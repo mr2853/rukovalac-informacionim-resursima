@@ -1,10 +1,32 @@
+QWidget {
+    background-color:#f7c08a;
+    
+}
 QLabel {
-    background-color:#FFFFFF;
-    qproperty-alignement: AlignCenter;
+    background-color:#f7c08a;
+    
 }
 
 QPushButton {
-    background-color: #2ABf9E;
-    padding: 20px;
+    
+    padding: 10px;
     font-size: 18px;
+    position: absolute;
+    border-radius: 30px;
+    width: 50%;
+    height: 40px;
+    background:black;
+    color: #fff;
+}
+
+QPushButton:hover {
+    
+    background: #ffc107;
+    color: #000;
+
+}
+QLineEdit {
+    background-color: #fff;
+    padding: 5px;
+    border-radius: 10px;
 }
