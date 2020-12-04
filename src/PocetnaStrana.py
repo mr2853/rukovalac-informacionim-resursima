@@ -7,7 +7,7 @@ from PySide2.QtWidgets import QWidget
 from CentralniWidget import CentralniWidget
 from Tab import Tab
 from MenuBar import MenuBar
-from Student import Student
+from klase.Student import Student
 
 
 class PocetnaStrana:

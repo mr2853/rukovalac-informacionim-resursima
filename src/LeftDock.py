@@ -6,11 +6,11 @@ class LeftDock(QtWidgets.QDockWidget):
         super().__init__(title, parent)
 
         self.model = QtWidgets.QFileSystemModel()
-        self.model.setRootPath("src\\")
+        self.model.setRootPath("src\\podaci\\metaPodaci\\")
 
         self.tree = QtWidgets.QTreeView()
         self.tree.setModel(self.model)
-        self.tree.setRootIndex(self.model.index("src\\"))
+        self.tree.setRootIndex(self.model.index("src\\podaci\\metaPodaci\\"))
         self.tree.clicked.connect(self.file_clicked)
         self.setWidget(self.tree)
 

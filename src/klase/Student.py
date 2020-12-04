@@ -1,6 +1,10 @@
+from .polozeni_predmet import PolozeniPredmet
+from .nepolozeni_predmet import NepolozeniPredmet
+
 class Student:
-    def __init__(self, index, name, lastname, parent):
-        super().__init__(parent)
+    def __init__(self, index, ime, prezime, polozeni, nepolozeni):
         self.index = index
-        self.name = name
-        self.lastname = lastname
+        self.ime = ime
+        self.prezime = prezime
+        self.polozeni_predmeti = [PolozeniPredmet(polozeni)]
+        self.nepolozeni_predmeti = [NepolozeniPredmet(nepolozeni)]
