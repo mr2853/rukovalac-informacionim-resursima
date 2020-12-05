@@ -16,7 +16,7 @@ class PocetnaStrana:
         self.main_window = QtWidgets.QMainWindow()
         self.main_window.resize(640, 480)
         self.main_window.setWindowTitle("Rukovalac informacionim resursima")
-        icon = QtGui.QIcon("icons8-edit-file-64.png")
+        icon = QtGui.QIcon("logo.png")
         self.main_window.setWindowIcon(icon)
 
         meni_bar = MenuBar(self.main_window, parent=None)
