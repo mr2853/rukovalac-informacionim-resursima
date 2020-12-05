@@ -10,7 +10,7 @@ class MenuBar(QtWidgets.QMenuBar):
         self.qmenu4 = QtWidgets.QMenu("Help",parent=None)
 
         self.sub_menu1 = self.qmenu1.addMenu("Prva opcija")
-        self.sub_menu2 = self.qmenu1.addAction("Druga opcija")
+        self.sub_menu2 = self.qmenu1.addAction("Save")
         self.sub_menu3 = self.qmenu1.addAction("Treca opcija")
         self.sub_menu4 = self.qmenu1.addMenu("Cetvrta opcija")
 

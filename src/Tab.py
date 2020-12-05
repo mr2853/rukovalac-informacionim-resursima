@@ -74,7 +74,10 @@ class Tab(QtWidgets.QWidget):
         # for i in range(1, len(lista)):
         #     self.setHorizontalHeaderItem(counter, lista[i])
         #     counter += 1
-        if lista[0] == "Student":
+        pocetak = putanja.rfind("\\")+1
+        kraj = putanja.rfind(".")
+        
+        if putanja[pocetak:kraj] == "studenti":
             student_model = StudentModel()
             with open(putanja) as f:
                 counter = 0

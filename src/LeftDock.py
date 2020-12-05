@@ -15,7 +15,7 @@ class LeftDock(QtWidgets.QDockWidget):
         self.setWidget(self.tree)
 
     def file_clicked(self, index):
-        print(self.model.filePath(index))
+        # print(self.model.filePath(index))
         path = self.model.filePath(index)
         self.kliknut.emit(path)
     
