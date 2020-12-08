@@ -8,7 +8,7 @@ from PySide2 import QtGui
 import json
 
 class Tab(QtWidgets.QWidget):
-    def __init__(self, parent):
+    def __init__(self, parent=None):
         super().__init__(parent)
         self.main_layout = QtWidgets.QVBoxLayout()
         self.tab_widget = None

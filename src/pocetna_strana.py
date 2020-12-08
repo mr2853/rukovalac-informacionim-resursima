@@ -69,3 +69,4 @@ class PocetnaStrana:
             tab1 = Tab(self.central_widget)
             self.central_widget.addTab(tab1, path.split("/")[-1])
             tab1.read(neka_lista)
+            
