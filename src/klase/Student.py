@@ -3,7 +3,7 @@ class Student:
         """
         ustanova | struka | broj_indeksa | prezime | ime_roditelja | ime | pol | adresa_stanovanja | telefon | JMBG | datum_rodjenja
         """
-        if len(args) == 10: # ako je niz duzine 10 znaci ima 10 parametara 
+        if len(args) == 11: # ako je niz duzine 10 znaci ima 10 parametara 
             self.constructor1(args)
         elif len(args) == 1: # ako je duzine 1 znaci ima 1 parametar
             self.constructor2(args)
@@ -38,10 +38,3 @@ class Student:
         self.datum_rodjenja = lista[10]
         return self
     
-    def __setitem__(self, i, value):
-        if i == 0:
-            self.index = value
-        elif i == 1:
-            self.ime = value
-        elif i == 2:
-            self.prezime = value
