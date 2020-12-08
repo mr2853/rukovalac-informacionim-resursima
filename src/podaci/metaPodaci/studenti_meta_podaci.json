@@ -1,0 +1,1 @@
+{"klasa":"Student","nazivi_atributa":["ustanova","struka","broj_indeksa","prezime","ime_roditelja","ime","pol","adresa_stanovanja","telefon","JMBG","datum_rodjenja"], "nazivi_kolona":["Ustanova","Struka","Broj indeksa","Prezime","Ime roditelja","Ime","Pol","Adresa stanovanja","Telefon","JMBG","Datum rodjenja"], "podaci":"src\\podaci\\studenti.csv"}

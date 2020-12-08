@@ -2,13 +2,15 @@ import sys
 from PySide2 import QtWidgets, QtGui
 from PySide2.QtCore import QPoint
 from PySide2.QtGui import Qt
-from LeftDock import LeftDock
+from left_dock import LeftDock
 from PySide2 import QtWidgets
 from PySide2.QtWidgets import QWidget
-from CentralniWidget import CentralniWidget
-from Tab import Tab
-from MenuBar import MenuBar
-from klase.Student import Student
+from centralni_widget import CentralniWidget
+from tab import Tab
+from menu_bar import MenuBar
+from klase.student import Student
+import csv
+import json
 
 
 class PocetnaStrana:
@@ -60,8 +62,10 @@ class PocetnaStrana:
                 ista_putanja = True
         if not ista_putanja:
             self.lista_putanja.append(path)
+            neka_lista = {}
             with open(path) as f:
-                text = (f.read())
-                tab1 = Tab(self.central_widget)
-                self.central_widget.addTab(tab1, path.split("/")[-1])
-                tab1.read(text)
+                neka_lista = json.load(f)
+
+            tab1 = Tab(self.central_widget)
+            self.central_widget.addTab(tab1, path.split("/")[-1])
+            tab1.read(neka_lista)
