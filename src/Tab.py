@@ -17,7 +17,7 @@ class Tab(QtWidgets.QWidget):
         self.table.setSelectionMode(QAbstractItemView.SingleSelection)
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
 
-        # self.table.clicked.connect(self.student_selected)
+        # self.table.clicked.connect(self.element_selected)
         self.main_layout.addWidget(self.table)
         self.main_layout.addWidget(self.tab_widget)
         self.setLayout(self.main_layout)
@@ -45,6 +45,6 @@ class Tab(QtWidgets.QWidget):
                 
         self.table.setModel(model)
     
-    # def student_selected(self, index):
+    # def element_selected(self, index):
         # model = self.table.model()
-        # selected_student = model.get_element(index)
+        # element_selected = model.get_element(index)

@@ -42,10 +42,6 @@ class Model(QtCore.QAbstractTableModel):
     # metode za editable model
     def setData(self, index, value, role=QtCore.Qt.EditRole):
         element = self.get_element(index)
-        if index.column() == 0 and role == QtCore.Qt.EditRole:
-            element.index = value
-            return True
-        element = self.get_element(index)
         if value == "":
             return False
         for i in range(self.broj_kolona):
