@@ -12,16 +12,16 @@ class Prijava(QWidget):
         icon = QIcon("logo.png")
         self.setWindowIcon(icon)
         korisnicko_ime = QLabel('<font size="4"> Korisnicko ime: </font>')
-        self.lineEdit_korisnik = QLineEdit()
-        self.lineEdit_korisnik.setPlaceholderText("Molim Vas unesite korisnicko ime: ")
+        self.line_edit_korisnik = QLineEdit()
+        self.line_edit_korisnik.setPlaceholderText("Molim Vas unesite korisnicko ime: ")
         layout.addWidget(korisnicko_ime,0,0)
-        layout.addWidget(self.lineEdit_korisnik,0,1)
+        layout.addWidget(self.line_edit_korisnik,0,1)
 
         lozinka = QLabel('<font size="4"> Lozinka: </font>')
-        self.lineEdit_lozinka = QLineEdit()
-        self.lineEdit_lozinka.setPlaceholderText("Molim Vas unesite lozinku:")
+        self.line_edit_lozinka = QLineEdit()
+        self.line_edit_lozinka.setPlaceholderText("Molim Vas unesite lozinku:")
         layout.addWidget(lozinka,1,0)
-        layout.addWidget(self.lineEdit_lozinka,1,1)
+        layout.addWidget(self.line_edit_lozinka,1,1)
         layout.setRowMinimumHeight(2,75)
         
 
@@ -36,7 +36,7 @@ class Prijava(QWidget):
     def check_password(self):
         msg = QMessageBox()
 
-        if self.lineEdit_korisnik.text() == "Vesna" and self.lineEdit_lozinka.text() == "111":
+        if self.line_edit_korisnik.text() == "Vesna" and self.line_edit_lozinka.text() == "111":
             msg.setText("Ulogovani ste!")
             msg.exec_()
         else:

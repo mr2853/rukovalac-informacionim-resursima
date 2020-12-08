@@ -27,9 +27,9 @@ class PocetnaStrana:
         toolbar = QtWidgets.QToolBar("tool bar", parent=None)
         self.main_window.addToolBar(toolbar)
 
-        statusBar = QtWidgets.QStatusBar()
-        statusBar.showMessage("Prikazan status bar!")
-        self.main_window.setStatusBar(statusBar)
+        status_bar = QtWidgets.QStatusBar()
+        status_bar.showMessage("Prikazan status bar!")
+        self.main_window.setStatusBar(status_bar)
         
         self.central_widget = QtWidgets.QTabWidget(self.main_window)
         # tab = Tab(self.central_widget)

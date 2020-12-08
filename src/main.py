@@ -1,7 +1,7 @@
 import sys
 from PySide2.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QLineEdit, QGridLayout, QMessageBox
 from prijava import Prijava
-from PocetnaStrana import PocetnaStrana
+from pocetna_strana import PocetnaStrana
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

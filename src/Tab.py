@@ -23,22 +23,22 @@ class Tab(QtWidgets.QWidget):
 
         self.sub_layout = QtWidgets.QHBoxLayout()
 
-        self.btnUp = QtWidgets.QPushButton("↑", self)
-        self.btnDown = QtWidgets.QPushButton("<", self)
-        self.btnLeft = QtWidgets.QPushButton(">", self)
-        self.btnRight = QtWidgets.QPushButton("↓", self)
+        self.btn_up = QtWidgets.QPushButton("↑", self)
+        self.btn_down = QtWidgets.QPushButton("<", self)
+        self.btn_left = QtWidgets.QPushButton(">", self)
+        self.btn_right = QtWidgets.QPushButton("↓", self)
 
-        self.btnUp.setFixedSize(50,80)
-        self.btnDown.setFixedSize(50,80)
-        self.btnLeft.setFixedSize(50,80)
-        self.btnRight.setFixedSize(50,80)
+        self.btn_up.setFixedSize(50,80)
+        self.btn_down.setFixedSize(50,80)
+        self.btn_left.setFixedSize(50,80)
+        self.btn_right.setFixedSize(50,80)
         
         self.sub_layout.addStretch()
         
-        self.sub_layout.addWidget(self.btnUp)
-        self.sub_layout.addWidget(self.btnDown)
-        self.sub_layout.addWidget(self.btnLeft)
-        self.sub_layout.addWidget(self.btnRight)
+        self.sub_layout.addWidget(self.btn_up)
+        self.sub_layout.addWidget(self.btn_down)
+        self.sub_layout.addWidget(self.btn_left)
+        self.sub_layout.addWidget(self.btn_right)
         self.sub_layout.addStretch()
         self.sub_layout.setSpacing(0)
 
@@ -66,9 +66,9 @@ class Tab(QtWidgets.QWidget):
         self.tab_widget1.setWindowTitle("neki naslov")
     
     def read(self, text):
-        putanjaPocinje = text.find("podaci:")
-        putanja = text[putanjaPocinje+7:len(text)]
-        text = text[0:putanjaPocinje]
+        putanja_pocinje = text.find("podaci:")
+        putanja = text[putanja_pocinje+7:len(text)]
+        text = text[0:putanja_pocinje]
         lista = text.split(",")
         counter = 0
         # for i in range(1, len(lista)):
@@ -115,10 +115,10 @@ class Tab(QtWidgets.QWidget):
 
 
         
-    def create_tab_widget(self):
-        self.tab_widget = QtWidgets.QTabWidget(self)
-        self.tab_widget.setTabsClosable(True)
-        self.tab_widget.tabCloseRequested.connect(self.delete_tab)
+    # def create_tab_widget(self):
+    #     self.tab_widget = QtWidgets.QTabWidget(self)
+    #     self.tab_widget.setTabsClosable(True)
+    #     self.tab_widget.tabCloseRequested.connect(self.delete_tab)
 
-    def delete_tab(self, index):
-        self.tab_widget.removeTab(index)
+    # def delete_tab(self, index):
+    #     self.tab_widget.removeTab(index)
