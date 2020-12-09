@@ -1,4 +1,4 @@
-class Plan_studijske_Grupe:
+class PlanStudijskeGrupe:
     def __init__(self,*args):
         
         if len(args) == 6:
@@ -20,9 +20,9 @@ class Plan_studijske_Grupe:
         lista = []
         lista = args[0][0]   
         self.program_ustanove = lista[0]
-        self.oznaka_programa = args[1]
-        self.blok = args[2]
-        self.pozicija = args[3]
-        self.ustanova_predmet = args[4]
-        self.oznaka_predmeta = args[5]
+        self.oznaka_programa = lista[1]
+        self.blok = lista[2]
+        self.pozicija = lista[3]
+        self.ustanova_predmet = lista[4]
+        self.oznaka_predmeta = lista[5]
         return self

@@ -1,4 +1,4 @@
-class Tok_studija:
+class TokStudija:
     def __init__(self, *args):
        
         if len(args) == 13:

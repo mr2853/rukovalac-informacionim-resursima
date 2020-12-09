@@ -1,4 +1,4 @@
-class Nivo_studija:
+class NivoStudija:
     def __init__(self, *args):
         if len(args) == 2:
             self.constructor1(args)

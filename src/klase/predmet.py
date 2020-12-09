@@ -3,7 +3,7 @@ class Predmet:
         if len(args) == 4:
             self.constructor1(args)
         elif len(args) == 1:
-            self.constructor2
+            self.constructor2(args)
 
         
     def constructor1(self, *args):

@@ -39,7 +39,7 @@ class Model(QtCore.QAbstractTableModel):
 
         return None
 
-    # metode za editable model
+    # metoda za promenu podataka elementa kada se double klik na celiju, menja podatke u listi
     def setData(self, index, value, role=QtCore.Qt.EditRole):
         element = self.get_element(index)
         if value == "":

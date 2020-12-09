@@ -1,4 +1,4 @@
-class Studijski_programi:
+class StudijskiProgrami:
     def __init__(self,*args):
         
         

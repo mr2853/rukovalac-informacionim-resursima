@@ -1,4 +1,4 @@
-class Visokoskolska_ustanova:
+class VisokoskolskaUstanova:
     def __init__(self, *args):
         if len(args) == 3:
             self.construktor1(args)

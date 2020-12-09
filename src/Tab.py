@@ -3,6 +3,12 @@ from PySide2 import QtWidgets
 from PySide2.QtWidgets import QAbstractItemView
 from klase.model import Model
 from klase.student import Student
+from klase.visokoskolska_ustanova import VisokoskolskaUstanova
+from klase.tok_studija import TokStudija
+from klase.studijski_programi import StudijskiProgrami
+from klase.predmet import Predmet
+from klase.plan_studijske_grupe import PlanStudijskeGrupe
+from klase.nivo_studija import NivoStudija
 from PySide2.QtWidgets import QWidget
 from PySide2 import QtGui
 import json
