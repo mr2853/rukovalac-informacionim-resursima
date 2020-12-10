@@ -10,17 +10,18 @@ class Model(QtCore.QAbstractTableModel, QtCore.QObject):
     def __init__(self, nazivi_atributa, nazivi_kolona, parent=None):
         super().__init__(parent)
         # self.upisan_podatak
-        self.lista = [] # nije dvodimenzionalni niz
+        self.lista_original = []
+        self.lista_prikaz = []
         self.nazivi_atributa = nazivi_atributa
         self.nazivi_kolona = nazivi_kolona
         self.broj_kolona = len(self.nazivi_kolona)
 
     # pomocna metoda
     def get_element(self, index):
-        return self.lista[index.row()]
+        return self.lista_prikaz[index.row()]
 
     def rowCount(self, index):
-        return len(self.lista)
+        return len(self.lista_prikaz)
 
     def columnCount(self, index):
         return self.broj_kolona
@@ -64,5 +65,5 @@ class Model(QtCore.QAbstractTableModel, QtCore.QObject):
         :param: index - oznacava po kojoj koloni/atributu se sortira
         :param: bool_nacin_sortiranja - oznacava da li je sortiranje prema vecem ili prema manjem elementu
         """
-        self.lista.sort(key = lambda x: x.__getattribute__(self.nazivi_atributa[index]) , reverse=bool_nacin_sortiranja)
+        self.lista_prikaz.sort(key = lambda x: x.__getattribute__(self.nazivi_atributa[index]) , reverse=bool_nacin_sortiranja)
     

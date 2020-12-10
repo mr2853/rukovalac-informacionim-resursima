@@ -42,7 +42,8 @@ class Tab(QtWidgets.QWidget):
                     break
                 
                 lista_podataka = podaci.split(",")
-                self.model.lista.append(globals()[lista_json["klasa"]](lista_podataka))
+                self.model.lista_original.append(globals()[lista_json["klasa"]](lista_podataka))
+                self.model.lista_prikaz.append(globals()[lista_json["klasa"]](lista_podataka))
 
         self.table.setModel(self.model)
         self.table.setSortingEnabled(True)
@@ -68,7 +69,7 @@ class Tab(QtWidgets.QWidget):
         top = QModelIndex()
         top.child(0,0)
         bottom = QModelIndex()
-        bottom.child(len(self.model.lista), self.model.broj_kolona)
+        bottom.child(len(self.model.lista_prikaz), self.model.broj_kolona)
         self.table.dataChanged(top, bottom) # da refresuje tabelu od top indexa to bottom indexa
 
     # def element_selected(self, index):
