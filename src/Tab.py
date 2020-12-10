@@ -23,18 +23,27 @@ class Tab(QtWidgets.QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.main_layout = QtWidgets.QVBoxLayout()
-        self.table = QtWidgets.QTableView()
+        self.tab_widget = None
+        self.create_tab_widget()
+        self.table = QtWidgets.QTableView(self.tab_widget)
+        
         self.table.setUpdatesEnabled(True)
         self.table.setSelectionMode(QAbstractItemView.SingleSelection)
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.main_layout.addWidget(self.table)
+        self.main_layout.addWidget(self.tab_widget)
         self.setLayout(self.main_layout)
+
+    def create_tab_widget(self):
+        self.tab_widget = QtWidgets.QTabWidget(self)
+        self.tab_widget.setTabsClosable(True)
+        self.tab_widget.tabCloseRequested.connect(self.delete_tab)
 
     def delete_tab(self, index):
         self.main_layout.removeWidget(index)
     
     def read(self, lista_json):
-        self.model = Model(lista_json["nazivi_atributa"], lista_json["nazivi_kolona"])
+        self.model = Model(lista_json)
         with open(lista_json["podaci"], newline='\n') as f:
             while True:
                 podaci = f.readline().strip()

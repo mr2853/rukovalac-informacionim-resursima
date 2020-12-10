@@ -1,1 +1,7 @@
-{"klasa":"VisokoskolskaUstanova","nazivi_atributa":["oznaka","naziv","adresa"], "nazivi_kolona":["Oznaka","Naziv","Adresa"], "podaci":"src\\podaci\\visokoskolske_ustanove.csv"}
+{
+    "klasa":"VisokoskolskaUstanova",
+    "nazivi_atributa":["oznaka","naziv","adresa"],
+    "nazivi_kolona":["Naziv","Adresa"],
+    "nazivi_kol_atributa":["naziv","adresa"], 
+    "podaci":"src\\podaci\\visokoskolske_ustanove.csv"
+}

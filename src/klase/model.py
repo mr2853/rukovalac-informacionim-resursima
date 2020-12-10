@@ -7,13 +7,14 @@ from PySide2.QtCore import Signal
 
 class Model(QtCore.QAbstractTableModel, QtCore.QObject):
     upisan_podatak = QtCore.Signal(int)
-    def __init__(self, nazivi_atributa, nazivi_kolona, parent=None):
+    def __init__(self, lista_json, parent=None):
         super().__init__(parent)
         # self.upisan_podatak
         self.lista_original = []
         self.lista_prikaz = []
-        self.nazivi_atributa = nazivi_atributa
-        self.nazivi_kolona = nazivi_kolona
+        self.nazivi_atributa = lista_json["nazivi_atributa"]
+        self.nazivi_kolona = lista_json["nazivi_kolona"]
+        self.nazivi_kol_atributa = lista_json["nazivi_kol_atributa"]
         self.broj_kolona = len(self.nazivi_kolona)
 
     # pomocna metoda
@@ -31,7 +32,7 @@ class Model(QtCore.QAbstractTableModel, QtCore.QObject):
         element = self.get_element(index)
         for i in range(self.broj_kolona):
             if i == index.column() and role == QtCore.Qt.DisplayRole:
-                return element.__getattribute__(self.nazivi_atributa[i])
+                return element.__getattribute__(self.nazivi_kol_atributa[i])
         return None
 
     def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
@@ -45,19 +46,19 @@ class Model(QtCore.QAbstractTableModel, QtCore.QObject):
         return None
 
     # metoda za promenu podataka elementa kada se double klik na celiju, menja podatke u listi
-    def setData(self, index, value, role=QtCore.Qt.EditRole):
-        element = self.get_element(index)
-        if value == "":
-            return False
-        for i in range(self.broj_kolona):
-            if index.column() == i and role == QtCore.Qt.EditRole:
-                element.__setattr__(self.nazivi_atributa[i], value)
-                self.upisan_podatak.emit(0)
-                return True
-        return False
+    # def setData(self, index, value, role=QtCore.Qt.EditRole):
+    #     element = self.get_element(index)
+    #     if value == "":
+    #         return False
+    #     for i in range(self.broj_kolona):
+    #         if index.column() == i and role == QtCore.Qt.EditRole:
+    #             element.__setattr__(self.nazivi_atributa[i], value)
+    #             self.upisan_podatak.emit(0)
+    #             return True
+    #     return False
 
-    def flags(self, index):
-        return super().flags(index) | QtCore.Qt.ItemIsEditable # ili nad bitovima
+    # def flags(self, index):
+    #     return super().flags(index) | QtCore.Qt.ItemIsEditable # ili nad bitovima
 
     def sort_list(self, index, bool_nacin_sortiranja):
         """
@@ -65,5 +66,5 @@ class Model(QtCore.QAbstractTableModel, QtCore.QObject):
         :param: index - oznacava po kojoj koloni/atributu se sortira
         :param: bool_nacin_sortiranja - oznacava da li je sortiranje prema vecem ili prema manjem elementu
         """
-        self.lista_prikaz.sort(key = lambda x: x.__getattribute__(self.nazivi_atributa[index]) , reverse=bool_nacin_sortiranja)
+        self.lista_prikaz.sort(key = lambda x: x.__getattribute__(self.nazivi_kol_atributa[index]) , reverse=bool_nacin_sortiranja)
     

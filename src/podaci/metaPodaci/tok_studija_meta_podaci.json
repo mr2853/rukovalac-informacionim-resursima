@@ -1,1 +1,6 @@
-{"klasa":"TokStudija","nazivi_atributa":["ustanova","oznaka_programa","student_iz_ustanove","struka","broj_indeksa","skolska_godina","godina_studija","blok","redni_broj_upisa","datum_upisa","datum_overe","espb_pocetni","espb_krajnji"], "nazivi_kolona":["Ustanova","Oznaka programa","Student iz ustanove","Struka","Broj indeksa","Skolska godina","Godina studija","Blok","Redni broj upisa","Datum upisa","Datum overe","ESPB pocetni","ESPB krajnji"], "podaci":"src\\podaci\\tok_studija.csv"}
+{
+    "klasa":"TokStudija",
+    "nazivi_atributa":["ustanova","oznaka_programa","student_iz_ustanove","struka","broj_indeksa","skolska_godina","godina_studija","blok","redni_broj_upisa","datum_upisa","datum_overe","espb_pocetni","espb_krajnji"],
+    "nazivi_kolona":["Oznaka programa","Student iz ustanove","Struka","Broj indeksa","Skolska godina","Godina studija","Redni broj upisa"],
+    "nazivi_kol_atributa":["oznaka_programa","student_iz_ustanove","struka","broj_indeksa","skolska_godina","godina_studija","redni_broj_upisa"], 
+    "podaci":"src\\podaci\\tok_studija.csv"}

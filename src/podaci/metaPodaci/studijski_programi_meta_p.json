@@ -1,1 +1,6 @@
-{"klasa":"StudijskiProgrami","nazivi_atributa":["ustanova","nivo","oznaka_programa","naziv_programa"], "nazivi_kolona":["Ustanova","Nivo","Oznaka programa","Naziv programa"], "podaci":"src\\podaci\\studijski_programi.csv"}
+{
+    "klasa":"StudijskiProgrami",
+    "nazivi_atributa":["ustanova","nivo","oznaka_programa","naziv_programa"],
+    "nazivi_kolona":["Nivo","Oznaka programa","Naziv programa"],
+    "nazivi_kol_atributa":["nivo","oznaka_programa","naziv_programa"], 
+    "podaci":"src\\podaci\\studijski_programi.csv"}
