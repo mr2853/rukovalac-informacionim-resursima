@@ -5,7 +5,6 @@ from PySide2.QtGui import Qt
 from left_dock import LeftDock
 from PySide2 import QtWidgets
 from PySide2.QtWidgets import QWidget
-from centralni_widget import CentralniWidget
 from tab import Tab
 from menu_bar import MenuBar
 from klase.student import Student

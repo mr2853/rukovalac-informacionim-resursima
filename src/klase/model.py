@@ -1,11 +1,15 @@
 from PySide2 import QtCore
 from PySide2 import QtGui
 from PySide2.QtGui import Qt
+import operator
+from PySide2.QtCore import Signal
 
 
-class Model(QtCore.QAbstractTableModel):
+class Model(QtCore.QAbstractTableModel, QtCore.QObject):
+    upisan_podatak = QtCore.Signal(int)
     def __init__(self, nazivi_atributa, nazivi_kolona, parent=None):
         super().__init__(parent)
+        # self.upisan_podatak
         self.lista = [] # nije dvodimenzionalni niz
         self.nazivi_atributa = nazivi_atributa
         self.nazivi_kolona = nazivi_kolona
@@ -47,10 +51,18 @@ class Model(QtCore.QAbstractTableModel):
         for i in range(self.broj_kolona):
             if index.column() == i and role == QtCore.Qt.EditRole:
                 element.__setattr__(self.nazivi_atributa[i], value)
+                self.upisan_podatak.emit(0)
                 return True
         return False
 
     def flags(self, index):
         return super().flags(index) | QtCore.Qt.ItemIsEditable # ili nad bitovima
 
+    def sort_list(self, index, bool_nacin_sortiranja):
+        """
+        sortira listu
+        :param: index - oznacava po kojoj koloni/atributu se sortira
+        :param: bool_nacin_sortiranja - oznacava da li je sortiranje prema vecem ili prema manjem elementu
+        """
+        self.lista.sort(key = lambda x: x.__getattribute__(self.nazivi_atributa[index]) , reverse=bool_nacin_sortiranja)
     

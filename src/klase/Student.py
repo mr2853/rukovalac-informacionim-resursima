@@ -34,7 +34,7 @@ class Student:
         self.pol = lista[6]
         self.adresa_stanovanja = lista[7]
         self.telefon = lista[8]
-        self.JMBG = lista[9]
+        self.jmbg = lista[9]
         self.datum_rodjenja = lista[10]
         return self
     
