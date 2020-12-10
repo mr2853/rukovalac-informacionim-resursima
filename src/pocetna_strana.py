@@ -23,7 +23,7 @@ class PocetnaStrana:
         self.main_window.setWindowIcon(icon)
 
         meni_bar = MenuBar(self.main_window, parent=None)
-        meni_bar.sub_menu2.triggered.connect(self.save)
+        
 
         toolbar = QtWidgets.QToolBar("tool bar", parent=None)
         self.main_window.addToolBar(toolbar)
