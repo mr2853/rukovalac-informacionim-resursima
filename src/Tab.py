@@ -30,6 +30,7 @@ class Tab(QtWidgets.QWidget):
         self.table.setUpdatesEnabled(True)
         self.table.setSelectionMode(QAbstractItemView.SingleSelection)
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.table.clicked.connect(self.element_selected)
         self.main_layout.addWidget(self.table)
         self.main_layout.addWidget(self.tab_widget)
         self.setLayout(self.main_layout)
@@ -81,6 +82,6 @@ class Tab(QtWidgets.QWidget):
         bottom.child(len(self.model.lista_prikaz), self.model.broj_kolona)
         self.table.dataChanged(top, bottom) # da refresuje tabelu od top indexa to bottom indexa
 
-    # def element_selected(self, index):
-        # model = self.table.model()
-        # element_selected = model.get_element(index)
+    def element_selected(self, index):
+        model = self.table.model()
+        element_selected = model.get_element(index)

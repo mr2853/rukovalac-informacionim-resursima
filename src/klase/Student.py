@@ -1,11 +1,9 @@
 class Student:
     def __init__(self,*args): # *args pokazuje na niz parametara koji je prosledjen
-        """
-        ustanova | struka | broj_indeksa | prezime | ime_roditelja | ime | pol | adresa_stanovanja | telefon | JMBG | datum_rodjenja
-        """
-        if len(args) == 11: # ako je niz duzine 10 znaci ima 10 parametara 
+
+        if len(args) > 2: # ako je niz duzine 10 znaci ima 10 parametara 
             self.constructor1(args)
-        elif len(args) == 1: # ako je duzine 1 znaci ima 1 parametar
+        elif len(args) == 2: # ako je duzine 1 znaci ima 1 parametar
             self.constructor2(args)
             
     def constructor1(self, *args): # i ovde svaki parametar redom dodeljuje gde je potrebno

@@ -1,7 +1,0 @@
-{
-    "klasa":"NivoStudija",
-    "nazivi_atributa":["oznaka","naziv"],
-    "nazivi_kolona":["Oznaka","Naziv"],
-    "nazivi_kol_atributa":["oznaka","naziv"],
-    "podaci":"src\\podaci\\nivo_studija.csv"
-}

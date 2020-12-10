@@ -1,0 +1,12 @@
+klasa:NivoStudija
+tip_datoteke:serijska
+relativna_putanja:src\\podaci
+sufiks:csv
+podaci:relativna_putanja\\nivo_studija.sufiks
+nazivi_atributa:oznaka,naziv
+tipovi_atributa:float,character
+duzina_atributa:2,80
+obaveznost_atributa:True,True
+veze:child_StudijskiProgrami(Oznaka=Nivo)
+nazivi_kolona:Oznaka,Naziv
+nazivi_kol_atributa:oznaka,naziv
