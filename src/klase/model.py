@@ -7,14 +7,14 @@ from PySide2.QtCore import Signal
 
 class Model(QtCore.QAbstractTableModel, QtCore.QObject):
     upisan_podatak = QtCore.Signal(int)
-    def __init__(self, lista_json, parent=None):
+    def __init__(self, lista, parent=None):
         super().__init__(parent)
         # self.upisan_podatak
         self.lista_original = []
         self.lista_prikaz = []
-        self.nazivi_atributa = lista_json["nazivi_atributa"]
-        self.nazivi_kolona = lista_json["nazivi_kolona"]
-        self.nazivi_kol_atributa = lista_json["nazivi_kol_atributa"]
+        self.nazivi_atributa = lista[5].split(",")
+        self.nazivi_kolona = lista[10].split(",")
+        self.nazivi_kol_atributa = lista[11].split(",")
         self.broj_kolona = len(self.nazivi_kolona)
 
     # pomocna metoda

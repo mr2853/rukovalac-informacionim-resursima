@@ -1,8 +1,8 @@
 objekat:PlanStudijskeGrupe
 tip_datoteke:serijska
-relativna_putanja:src\\podaci
+relativna_putanja:src\podaci
 sufiks:csv
-podaci:relativna_putanja\\plan_studijske_grupe.sufiks
+podaci:relativna_putanja\plan_studijske_grupe.sufiks
 nazivi_atributa:program_ustanove,oznaka_programa,blok,pozicija,ustanova_predmet,oznaka_predmeta
 tipovi_atributa:character,character,int,int,character
 duzina_atributa:2,3,2,2,2,6

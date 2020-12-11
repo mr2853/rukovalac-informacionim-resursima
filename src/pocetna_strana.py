@@ -7,7 +7,6 @@ from PySide2 import QtWidgets
 from PySide2.QtWidgets import QWidget
 from tab import Tab
 from menu_bar import MenuBar
-from klase.student import Student
 import csv
 import json
 
@@ -54,18 +53,31 @@ class PocetnaStrana:
         self.lista_putanja.remove(self.lista_putanja[index])
 
     def read(self, index):
-        path = self.dock.model.filePath(index)
+        putanja = self.dock.model.filePath(index)
         ista_putanja = False
         for i in range(len(self.lista_putanja)):
-            if path == self.lista_putanja[i]:
+            if putanja == self.lista_putanja[i]:
                 ista_putanja = True
         if not ista_putanja:
-            self.lista_putanja.append(path)
-            neka_lista = {}
-            with open(path) as f:
-                neka_lista = json.load(f)
+            self.lista_putanja.append(putanja)
+            neka_lista = []
+            with open(putanja, newline='') as csvfile:
+                spamreader = csv.reader(csvfile, delimiter = "\n")
+                counter = 0
+                for row in spamreader:
+                    dve_tacke = row[0].find(":")+1
+                    row[0] = row[0][dve_tacke:len(row[0])]
+
+                    if counter == 4:
+                        del1 = row[0].find("\\")
+                        del2 = row[0].find(".") + 1
+                        row[0] = row[0][del1:del2]
+                        row[0] = neka_lista[2] + row[0] + neka_lista[3]
+                        
+                    neka_lista.append(row[0])
+                    counter += 1
 
             tab1 = Tab(self.central_widget)
-            self.central_widget.addTab(tab1, path.split("/")[-1])
+            self.central_widget.addTab(tab1, putanja.split("/")[-1])
             tab1.read(neka_lista)
             

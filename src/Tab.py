@@ -3,13 +3,6 @@ from PySide2 import QtWidgets, QtGui
 from PySide2 import QtWidgets
 from PySide2.QtWidgets import QAbstractItemView
 from klase.model import Model
-from klase.student import Student
-from klase.visokoskolska_ustanova import VisokoskolskaUstanova
-from klase.tok_studija import TokStudija
-from klase.studijski_programi import StudijskiProgrami
-from klase.predmet import Predmet
-from klase.plan_studijske_grupe import PlanStudijskeGrupe
-from klase.nivo_studija import NivoStudija
 from PySide2.QtWidgets import QWidget
 from PySide2 import QtGui
 from PySide2 import QtCore
@@ -18,6 +11,7 @@ from PySide2.QtWidgets import QHeaderView
 from PySide2.QtCore import QModelIndex
 from PySide2.QtCore import QObject, Signal, Slot
 import json
+from klase.genericka_klasa import GenerickaKlasa
 
 class Tab(QtWidgets.QWidget):
     def __init__(self, parent=None):
@@ -43,24 +37,25 @@ class Tab(QtWidgets.QWidget):
     def delete_tab(self, index):
         self.main_layout.removeWidget(index)
     
-    def read(self, lista_json):
-        self.model = Model(lista_json)
-        with open(lista_json["podaci"], newline='\n') as f:
+    def read(self, lista):
+        self.model = Model(lista)
+        with open(lista[4], newline='\n') as f:
             while True:
                 podaci = f.readline().strip()
                 if podaci == "":
                     break
                 
                 lista_podataka = podaci.split(",")
-                self.model.lista_original.append(globals()[lista_json["klasa"]](lista_podataka))
-                self.model.lista_prikaz.append(globals()[lista_json["klasa"]](lista_podataka))
+                self.meta_podaci = lista
+                self.model.lista_original.append(GenerickaKlasa(lista[5].split(","), lista_podataka))
+                self.model.lista_prikaz.append(GenerickaKlasa(lista[5].split(","), lista_podataka))
 
         self.table.setModel(self.model)
         self.table.setSortingEnabled(True)
         self.table.sortByColumn(0,Qt.AscendingOrder)
         self.table.horizontalHeader().sectionClicked.connect(self.sort_table) # kada se klikne na neki horizontalHeader da pozove self.sort_table
-        self.model.upisan_podatak.connect(self.sort_table) # u slucaju izmene podataka da pozove sort_table
-        self.sort_table(0) # pri ucitavanju datoteke sortiramo tabelu prema prvoj koloni
+        if lista[1] == "sekvencijalna":
+            self.model.upisan_podatak.connect(self.sort_table) # u slucaju izmene podataka da pozove sort_table
 
     @Slot(int)
     def sort_table(self, index):
@@ -85,3 +80,14 @@ class Tab(QtWidgets.QWidget):
     def element_selected(self, index):
         model = self.table.model()
         element_selected = model.get_element(index)
+        # veze = []
+        # veze = self.meta_podaci[9].split(",")
+        # for i in veze:
+        #     if not i.find("child_"):
+        #         veze.pop(i)
+        #     else:
+        #         del1 = veze[i].find("_")+1
+        #         veze[i] = veze[i][del1:len(veze[i])]
+        #         del1 = veze[i].find("(")
+        #         ime_deteta = veze[i][0:del1]
+        #         ime_deteta = ime_deteta.lower()

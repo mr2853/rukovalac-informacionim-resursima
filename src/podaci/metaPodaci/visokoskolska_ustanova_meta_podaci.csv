@@ -1,8 +1,8 @@
 objekat:VisokoskolskaUstanova
 tip_datoteke:serijska
-relativna_putanja:src\\podaci
+relativna_putanja:src\podaci
 sufiks:csv
-podaci:relativna_putanja\\visokoskolske_ustanove.sufiks
+podaci:relativna_putanja\visokoskolske_ustanove.sufiks
 naziv_atributa:oznaka,naziv,adresa
 tipovi_atributa:character,character,character
 duzina_atributa:2,80,80

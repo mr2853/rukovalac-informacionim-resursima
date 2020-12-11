@@ -1,8 +1,8 @@
 objekat:Predmet
 tip_datoteke:serijska
-relativna_putanja:src\\podaci
+relativna_putanja:src\podaci
 sufiks:csv
-podaci:relativna_putanja\\predmeti.sufiks
+podaci:relativna_putanja\predmeti.sufiks
 nazivi_atributa:ustanova,oznaka,naziv,espb
 tipovi_atributa:character,character,character,int
 duzina_atributa:2,6,120,2

@@ -1,8 +1,8 @@
-klasa:NivoStudija
+objekat:NivoStudija
 tip_datoteke:serijska
-relativna_putanja:src\\podaci
+relativna_putanja:src\podaci
 sufiks:csv
-podaci:relativna_putanja\\nivo_studija.sufiks
+podaci:relativna_putanja\nivo_studija.sufiks
 nazivi_atributa:oznaka,naziv
 tipovi_atributa:float,character
 duzina_atributa:2,80
