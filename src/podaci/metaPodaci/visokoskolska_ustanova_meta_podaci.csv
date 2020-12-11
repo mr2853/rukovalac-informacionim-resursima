@@ -7,6 +7,6 @@ naziv_atributa:oznaka,naziv,adresa
 tipovi_atributa:character,character,character
 duzina_atributa:2,80,80
 obaveznost_atributa:True,True,True
-veze:child_StudijskiProgrami(Oznaka=Ustanova),child_Predmeti(Oznaka=Ustanova),child_Studenti(Oznaka=Ustanova)
+veze:child_StudijskiProgrami(oznaka=ustanova),child_NastavniPredmet(oznaka=ustanova),child_Studenti(oznaka=ustanova)
 nazivi_kolona:Naziv,Adresa
 nazivi_kol_atributa:naziv,adresa

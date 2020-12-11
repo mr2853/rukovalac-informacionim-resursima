@@ -10,7 +10,6 @@ class Model(QtCore.QAbstractTableModel, QtCore.QObject):
     def __init__(self, lista, parent=None):
         super().__init__(parent)
         # self.upisan_podatak
-        self.lista_original = []
         self.lista_prikaz = []
         self.nazivi_atributa = lista[5].split(",")
         self.nazivi_kolona = lista[10].split(",")

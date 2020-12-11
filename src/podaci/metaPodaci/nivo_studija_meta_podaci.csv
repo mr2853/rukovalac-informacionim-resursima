@@ -7,6 +7,6 @@ nazivi_atributa:oznaka,naziv
 tipovi_atributa:float,character
 duzina_atributa:2,80
 obaveznost_atributa:True,True
-veze:child_StudijskiProgrami(Oznaka=Nivo)
+veze:child_StudijskiProgrami(oznaka=nivo)
 nazivi_kolona:Oznaka,Naziv
 nazivi_kol_atributa:oznaka,naziv

@@ -8,6 +8,7 @@ from PySide2.QtWidgets import QWidget
 from tab import Tab
 from menu_bar import MenuBar
 from tool_bar import ToolBar
+from klase.metode import citanje_meta_podataka
 import csv
 import json
 
@@ -23,7 +24,6 @@ class PocetnaStrana:
         self.main_window.setWindowIcon(icon)
 
         meni_bar = MenuBar(self.main_window, parent=None)
-        
 
         ToolBar(self.main_window,parent=None)
 
@@ -45,9 +45,6 @@ class PocetnaStrana:
         
         self.main_window.show()
 
-    def save(self):
-        print("kao sacuvan")
-
     def delete_tab(self, index):
         self.central_widget.removeTab(index)
         self.lista_putanja.remove(self.lista_putanja[index])
@@ -60,22 +57,7 @@ class PocetnaStrana:
                 ista_putanja = True
         if not ista_putanja:
             self.lista_putanja.append(putanja)
-            neka_lista = []
-            with open(putanja, newline='') as csvfile:
-                spamreader = csv.reader(csvfile, delimiter = "\n")
-                counter = 0
-                for row in spamreader:
-                    dve_tacke = row[0].find(":")+1
-                    row[0] = row[0][dve_tacke:len(row[0])]
-
-                    if counter == 4:
-                        del1 = row[0].find("\\")
-                        del2 = row[0].find(".") + 1
-                        row[0] = row[0][del1:del2]
-                        row[0] = neka_lista[2] + row[0] + neka_lista[3]
-                        
-                    neka_lista.append(row[0])
-                    counter += 1
+            neka_lista = citanje_meta_podataka(putanja)
 
             tab1 = Tab(self.central_widget)
             self.central_widget.addTab(tab1, putanja.split("/")[-1])
