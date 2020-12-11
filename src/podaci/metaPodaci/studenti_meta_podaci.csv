@@ -1,0 +1,13 @@
+klasa:GenerickaKlasa
+objekat:Student
+tip_datoteke:serijska
+relativna_putanja:src\\podaci
+sufiks:csv
+podaci:relativna_putanja\\studenti.sufiks
+nazivi_atributa:ustanova,struka,broj_indeksa,prezime,ime_roditelja,ime,pol,adresa_stanovanja,telefon,jmbg,datum_rodjenja
+tipovi_atributa:character,character,character,character,boolean,character,character,character,character,character,date
+duzina_atributa:2,2,6,20,20,20,1,120,20,13,10
+obaveznost_atributa:True,True,True,True,False,True,True,False,False,False,False
+veze:parent_VisokoSkolskaUstanova(Ustanova),child_Tok_Studija(Ustanova,Struka,Broj indeksa)
+nazivi_kolona:Struka,Broj indeksa,Prezime,Ime,Datum rodjenja
+nazivi_kol_atributa:struka,broj_indeksa,prezime,ime,datum_rodjenja

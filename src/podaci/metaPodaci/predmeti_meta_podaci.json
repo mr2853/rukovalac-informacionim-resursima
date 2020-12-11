@@ -1,7 +1,0 @@
-{
-    "klasa":"Predmet",
-    "nazivi_atributa":["ustanova","oznaka","naziv","espb"],
-    "nazivi_kolona":["Ustanova","Oznaka","Naziv"],
-    "nazivi_kol_atributa":["ustanova","oznaka","naziv"],
-    "podaci":"src\\podaci\\predmeti.csv"
-}

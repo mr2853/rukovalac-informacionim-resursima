@@ -1,6 +1,0 @@
-{
-    "klasa":"Student",
-    "nazivi_atributa":["ustanova","struka","broj_indeksa","prezime","ime_roditelja","ime","pol","adresa_stanovanja","telefon","jmbg","datum_rodjenja"],
-    "nazivi_kolona":["Struka","Broj indeksa","Prezime","Ime","Datum rodjenja"],
-    "nazivi_kol_atributa":["struka","broj_indeksa","prezime","ime","datum_rodjenja"], 
-    "podaci":"src\\podaci\\studenti.csv"}

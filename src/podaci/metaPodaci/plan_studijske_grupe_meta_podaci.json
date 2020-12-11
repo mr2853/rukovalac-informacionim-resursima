@@ -1,6 +1,0 @@
-{
-    "klasa":"PlanStudijskeGrupe",
-    "nazivi_atributa":["program_ustanove","oznaka_programa","blok","pozicija","ustanova_predmet","oznaka_predmeta"],
-    "nazivi_kolona":["Program ustanove","Oznaka programa"],
-    "nazivi_kol_atributa":["program_ustanove","oznaka_programa"],
-    "podaci":"src\\podaci\\plan_studijske_grupe.csv"}
