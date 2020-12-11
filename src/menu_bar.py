@@ -11,11 +11,11 @@ class MenuBar(QtWidgets.QMenuBar):
        
         self.qmenu1.addAction(QtGui.QIcon("about.png"), "O aplikaciji")
         
-        self.qmenu2.addAction(QtGui.QIcon("copy.png"),"Copy")
-        self.qmenu2.addAction(QtGui.QIcon("paste.png"),"Paste")
+        self.qmenu2.addAction(QtGui.QIcon("ikonice/copy.png"),"Copy")
+        self.qmenu2.addAction(QtGui.QIcon("ikonice/paste.png"),"Paste")
         
 
-        self.qmenu3.addAction(QtGui.QIcon("upustvo.png"),"Korisnicko upustvo")
+        self.qmenu3.addAction(QtGui.QIcon("ikonice/upustvo.png"),"Korisnicko upustvo")
       
         self.qMenuBar = QtWidgets.QMenuBar()
         self.qMenuBar.addMenu(self.qmenu1)

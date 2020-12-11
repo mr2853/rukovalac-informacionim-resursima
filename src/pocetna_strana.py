@@ -7,6 +7,7 @@ from PySide2 import QtWidgets
 from PySide2.QtWidgets import QWidget
 from tab import Tab
 from menu_bar import MenuBar
+from tool_bar import ToolBar
 import csv
 import json
 
@@ -18,14 +19,13 @@ class PocetnaStrana:
         self.main_window = QtWidgets.QMainWindow()
         self.main_window.resize(640, 480)
         self.main_window.setWindowTitle("Rukovalac informacionim resursima")
-        icon = QtGui.QIcon("icons8-edit-file-64.png")
+        icon = QtGui.QIcon("ikonice/logo.jpg")
         self.main_window.setWindowIcon(icon)
 
         meni_bar = MenuBar(self.main_window, parent=None)
         
 
-        toolbar = QtWidgets.QToolBar("tool bar", parent=None)
-        self.main_window.addToolBar(toolbar)
+        ToolBar(self.main_window,parent=None)
 
         status_bar = QtWidgets.QStatusBar()
         status_bar.showMessage("Prikazan status bar!")
