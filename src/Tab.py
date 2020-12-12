@@ -41,6 +41,7 @@ class Tab(QtWidgets.QWidget):
     def read(self, lista):
         self.model = kreiraj_model(lista)
         self.meta_podaci = lista
+
         self.table.setModel(self.model)
         self.table.setSortingEnabled(True)
         self.table.horizontalHeader().sectionClicked.connect(self.sort_table) # kada se klikne na neki horizontalHeader da pozove self.sort_table
@@ -66,7 +67,7 @@ class Tab(QtWidgets.QWidget):
         bottom = QModelIndex()
         bottom.child(len(self.model.lista_prikaz), self.model.broj_kolona)
         self.table.dataChanged(top, bottom) # da refresuje tabelu od top indexa to bottom indexa
-
+    
     def element_selected(self, index):
         model = self.table.model()
         element_selected = model.get_element(index)

@@ -9,6 +9,7 @@ from tab import Tab
 from menu_bar import MenuBar
 from tool_bar import ToolBar
 from klase.metode import citanje_meta_podataka
+from klase.prikaz_elementa import PrikazElementa
 import csv
 import json
 
@@ -25,8 +26,8 @@ class PocetnaStrana:
 
         meni_bar = MenuBar(self.main_window, parent=None)
 
-        ToolBar(self.main_window,parent=None)
-
+        self.tool_bar = ToolBar(self.main_window,parent=None)
+        self.tool_bar.create_o.triggered.connect(self.otvori_prikaz)
         status_bar = QtWidgets.QStatusBar()
         status_bar.showMessage("Prikazan status bar!")
         self.main_window.setStatusBar(status_bar)
@@ -44,7 +45,10 @@ class PocetnaStrana:
         self.dock.tree.clicked.connect(self.read)
         
         self.main_window.show()
-
+    def otvori_prikaz(self):
+        self.prikaz = PrikazElementa(self.central_widget.currentWidget(),
+                    self.central_widget.currentWidget().meta_podaci[5].split(","))
+    
     def delete_tab(self, index):
         self.central_widget.removeTab(index)
         self.lista_putanja.remove(self.lista_putanja[index])
@@ -59,7 +63,7 @@ class PocetnaStrana:
             self.lista_putanja.append(putanja)
             neka_lista = citanje_meta_podataka(putanja)
 
-            tab1 = Tab(self.central_widget)
-            self.central_widget.addTab(tab1, putanja.split("/")[-1])
-            tab1.read(neka_lista)
+            tab = Tab(self.central_widget)
+            self.central_widget.addTab(tab, putanja.split("/")[-1])
+            tab.read(neka_lista)
             
