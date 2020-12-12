@@ -5,11 +5,13 @@ from PySide2.QtGui import Qt
 from left_dock import LeftDock
 from PySide2 import QtWidgets
 from PySide2.QtWidgets import QWidget
-from Tab import Tab
+from tab import Tab
 from menu_bar import MenuBar
 from tool_bar import ToolBar
 from klase.metode import citanje_meta_podataka
+from klase.metode import pretraga_serijske
 from klase.prikaz_elementa import PrikazElementa
+from PySide2.QtCore import QModelIndex
 import csv
 import json
 
@@ -28,6 +30,7 @@ class PocetnaStrana:
 
         self.tool_bar = ToolBar(self.main_window,parent=None)
         self.tool_bar.dodaj.triggered.connect(self.otvori_prikaz)
+        self.tool_bar.pretrazi.triggered.connect(self.otvori_pretragu)
         status_bar = QtWidgets.QStatusBar()
         status_bar.showMessage("Prikazan status bar!")
         self.main_window.setStatusBar(status_bar)
@@ -49,6 +52,19 @@ class PocetnaStrana:
         self.prikaz = PrikazElementa(self.central_widget.currentWidget(),
                     self.central_widget.currentWidget().meta_podaci[5].split(","))
     
+    
+    def otvori_pretragu(self):
+        lista_atributa = self.central_widget.currentWidget().meta_podaci[5].split(",")
+        self.prikaz = PrikazElementa(self.central_widget.currentWidget(), lista_atributa)
+        lista_kljuceva = self.prikaz.lista_atr
+        lista_kriterijuma = self.prikaz.lista_kriterijuma
+
+        self.central_widget.currentWidget().model = pretraga_serijske(
+            lista_kljuceva, lista_kriterijuma, 
+            self.central_widget.currentWidget().meta_podaci)
+
+        self.central_widget.currentWidget().table.setModel(self.central_widget.currentWidget().model)
+
     def delete_tab(self, index):
         self.central_widget.removeTab(index)
         self.lista_putanja.remove(self.lista_putanja[index])

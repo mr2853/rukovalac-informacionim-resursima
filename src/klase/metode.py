@@ -35,3 +35,24 @@ def kreiraj_model(lista):
             model.lista_prikaz.append(GenerickaKlasa(lista[5].split(","), lista_podataka))
 
     return model
+
+def pretraga_serijske(lista_kljuceva, lista_kriterijuma, meta_podaci):
+    model = Model(meta_podaci)
+    with open(meta_podaci[4], newline='\n') as f:
+        while True:
+            podaci = f.readline().strip()
+            if podaci == "":
+                break
+            
+            lista_podataka = podaci.split(",")
+            lista_atributa = meta_podaci[5].split(",")
+            for i in range(len(lista_podataka)):
+                proslo = False
+                for j in range(len(lista_kljuceva)):
+                    if lista_atributa[i] == lista_kljuceva[j]:
+                        if lista_podataka[i] == lista_kriterijuma[j]:
+                            proslo = True
+                if proslo:
+                    model.lista_prikaz.append(GenerickaKlasa(lista_atributa, lista_podataka))
+
+    return model

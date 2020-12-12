@@ -6,15 +6,16 @@ class PrikazElementa(QtWidgets.QWidget):
         super().__init__()
         # parent.table.hide()
         # parent.tab_widget.hide()
+        self.lista_atr = []
+        self.lista_kriterijuma = []
         if len(lista_podataka) != 0:
             self.element = GenerickaKlasa(lista_atributa, lista_podataka)
         else:
             self.element = GenerickaKlasa([],[])
-        ok = False
-        
+
         for i in range(len(lista_atributa)):
-            ime = "input"
-            ime += str(i+1)
+            # ime = "input"
+            # ime += str(i+1)
             naziv = lista_atributa[i][0].upper()
 
             for s in range(1, len(lista_atributa[i])):
@@ -25,7 +26,12 @@ class PrikazElementa(QtWidgets.QWidget):
                 else:
                     naziv += lista_atributa[i][s]
 
-            text, ime = QtWidgets.QInputDialog.getText(None, 'Unos podataka:', naziv+":", QtWidgets.QLineEdit.Normal, "")
-
-            if ok:
+            text, ok = QtWidgets.QInputDialog.getText(self, 'Unos podataka:', naziv+":", QtWidgets.QLineEdit.Normal)
+            
+            if ok and len(text.strip()) != 0:
                 self.element.__setattr__(lista_atributa[i], str(text))
+                self.lista_atr.append(lista_atributa[i])
+                self.lista_kriterijuma.append(text)
+
+        
+        

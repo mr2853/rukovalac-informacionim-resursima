@@ -133,7 +133,7 @@ class Tab(QtWidgets.QWidget):
                             if element_selected.__getattribute__(kljucevi[0]) != self.__getattribute__(ime).model.lista_prikaz[j].__getattribute__(kljucevi[1]):
                                 pronadjen = False
                         else:
-                            print("eror u len(klucevi):", len(kljucevi), "// ", kljucevi)
+                            print("tab.py, 135 linija, eror u len(klucevi):", len(kljucevi), "// ", kljucevi)
                     if pronadjen:
                         nova_lista.append(self.__getattribute__(ime).model.lista_prikaz[j])
 
