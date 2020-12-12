@@ -1,0 +1,6 @@
+1. Promeniti prikaz naslova datoteka i njihovih ikonica u dock-u
+2. Promeniti nazive datoteka podataka, da se razlikuju sekvencijalne od serijskih
+3. Dodati dugmad za kretanje parent_ child_, gore dole levo desno
+4. Omoguciti kretanje parent_ child_, gore dole levo desno
+5. U toolBar staviti opciju izmeni datoteku i obrisi datoteku
+(u slucaju da zelimo da menjamo, dodajemo i brisemo meta podatke)
