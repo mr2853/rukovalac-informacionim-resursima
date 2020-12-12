@@ -5,7 +5,7 @@ from PySide2.QtGui import Qt
 from left_dock import LeftDock
 from PySide2 import QtWidgets
 from PySide2.QtWidgets import QWidget
-from tab import Tab
+from Tab import Tab
 from menu_bar import MenuBar
 from tool_bar import ToolBar
 from klase.metode import citanje_meta_podataka
@@ -21,13 +21,13 @@ class PocetnaStrana:
         self.main_window = QtWidgets.QMainWindow()
         self.main_window.resize(640, 480)
         self.main_window.setWindowTitle("Rukovalac informacionim resursima")
-        icon = QtGui.QIcon("ikonice/logo.jpg")
+        icon = QtGui.QIcon("src/ikonice/logo.jpg")
         self.main_window.setWindowIcon(icon)
 
         meni_bar = MenuBar(self.main_window, parent=None)
 
         self.tool_bar = ToolBar(self.main_window,parent=None)
-        self.tool_bar.create_o.triggered.connect(self.otvori_prikaz)
+        self.tool_bar.dodaj.triggered.connect(self.otvori_prikaz)
         status_bar = QtWidgets.QStatusBar()
         status_bar.showMessage("Prikazan status bar!")
         self.main_window.setStatusBar(status_bar)
