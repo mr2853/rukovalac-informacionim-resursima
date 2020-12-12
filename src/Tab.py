@@ -28,7 +28,30 @@ class Tab(QtWidgets.QWidget):
         self.table.setSelectionMode(QAbstractItemView.SingleSelection)
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.clicked.connect(self.element_selected)
+
+        self.sub_layout = QtWidgets.QHBoxLayout()
+
+        self.btnUp = QtWidgets.QPushButton("↑", self)
+        self.btnDown = QtWidgets.QPushButton("<", self)
+        self.btnLeft = QtWidgets.QPushButton(">", self)
+        self.btnRight = QtWidgets.QPushButton("↓", self)
+
+        self.btnUp.setFixedSize(50,80)
+        self.btnDown.setFixedSize(50,80)
+        self.btnLeft.setFixedSize(50,80)
+        self.btnRight.setFixedSize(50,80)
+
+        self.sub_layout.addStretch()
+
+        self.sub_layout.addWidget(self.btnUp)
+        self.sub_layout.addWidget(self.btnDown)
+        self.sub_layout.addWidget(self.btnLeft)
+        self.sub_layout.addWidget(self.btnRight)
+        self.sub_layout.addStretch()
+        self.sub_layout.setSpacing(0)
+
         self.main_layout.addWidget(self.table)
+        self.main_layout.addLayout(self.sub_layout)
         self.main_layout.addWidget(self.tab_widget)
         self.setLayout(self.main_layout)
         
