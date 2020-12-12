@@ -31,22 +31,22 @@ class Tab(QtWidgets.QWidget):
 
         self.sub_layout = QtWidgets.QHBoxLayout()
 
-        self.btnUp = QtWidgets.QPushButton("↑", self)
-        self.btnDown = QtWidgets.QPushButton("<", self)
-        self.btnLeft = QtWidgets.QPushButton(">", self)
-        self.btnRight = QtWidgets.QPushButton("↓", self)
+        self.btn_up = QtWidgets.QPushButton("↑", self)
+        self.btn_down = QtWidgets.QPushButton("↓", self)
+        self.btn_left = QtWidgets.QPushButton("<", self)
+        self.btn_right = QtWidgets.QPushButton(">", self)
 
-        self.btnUp.setFixedSize(50,80)
-        self.btnDown.setFixedSize(50,80)
-        self.btnLeft.setFixedSize(50,80)
-        self.btnRight.setFixedSize(50,80)
+        self.btn_up.setFixedSize(50,80)
+        self.btn_down.setFixedSize(50,80)
+        self.btn_left.setFixedSize(50,80)
+        self.btn_right.setFixedSize(50,80)
 
         self.sub_layout.addStretch()
 
-        self.sub_layout.addWidget(self.btnUp)
-        self.sub_layout.addWidget(self.btnDown)
-        self.sub_layout.addWidget(self.btnLeft)
-        self.sub_layout.addWidget(self.btnRight)
+        self.sub_layout.addWidget(self.btn_up)
+        self.sub_layout.addWidget(self.btn_down)
+        self.sub_layout.addWidget(self.btn_left)
+        self.sub_layout.addWidget(self.btn_right)
         self.sub_layout.addStretch()
         self.sub_layout.setSpacing(0)
 
@@ -54,7 +54,7 @@ class Tab(QtWidgets.QWidget):
         self.main_layout.addLayout(self.sub_layout)
         self.main_layout.addWidget(self.tab_widget)
         self.setLayout(self.main_layout)
-        
+
     def delete_tab(self, index):
         self.main_layout.removeWidget(index)
 
@@ -67,6 +67,8 @@ class Tab(QtWidgets.QWidget):
 
         self.table.setModel(self.model)
         self.table.setSortingEnabled(True)
+        self.table.setSelectionMode(QAbstractItemView.SingleSelection)
+        self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.horizontalHeader().sectionClicked.connect(self.sort_table) # kada se klikne na neki horizontalHeader da pozove self.sort_table
         if lista[1] == "sekvencijalna":
             self.model.upisan_podatak.connect(self.sort_table) # u slucaju izmene podataka da pozove sort_table
@@ -92,6 +94,7 @@ class Tab(QtWidgets.QWidget):
         self.table.dataChanged(top, bottom) # da refresuje tabelu od top indexa to bottom indexa
     
     def element_selected(self, index):
+        self.table.selected_elem = index
         model = self.table.model()
         element_selected = model.get_element(index)
         veze = []
