@@ -1,3 +1,4 @@
 1. Promeniti prikaz naslova datoteka i njihovih ikonica u dock-u
 2. Promeniti nazive datoteka podataka, da se razlikuju sekvencijalne od serijskih
-3. Kada shvatim kako je zamisljeno kretanje levo desno, odraditi to
+3. Shvatiti kako je zamisljeno kretanje levo desno, i odraditi to
+4. Testirati sutra detaljnije brisanje iz tabele

@@ -15,7 +15,7 @@ class Model(QtCore.QAbstractTableModel, QtCore.QObject):
         self.nazivi_kolona = lista[10].split(",")
         self.nazivi_kol_atributa = lista[11].split(",")
         self.broj_kolona = len(self.nazivi_kolona)
-
+        
     # pomocna metoda
     def get_element(self, index):
         return self.lista_prikaz[index.row()]

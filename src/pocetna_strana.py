@@ -3,6 +3,7 @@ import sys
 from PySide2 import QtWidgets, QtGui
 from PySide2.QtCore import QPoint
 from PySide2.QtGui import Qt
+from klase.genericka_klasa import GenerickaKlasa
 from left_dock import LeftDock
 from PySide2.QtWidgets import QInputDialog, QMainWindow, QMessageBox, QWidget
 from PySide2.QtWidgets import QAbstractItemView
@@ -33,7 +34,7 @@ class PocetnaStrana(QWidget):
         self.tool_bar = ToolBar(self.main_window,parent=None)
         self.tool_bar.dodaj.triggered.connect(self.otvori_prikaz)
         self.tool_bar.pretrazi.triggered.connect(self.otvori_pretragu)
-        self.tool_bar.ukloni_tabela.triggered.connect(self.ukloni_tabela)
+        self.tool_bar.ukloni_iz_tabele.triggered.connect(self.ukloni_iz_tabele)
         status_bar = QtWidgets.QStatusBar()
         status_bar.showMessage("Prikazan status bar!")
         self.main_window.setStatusBar(status_bar)
@@ -56,13 +57,13 @@ class PocetnaStrana(QWidget):
     
     def otvori_tabelu_desni_rodjak(self):...
 
-    def ukloni_tabela(self):
-        # hasattr proverava da li .table ima atribut selected_elem, kojeg mu dodeljujem kada se klikne na neki element
+    def ukloni_iz_tabele(self):
         if self.central_widget.currentWidget() == None:
             msgBox = QMessageBox()
             msgBox.setText("Trenutno ni jedna datoteka nije otvorena")
             msgBox.exec()
             return
+        # hasattr proverava da li .table ima atribut selected_elem, kojeg mu dodeljujem kada se klikne na neki element
         elif not hasattr(self.central_widget.currentWidget().table, "selected_elem"):
             msgBox = QMessageBox()
             msgBox.setText("Trenutno ni jedan element nije selektovan")
@@ -72,49 +73,57 @@ class PocetnaStrana(QWidget):
         model = self.central_widget.currentWidget().table.model()
         element_selected = model.get_element(self.central_widget.currentWidget().table.selected_elem)
         putanja = self.central_widget.currentWidget().meta_podaci[4]
-        lista_kljuceva = self.central_widget.currentWidget().meta_podaci[12]
-        lista_elemenata = []
-        eze = []
+        lista_kljuceva = self.central_widget.currentWidget().meta_podaci[12].split(",")
+        lista_atributa = self.central_widget.currentWidget().meta_podaci[5].split(",")
+        veze = []
         veze = self.central_widget.currentWidget().meta_podaci[9].split(",")
-        brojac = len(veze)-1
-        # ovaj kod sam kopirao iz tab.py kada sam otvarao tabele od dece glavne tabele
-        # for i in range(len(veze)): # prolazi kroz listu dece
-        #     if veze[brojac].find("child_") == -1: # ako veza nije dete nego je parent da preskoci samo
-        #         veze.pop(brojac)
-        #         brojac -= 1
-        #     else:
-        #         brojac -= 1
-        #         del1 = veze[brojac].find("_")+1
-        #         veze[brojac] = veze[brojac][del1:len(veze[brojac])]
-        #         del1 = veze[brojac].find("(")
-        #         ime_deteta = veze[brojac][0:del1]
-        #         nova_meta = ""
-        #         for s in range(len(ime_deteta)):
-        #             if ime_deteta[s].isupper():
-        #                 nova_meta += "_" + ime_deteta[s].lower()
-        #             else:
-        #                 nova_meta += ime_deteta[s]
         
-        #         nova_meta = nova_meta[1:len(nova_meta)]
-        #         nova_meta = self.meta_podaci[2] + "\\metaPodaci\\" + nova_meta + "_meta_podaci." + self.meta_podaci[3]
-        #         meta_putanje_dece.append(nova_meta) # dovde u sustini kreira meta putanju do deteta
-        #         onda ce se trebati proci kroz meta putanje
+        for i in range(len(veze)):
+            if hasattr(self.central_widget.currentWidget(), "sub_table"+str(i+1)):
+                if len(self.central_widget.currentWidget().__getattribute__("sub_table"+str(i+1)).model.lista_prikaz) != 0:
+                    msgBox = QMessageBox()
+                    msgBox.setText("Selektovani element ne sme da se obrise zato sto se njegovi podaci koriste u pod tabelama, njegovoj deci")
+                    msgBox.exec()
+                    return
         
-        #         del1 = veze[brojac].find("(") + 1
-        #         del2 = veze[brojac].find(")")
-        #         lista_kljuceva.append(veze[brojac][del1:del2].split("#")) # ovde je lista kljuceva koja povezuju
-        #          																glavnu tabelu i dete
-        #  i onda treba proci kroz dete i proveriti da li ima kljuc i ako ima da obustavi brisanje
+        self.central_widget.currentWidget().table.model().lista_prikaz = []
 
+        top = QModelIndex()
+        top.child(0,0)
+        self.central_widget.currentWidget().table.model().beginRemoveRows(top, 0, 0)
 
-        # otvoriti datoteku, ucitavati datoteku i ubacivati elemente u listu_elemenata
-        # dok se ne nadje element sa istim kljucevima, nece biti vise elemenata sa istim kljucem
-        # posto su jedinstveni, kada se naidje na njega preskociti njegovo ubacivanje u listu i nastaviti dalje
-
-        # onda upisati sa for petljom elemente liste u datoteku
-
-        self.central_widget.currentWidget().table.setModel(model)
+        with open(putanja, newline='') as csvfile:
+            spamreader = csv.reader(csvfile, delimiter = "\n")
+            counter = 0
+            for row in spamreader:
+                if row[0] == "":
+                    continue
+                objekat = GenerickaKlasa(lista_atributa, row[0].split(","))
+                nadjen = True
+                for i in range(len(lista_kljuceva)):
+                    if objekat.__getattribute__(lista_kljuceva[i]) != element_selected.__getattribute__(lista_kljuceva[i]):
+                        nadjen = False
+                if not nadjen:
+                    self.central_widget.currentWidget().table.model().lista_prikaz.append(objekat)
+                else:
+                    self.central_widget.currentWidget().table.model().removeRow(counter)
+                counter += 1
         
+        self.central_widget.currentWidget().table.model().endRemoveRows()
+        
+        with open(putanja, 'w', newline='') as f:
+            writer = csv.writer(f, delimiter = ",")
+            for i in range(len(self.central_widget.currentWidget().table.model().lista_prikaz)):
+                tekst = ""
+                for j in range(len(lista_atributa)):
+                    tekst += str(self.central_widget.currentWidget().table.model().lista_prikaz[i].__getattribute__(lista_atributa[j]))
+                    if j < len(lista_atributa)-1:
+                        tekst += ","
+                        
+                novi_red = tekst.split(",")
+                writer.writerow(novi_red)
+
+
     def otvori_tabelu_roditelj(self):
         if self.central_widget.currentWidget() == None:
             msgBox = QMessageBox()
@@ -186,16 +195,15 @@ class PocetnaStrana(QWidget):
         lista_roditelja[index] = lista_roditelja[index][del1:len(lista_roditelja[index])]
         del1 = lista_roditelja[index].find("(")
         ime_roditelja = lista_roditelja[index][0:del1]
-        nova_meta = ""
-        print("pocetna_strana.py 190 line: ",ime_roditelja)
-        for s in range(len(ime_roditelja)):
+        nova_meta = ime_roditelja[0].lower()
+        
+        for s in range(1, len(ime_roditelja)):
             if ime_roditelja[s].isupper():
                 nova_meta += "_" + ime_roditelja[s].lower()
             else:
                 nova_meta += ime_roditelja[s]
-        print("pocetna_strana.py 196 line: ",nova_meta)
-
-        nova_meta = nova_meta[1:len(nova_meta)]
+                
+        
         nova_meta = meta_podaci[2] + "\\metaPodaci\\" + nova_meta + "_meta_podaci." + meta_podaci[3]
         
         del1 = lista_roditelja[index].find("(") + 1
@@ -311,12 +319,12 @@ class PocetnaStrana(QWidget):
         self.prikaz = PrikazElementa(self.central_widget.currentWidget(), self.central_widget.currentWidget().meta_podaci)
         lista_kljuceva = self.prikaz.lista_atr
         lista_kriterijuma = self.prikaz.lista_kriterijuma
-
-        self.central_widget.currentWidget().model = pretraga_serijske(
+        model = self.central_widget.currentWidget().table.model()
+        model = pretraga_serijske(
             lista_kljuceva, lista_kriterijuma, 
             self.central_widget.currentWidget().meta_podaci)
 
-        self.central_widget.currentWidget().table.setModel(self.central_widget.currentWidget().model)
+        self.central_widget.currentWidget().table.setModel(model)
 
     def delete_tab(self, index):
         self.central_widget.removeTab(index)

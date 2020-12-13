@@ -15,7 +15,7 @@ class ToolBar(QtWidgets.QToolBar):
         self.izmeni = QtWidgets.QAction(QtGui.QIcon("src/ikonice/promjeni.png"),"Izmeni datoteku", main)
         self.izmeni_tabelu = QtWidgets.QAction(QtGui.QIcon("src/ikonice/izmeni_tabelu.png"),"Izmeni tabelu", main)
         self.ukloni = QtWidgets.QAction(QtGui.QIcon("src/ikonice/izbrisi.png"),"Izbrisi datoteku", main)
-        self.ukloni_tabela = QtWidgets.QAction(QtGui.QIcon("src/ikonice/izbrisi_tabela.png"),"Ukloni iz tabele", main)
+        self.ukloni_iz_tabele = QtWidgets.QAction(QtGui.QIcon("src/ikonice/izbrisi_tabela.png"),"Ukloni iz tabele", main)
         self.preimenuj = QtWidgets.QAction(QtGui.QIcon("src/ikonice/preimenuj.png"),"Preimenuj datoteku", main)
         self.pretrazi = QtWidgets.QAction(QtGui.QIcon("src/ikonice/pretraga.png"),"Pretrazi tabelu", main)
         self.tool_bar.addAction(self.kreiraj_datoteku)
@@ -24,7 +24,7 @@ class ToolBar(QtWidgets.QToolBar):
         self.tool_bar.addAction(self.ukloni)
         self.tool_bar.addAction(self.preimenuj)
         self.tool_bar.addAction(self.izmeni_tabelu)
-        self.tool_bar.addAction(self.ukloni_tabela)
+        self.tool_bar.addAction(self.ukloni_iz_tabele)
         
         self.tool_bar.addAction(self.pretrazi)
         self.setIconSize(QtCore.QSize(30,30))

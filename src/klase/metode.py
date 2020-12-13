@@ -9,6 +9,8 @@ def citanje_meta_podataka(putanja):
         spamreader = csv.reader(csvfile, delimiter = "\n")
         counter = 0
         for row in spamreader:
+            if row[0] == "":
+                continue
             dve_tacke = row[0].find(":")+1
             row[0] = row[0][dve_tacke:len(row[0])]
 

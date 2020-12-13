@@ -63,17 +63,16 @@ class Tab(QtWidgets.QWidget):
         self.tab_widget.removeTab(index)
     
     def read(self, lista):
-        self.model = kreiraj_model(lista)
+        model = kreiraj_model(lista)
         self.meta_podaci = lista
-
-        self.table.setModel(self.model)
+        self.table.setModel(model)
         self.table.setSortingEnabled(True)
         self.table.setSelectionMode(QAbstractItemView.SingleSelection)
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.horizontalHeader().sectionClicked.connect(self.sort_table) # kada se klikne na neki horizontalHeader da pozove self.sort_table
         if lista[1] == "sekvencijalna":
             self.sort_table(0)
-            self.model.upisan_podatak.connect(self.sort_table) # u slucaju izmene podataka da pozove sort_table
+            self.table.model().upisan_podatak.connect(self.sort_table) # u slucaju izmene podataka da pozove sort_table
 
     
     def sort_table(self, index):
@@ -85,14 +84,14 @@ class Tab(QtWidgets.QWidget):
         nacin_sortiranja = self.table.horizontalHeader().sortIndicatorOrder() # dobavljamo koja vrednost sortiranja je oznacena
         self.table.sortByColumn(index, nacin_sortiranja)
         if nacin_sortiranja == Qt.AscendingOrder: # ako je prema vecem
-            self.model.sort_list(index, False)
+            self.table.model().sort_list(index, False)
         else:                                   # ako nije prema vecem nego prema manjem
-            self.model.sort_list(index, True)
-        
+            self.table.model().sort_list(index, True)
+            
         top = QModelIndex()
         top.child(0,0)
         bottom = QModelIndex()
-        bottom.child(len(self.model.lista_prikaz), self.model.broj_kolona)
+        bottom.child(len(self.table.model().lista_prikaz), self.table.model().broj_kolona)
         self.table.dataChanged(top, bottom) # da refresuje tabelu od top indexa to bottom indexa
     
     def element_selected(self, index):
