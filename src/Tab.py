@@ -72,9 +72,10 @@ class Tab(QtWidgets.QWidget):
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.horizontalHeader().sectionClicked.connect(self.sort_table) # kada se klikne na neki horizontalHeader da pozove self.sort_table
         if lista[1] == "sekvencijalna":
+            self.sort_table(0)
             self.model.upisan_podatak.connect(self.sort_table) # u slucaju izmene podataka da pozove sort_table
 
-    @Slot(int)
+    
     def sort_table(self, index):
         """
         sortira listu

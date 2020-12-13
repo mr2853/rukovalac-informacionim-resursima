@@ -52,6 +52,10 @@ class PocetnaStrana(QWidget):
         
         self.main_window.show()
 
+    def otvori_tabelu_levi_rodjak(self):...
+    
+    def otvori_tabelu_desni_rodjak(self):...
+
     def ukloni_tabela(self):
         # hasattr proverava da li .table ima atribut selected_elem, kojeg mu dodeljujem kada se klikne na neki element
         if self.central_widget.currentWidget() == None:
@@ -72,18 +76,18 @@ class PocetnaStrana(QWidget):
         lista_elemenata = []
         eze = []
         veze = self.central_widget.currentWidget().meta_podaci[9].split(",")
-        counter = len(veze)-1
+        brojac = len(veze)-1
         # ovaj kod sam kopirao iz tab.py kada sam otvarao tabele od dece glavne tabele
         # for i in range(len(veze)): # prolazi kroz listu dece
-        #     if veze[counter].rfind("child_") == -1: # ako veza nije dete nego je parent da preskoci samo
-        #         veze.pop(counter)
-        #         counter -= 1
+        #     if veze[brojac].find("child_") == -1: # ako veza nije dete nego je parent da preskoci samo
+        #         veze.pop(brojac)
+        #         brojac -= 1
         #     else:
-        #         counter -= 1
-        #         del1 = veze[counter].find("_")+1
-        #         veze[counter] = veze[counter][del1:len(veze[counter])]
-        #         del1 = veze[counter].find("(")
-        #         ime_deteta = veze[counter][0:del1]
+        #         brojac -= 1
+        #         del1 = veze[brojac].find("_")+1
+        #         veze[brojac] = veze[brojac][del1:len(veze[brojac])]
+        #         del1 = veze[brojac].find("(")
+        #         ime_deteta = veze[brojac][0:del1]
         #         nova_meta = ""
         #         for s in range(len(ime_deteta)):
         #             if ime_deteta[s].isupper():
@@ -96,9 +100,9 @@ class PocetnaStrana(QWidget):
         #         meta_putanje_dece.append(nova_meta) # dovde u sustini kreira meta putanju do deteta
         #         onda ce se trebati proci kroz meta putanje
         
-        #         del1 = veze[counter].find("(") + 1
-        #         del2 = veze[counter].find(")")
-        #         lista_kljuceva.append(veze[counter][del1:del2].split("#")) # ovde je lista kljuceva koja povezuju
+        #         del1 = veze[brojac].find("(") + 1
+        #         del2 = veze[brojac].find(")")
+        #         lista_kljuceva.append(veze[brojac][del1:del2].split("#")) # ovde je lista kljuceva koja povezuju
         #          																glavnu tabelu i dete
         #  i onda treba proci kroz dete i proveriti da li ima kljuc i ako ima da obustavi brisanje
 
@@ -129,16 +133,16 @@ class PocetnaStrana(QWidget):
         veze = self.central_widget.currentWidget().meta_podaci[9].split(",")
         meta_podaci = self.central_widget.currentWidget().meta_podaci
         lista_kljuceva = []
-        counter = len(veze)-1
+        brojac = len(veze)-1
         lista_roditelja = []
 
         for i in range(len(veze)):
-            if veze[counter].rfind("parent_") == -1:
-                veze.pop(counter)
-                counter -= 1
+            if veze[brojac].find("parent_") == -1:
+                veze.pop(brojac)
+                brojac -= 1
             else:
-                lista_roditelja.append(veze[counter])
-                counter -= 1
+                lista_roditelja.append(veze[brojac])
+                brojac -= 1
         index = -1
 
         if len(lista_roditelja) == 0:
@@ -168,6 +172,7 @@ class PocetnaStrana(QWidget):
                 for i in range(len(lista_roditelja)):
                     if lista_roditelja[i].find(input[0]) != -1:
                         index = i
+                        break
             else:
                 return
 
@@ -182,11 +187,13 @@ class PocetnaStrana(QWidget):
         del1 = lista_roditelja[index].find("(")
         ime_roditelja = lista_roditelja[index][0:del1]
         nova_meta = ""
+        print("pocetna_strana.py 190 line: ",ime_roditelja)
         for s in range(len(ime_roditelja)):
             if ime_roditelja[s].isupper():
                 nova_meta += "_" + ime_roditelja[s].lower()
             else:
                 nova_meta += ime_roditelja[s]
+        print("pocetna_strana.py 196 line: ",nova_meta)
 
         nova_meta = nova_meta[1:len(nova_meta)]
         nova_meta = meta_podaci[2] + "\\metaPodaci\\" + nova_meta + "_meta_podaci." + meta_podaci[3]
@@ -222,6 +229,8 @@ class PocetnaStrana(QWidget):
 
         tab.btn_down.clicked.connect(self.otvori_tabelu_dete)
         tab.btn_up.clicked.connect(self.otvori_tabelu_roditelj)
+        tab.btn_left.clicked.connect(self.otvori_tabelu_levi_rodjak)
+        tab.btn_right.clicked.connect(self.otvori_tabelu_desni_rodjak)
 
         self.central_widget.removeTab(self.central_widget.currentIndex())
         self.central_widget.addTab(tab, ime_roditelja)
@@ -238,10 +247,6 @@ class PocetnaStrana(QWidget):
         
         self.lista_putanja.append(meta)
         self.lista_putanja.remove(self.lista_putanja[self.central_widget.currentIndex()])
-        # for i in range(len(self.lista_putanja)):
-        #     if self.lista_putanja[i].find(self.central_widget.currentWidget().putanja_meta_podaci) != -1:
-        #         self.lista_putanja.remove(self.lista_putanja[i])
-        #         break
 
     def otvori_tabelu_dete(self):
         if self.central_widget.currentWidget() == None:
@@ -292,7 +297,8 @@ class PocetnaStrana(QWidget):
             return
 
         self.prikaz = PrikazElementa(self.central_widget.currentWidget(),
-                    self.central_widget.currentWidget().meta_podaci[5].split(","))
+                    self.central_widget.currentWidget().meta_podaci[5].split(","),
+                    self.central_widget.currentWidget().table.model().lista_prikaz)
     
     
     def otvori_pretragu(self):
@@ -302,8 +308,7 @@ class PocetnaStrana(QWidget):
             msgBox.exec()
             return
 
-        lista_atributa = self.central_widget.currentWidget().meta_podaci[5].split(",")
-        self.prikaz = PrikazElementa(self.central_widget.currentWidget(), lista_atributa)
+        self.prikaz = PrikazElementa(self.central_widget.currentWidget(), self.central_widget.currentWidget().meta_podaci)
         lista_kljuceva = self.prikaz.lista_atr
         lista_kriterijuma = self.prikaz.lista_kriterijuma
 
@@ -323,6 +328,7 @@ class PocetnaStrana(QWidget):
         for i in range(len(self.lista_putanja)):
             if putanja == self.lista_putanja[i]:
                 ista_putanja = True
+                return
         if not ista_putanja:
             neka_lista = citanje_meta_podataka(putanja)
             self.lista_putanja.append(putanja)

@@ -1,6 +1,3 @@
 1. Promeniti prikaz naslova datoteka i njihovih ikonica u dock-u
 2. Promeniti nazive datoteka podataka, da se razlikuju sekvencijalne od serijskih
-3. U toolBar staviti opciju izmeni datoteku i obrisi datoteku
-(u slucaju da zelimo da menjamo, dodajemo i brisemo meta podatke)
-4. Testirati kretanje kroz parent_ child_, sutra namestiti da moze sa
- vise parenta, i da moze levo desno ici
+3. Kada shvatim kako je zamisljeno kretanje levo desno, odraditi to
