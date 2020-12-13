@@ -10,3 +10,4 @@ obaveznost_atributa:True,True,True,True,False,True,True,False,False,False,False
 veze:parent_VisokoskolskaUstanova(ustanova=oznaka),child_TokStudija(ustanova#struka#broj_indeksa)
 nazivi_kolona:Struka,Broj indeksa,Prezime,Ime,Datum rodjenja
 nazivi_kol_atributa:struka,broj_indeksa,prezime,ime,datum_rodjenja
+lista_kljuceva:ustanova,struka,broj_indeksa

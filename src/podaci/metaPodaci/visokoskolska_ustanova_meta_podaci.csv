@@ -10,3 +10,4 @@ obaveznost_atributa:True,True,True
 veze:child_StudijskiProgrami(oznaka=ustanova),child_NastavniPredmet(oznaka=ustanova),child_Studenti(oznaka=ustanova)
 nazivi_kolona:Naziv,Adresa
 nazivi_kol_atributa:naziv,adresa
+lista_kljuceva:oznaka

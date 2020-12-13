@@ -97,12 +97,12 @@ class Tab(QtWidgets.QWidget):
         self.table.selected_elem = index
         model = self.table.model()
         element_selected = model.get_element(index)
-        veze = []
-        veze = self.meta_podaci[9].split(",")
         self.tab_widget.clear()
         self.meta_putanje_dece = []
         imena_dece = []
         lista_kljuceva = []
+        veze = []
+        veze = self.meta_podaci[9].split(",")
         counter = len(veze)-1
 
         for i in range(len(veze)):
@@ -124,6 +124,7 @@ class Tab(QtWidgets.QWidget):
 
                 nova_meta = nova_meta[1:len(nova_meta)]
                 nova_meta = self.meta_podaci[2] + "\\metaPodaci\\" + nova_meta + "_meta_podaci." + self.meta_podaci[3]
+                self.meta_putanje_dece.append(nova_meta)
                 # nadjeno = False
                 # for m in range(len(self.meta_putanje_dece)):
                 #     if self.meta_putanje_dece[m] == nova_meta:
@@ -135,7 +136,6 @@ class Tab(QtWidgets.QWidget):
                 del2 = veze[counter].find(")")
                 lista_kljuceva.append(veze[counter][del1:del2].split("#"))
 
-                self.meta_putanje_dece.append(nova_meta)
         
         
                 ime = "sub_table" + str(i+1)
@@ -168,3 +168,4 @@ class Tab(QtWidgets.QWidget):
                 self.__getattribute__(ime).setModel(self.__getattribute__(ime).model)
             
                 self.tab_widget.addTab(self.__getattribute__(ime), ime_deteta)
+                counter -= 1

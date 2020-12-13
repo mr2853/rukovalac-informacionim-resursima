@@ -10,3 +10,4 @@ obaveznost_atributa:True,True,True,True,True,True
 veze:parent_NastavniPredmet(ustanova_predmet=ustanova,oznaka_predmeta=oznaka),parent_StudijskiProgram(program_ustanove=ustanova,oznaka_programa)
 nazivi_kolona:Program ustanove,Oznaka programa
 nazivi_kol_atributa:program_ustanove,oznaka_programa
+lista_kljuceva:program_ustanove,oznaka_programa,blok,pozicija

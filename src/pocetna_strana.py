@@ -4,7 +4,7 @@ from PySide2 import QtWidgets, QtGui
 from PySide2.QtCore import QPoint
 from PySide2.QtGui import Qt
 from left_dock import LeftDock
-from PySide2.QtWidgets import QWidget
+from PySide2.QtWidgets import QInputDialog, QMainWindow, QMessageBox, QWidget
 from PySide2.QtWidgets import QAbstractItemView
 from tab import Tab
 from menu_bar import MenuBar
@@ -18,9 +18,9 @@ import csv
 import json
 
 
-class PocetnaStrana:
-    def __init__(self):
-        super().__init__()
+class PocetnaStrana(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
         self.lista_putanja = []
         self.main_window = QtWidgets.QMainWindow()
         self.main_window.resize(640, 480)
@@ -33,6 +33,7 @@ class PocetnaStrana:
         self.tool_bar = ToolBar(self.main_window,parent=None)
         self.tool_bar.dodaj.triggered.connect(self.otvori_prikaz)
         self.tool_bar.pretrazi.triggered.connect(self.otvori_pretragu)
+        self.tool_bar.ukloni_tabela.triggered.connect(self.ukloni_tabela)
         status_bar = QtWidgets.QStatusBar()
         status_bar.showMessage("Prikazan status bar!")
         self.main_window.setStatusBar(status_bar)
@@ -51,8 +52,65 @@ class PocetnaStrana:
         
         self.main_window.show()
 
+    def ukloni_tabela(self):
+        # hasattr proverava da li .table ima atribut selected_elem, kojeg mu dodeljujem kada se klikne na neki element
+        if not hasattr(self.central_widget.currentWidget().table, "selected_elem"):
+            msgBox = QMessageBox()
+            msgBox.setText("Trenutno ni jedan element nije selektovan")
+            msgBox.exec()
+            return
+            
+        model = self.central_widget.currentWidget().table.model()
+        element_selected = model.get_element(self.central_widget.currentWidget().table.selected_elem)
+        putanja = self.central_widget.currentWidget().meta_podaci[4]
+        lista_kljuceva = self.central_widget.currentWidget().meta_podaci[12]
+        lista_elemenata = []
+        eze = []
+        veze = self.central_widget.currentWidget().meta_podaci[9].split(",")
+        counter = len(veze)-1
+        # ovaj kod sam kopirao iz tab.py kada sam otvarao tabele od dece glavne tabele
+        # for i in range(len(veze)): # prolazi kroz listu dece
+        #     if veze[counter].rfind("child_") == -1: # ako veza nije dete nego je parent da preskoci samo
+        #         veze.pop(counter)
+        #         counter -= 1
+        #     else:
+        #         counter -= 1
+        #         del1 = veze[counter].find("_")+1
+        #         veze[counter] = veze[counter][del1:len(veze[counter])]
+        #         del1 = veze[counter].find("(")
+        #         ime_deteta = veze[counter][0:del1]
+        #         nova_meta = ""
+        #         for s in range(len(ime_deteta)):
+        #             if ime_deteta[s].isupper():
+        #                 nova_meta += "_" + ime_deteta[s].lower()
+        #             else:
+        #                 nova_meta += ime_deteta[s]
+        
+        #         nova_meta = nova_meta[1:len(nova_meta)]
+        #         nova_meta = self.meta_podaci[2] + "\\metaPodaci\\" + nova_meta + "_meta_podaci." + self.meta_podaci[3]
+        #         meta_putanje_dece.append(nova_meta) # dovde u sustini kreira meta putanju do deteta
+        #         onda ce se trebati proci kroz meta putanje
+        
+        #         del1 = veze[counter].find("(") + 1
+        #         del2 = veze[counter].find(")")
+        #         lista_kljuceva.append(veze[counter][del1:del2].split("#")) # ovde je lista kljuceva koja povezuju
+        #          																glavnu tabelu i dete
+        #  i onda treba proci kroz dete i proveriti da li ima kljuc i ako ima da obustavi brisanje
+
+
+        # otvoriti datoteku, ucitavati datoteku i ubacivati elemente u listu_elemenata
+        # dok se ne nadje element sa istim kljucevima, nece biti vise elemenata sa istim kljucem
+        # posto su jedinstveni, kada se naidje na njega preskociti njegovo ubacivanje u listu i nastaviti dalje
+
+        # onda upisati sa for petljom elemente liste u datoteku
+
+        self.central_widget.currentWidget().table.setModel(model)
+        
     def otvori_tabelu_roditelj(self):
         if not hasattr(self.central_widget.currentWidget().table, "selected_elem"):
+            msgBox = QMessageBox()
+            msgBox.setText("Trenutno ni jedan element nije selektovan")
+            msgBox.exec()
             return
 
         model = self.central_widget.currentWidget().table.model()
@@ -70,13 +128,36 @@ class PocetnaStrana:
                 counter -= 1
             else:
                 lista_roditelja.append(veze[counter])
+                counter -= 1
         index = -1
-        if len(lista_roditelja) == 0:...
-            # poruka da tabela nema roditelja
-            # i return
-        elif len(lista_roditelja) > 1:...
-            # index = dialog drop down lista da izabere kog roditelja zeli
-            #  iz liste_roditelja i sacuvati index u index
+
+        if len(lista_roditelja) == 0:
+            msgBox = QMessageBox()
+            msgBox.setText("Selektovani element nema roditelja")
+            msgBox.exec()
+            return
+
+        elif len(lista_roditelja) > 1:
+            list_tuple = ()
+            for i in range(len(lista_roditelja)):
+                del1 = lista_roditelja[i].find("_")+1
+                del2 = lista_roditelja[i].find("(")
+                ime = lista_roditelja[i][del1:del2]
+
+                list_tuple = list_tuple + (ime,)
+
+            input = QtWidgets.QInputDialog.getItem(
+                self,
+                "",
+                "Trenutna tabela ima vise od 1 roditelja\nIzaberite roditelja:",
+                list_tuple,
+                0,
+                editable=False)
+
+            # if ok:
+            #     print(text)
+            #     index = int(text)
+
         elif len(lista_roditelja) == 1:
             index = 0
 
@@ -134,7 +215,11 @@ class PocetnaStrana:
 
     def otvori_tabelu_dete(self):
         if self.central_widget.currentWidget().tab_widget.currentWidget() == None:
+            msgBox = QMessageBox()
+            msgBox.setText("Trenutno ni jedan element nije selektovan")
+            msgBox.exec()
             return
+
         child = self.central_widget.currentWidget().tab_widget.currentWidget()
         tab = Tab(self.central_widget)
         tab.read(child.meta_podaci)
@@ -148,14 +233,22 @@ class PocetnaStrana:
 
     def otvori_prikaz(self):
         if self.central_widget.currentWidget() == None:
+            msgBox = QMessageBox()
+            msgBox.setText("Trenutno ni jedan element nije selektovan")
+            msgBox.exec()
             return
+
         self.prikaz = PrikazElementa(self.central_widget.currentWidget(),
                     self.central_widget.currentWidget().meta_podaci[5].split(","))
     
     
     def otvori_pretragu(self):
         if self.central_widget.currentWidget() == None:
+            msgBox = QMessageBox()
+            msgBox.setText("Trenutno ni jedan element nije selektovan")
+            msgBox.exec()
             return
+
         lista_atributa = self.central_widget.currentWidget().meta_podaci[5].split(",")
         self.prikaz = PrikazElementa(self.central_widget.currentWidget(), lista_atributa)
         lista_kljuceva = self.prikaz.lista_atr
