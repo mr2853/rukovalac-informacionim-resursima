@@ -2,20 +2,21 @@ from .genericka_klasa import GenerickaKlasa
 from PySide2 import QtWidgets
 
 class PrikazElementa(QtWidgets.QWidget):
-    def __init__(self, parent, lista_atributa, lista_podataka=[]):
-        super().__init__()
+    def __init__(self, parent, lista_atributa, element=None):
+        super().__init__(parent)
         # parent.table.hide()
         # parent.tab_widget.hide()
-        self.lista_atr = []
-        self.lista_kriterijuma = []
-        if len(lista_podataka) != 0:
-            self.element = GenerickaKlasa(lista_atributa, lista_podataka)
+        self.lista_atr = [] # ovu listu koristim za pretragu, dodaju se samo
+        # atributi cija input polja nisu prazna, i onda znam po kojim atributima
+        # da vrsim pretragu
+        self.lista_kriterijuma = [] # lista kriterijuma, isto kao lista gore sto
+        # cuva nazive atributa, ova lista cuva vrednosti tih atributa
+        if element != None:
+            self.element = element
         else:
             self.element = GenerickaKlasa([],[])
 
         for i in range(len(lista_atributa)):
-            # ime = "input"
-            # ime += str(i+1)
             naziv = lista_atributa[i][0].upper()
 
             for s in range(1, len(lista_atributa[i])):

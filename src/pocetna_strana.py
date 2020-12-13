@@ -124,10 +124,11 @@ class PocetnaStrana:
 
         tab.table.model().lista_prikaz = nova_lista
 
-        tab.table.setModel(tab.table.model())
+        # tab.table.setModel(tab.table.model())
 
         tab.btn_down.clicked.connect(self.otvori_tabelu_dete)
         tab.btn_up.clicked.connect(self.otvori_tabelu_roditelj)
+
         self.central_widget.removeTab(self.central_widget.currentIndex())
         self.central_widget.addTab(tab, ime_roditelja)
 
@@ -137,8 +138,11 @@ class PocetnaStrana:
         child = self.central_widget.currentWidget().tab_widget.currentWidget()
         tab = Tab(self.central_widget)
         tab.read(child.meta_podaci)
+        tab.table.model().lista_prikaz = child.model.lista_prikaz
+        
         tab.btn_down.clicked.connect(self.otvori_tabelu_dete)
         tab.btn_up.clicked.connect(self.otvori_tabelu_roditelj)
+
         self.central_widget.removeTab(self.central_widget.currentIndex())
         self.central_widget.addTab(tab, child.meta_podaci[0])
 
