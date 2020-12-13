@@ -15,8 +15,9 @@ import json
 from klase.genericka_klasa import GenerickaKlasa
 
 class Tab(QtWidgets.QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, putanja, parent=None):
         super().__init__(parent)
+        self.putanja_meta_podaci = putanja
         self.main_layout = QtWidgets.QVBoxLayout()
         self.tab_widget = QtWidgets.QTabWidget(self)
         self.tab_widget.setTabsClosable(True)

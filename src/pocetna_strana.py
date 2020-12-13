@@ -54,7 +54,12 @@ class PocetnaStrana(QWidget):
 
     def ukloni_tabela(self):
         # hasattr proverava da li .table ima atribut selected_elem, kojeg mu dodeljujem kada se klikne na neki element
-        if not hasattr(self.central_widget.currentWidget().table, "selected_elem"):
+        if self.central_widget.currentWidget() == None:
+            msgBox = QMessageBox()
+            msgBox.setText("Trenutno ni jedna datoteka nije otvorena")
+            msgBox.exec()
+            return
+        elif not hasattr(self.central_widget.currentWidget().table, "selected_elem"):
             msgBox = QMessageBox()
             msgBox.setText("Trenutno ni jedan element nije selektovan")
             msgBox.exec()
@@ -107,7 +112,12 @@ class PocetnaStrana(QWidget):
         self.central_widget.currentWidget().table.setModel(model)
         
     def otvori_tabelu_roditelj(self):
-        if not hasattr(self.central_widget.currentWidget().table, "selected_elem"):
+        if self.central_widget.currentWidget() == None:
+            msgBox = QMessageBox()
+            msgBox.setText("Trenutno ni jedna datoteka nije otvorena")
+            msgBox.exec()
+            return
+        elif not hasattr(self.central_widget.currentWidget().table, "selected_elem"):
             msgBox = QMessageBox()
             msgBox.setText("Trenutno ni jedan element nije selektovan")
             msgBox.exec()
@@ -153,10 +163,13 @@ class PocetnaStrana(QWidget):
                 list_tuple,
                 0,
                 editable=False)
-
-            # if ok:
-            #     print(text)
-            #     index = int(text)
+                
+            if input[1]:
+                for i in range(len(lista_roditelja)):
+                    if lista_roditelja[i].find(input[0]) != -1:
+                        index = i
+            else:
+                return
 
         elif len(lista_roditelja) == 1:
             index = 0
@@ -213,10 +226,37 @@ class PocetnaStrana(QWidget):
         self.central_widget.removeTab(self.central_widget.currentIndex())
         self.central_widget.addTab(tab, ime_roditelja)
 
+        meta = ""
+        for s in range(len(self.central_widget.currentWidget().meta_podaci[0])):
+            if self.central_widget.currentWidget().meta_podaci[0][s].isupper():
+                meta += "_" + self.central_widget.currentWidget().meta_podaci[0][s].lower()
+            else:
+                meta += self.central_widget.currentWidget().meta_podaci[0][s]
+                
+        meta = meta[1:len(meta)]
+        meta = self.central_widget.currentWidget().meta_podaci[2] + "\\metaPodaci\\" + meta + "_meta_podaci." + self.central_widget.currentWidget().meta_podaci[3]
+        
+        self.lista_putanja.append(meta)
+        self.lista_putanja.remove(self.lista_putanja[self.central_widget.currentIndex()])
+        # for i in range(len(self.lista_putanja)):
+        #     if self.lista_putanja[i].find(self.central_widget.currentWidget().putanja_meta_podaci) != -1:
+        #         self.lista_putanja.remove(self.lista_putanja[i])
+        #         break
+
     def otvori_tabelu_dete(self):
-        if self.central_widget.currentWidget().tab_widget.currentWidget() == None:
+        if self.central_widget.currentWidget() == None:
+            msgBox = QMessageBox()
+            msgBox.setText("Trenutno ni jedna datoteka nije otvorena")
+            msgBox.exec()
+            return
+        elif not hasattr(self.central_widget.currentWidget().table, "selected_elem"):
             msgBox = QMessageBox()
             msgBox.setText("Trenutno ni jedan element nije selektovan")
+            msgBox.exec()
+            return
+        elif self.central_widget.currentWidget().tab_widget.currentWidget() == None:
+            msgBox = QMessageBox()
+            msgBox.setText("Selektovani element nema pod tabele")
             msgBox.exec()
             return
 
@@ -231,10 +271,23 @@ class PocetnaStrana(QWidget):
         self.central_widget.removeTab(self.central_widget.currentIndex())
         self.central_widget.addTab(tab, child.meta_podaci[0])
 
+        meta = ""
+        for s in range(len(child.meta_podaci[0])):
+            if child.meta_podaci[0][s].isupper():
+                meta += "_" + child.meta_podaci[0][s].lower()
+            else:
+                meta += child.meta_podaci[0][s]
+                
+        meta = meta[1:len(meta)]
+        meta = child.meta_podaci[2] + "\\metaPodaci\\" + meta + "_meta_podaci." + child.meta_podaci[3]
+         
+        self.lista_putanja.append(meta)
+        self.lista_putanja.remove(self.lista_putanja[self.central_widget.currentIndex()])
+
     def otvori_prikaz(self):
         if self.central_widget.currentWidget() == None:
             msgBox = QMessageBox()
-            msgBox.setText("Trenutno ni jedan element nije selektovan")
+            msgBox.setText("Trenutno ni jedna datoteka nije otvorena")
             msgBox.exec()
             return
 
@@ -271,10 +324,10 @@ class PocetnaStrana(QWidget):
             if putanja == self.lista_putanja[i]:
                 ista_putanja = True
         if not ista_putanja:
-            self.lista_putanja.append(putanja)
             neka_lista = citanje_meta_podataka(putanja)
+            self.lista_putanja.append(putanja)
 
-            tab = Tab(self.central_widget)
+            tab = Tab(putanja, self.central_widget)
             tab.read(neka_lista)
             tab.btn_down.clicked.connect(self.otvori_tabelu_dete)
             tab.btn_up.clicked.connect(self.otvori_tabelu_roditelj)
