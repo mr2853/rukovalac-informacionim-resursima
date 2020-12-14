@@ -1,8 +1,8 @@
-objekat:StudijskiProgrami
+objekat:StudijskiProgram
 tip_datoteke:serijska
 relativna_putanja:src\podaci
 sufiks:csv
-podaci:relativna_putanja\studijski_programi.sufiks
+podaci:relativna_putanja\studijski_program.sufiks
 nazivi_atributa:ustanova,nivo,oznaka_programa,naziv_programa
 tipovi_atributa:character,float,character,character
 duzina_atributa:2,2,3,120

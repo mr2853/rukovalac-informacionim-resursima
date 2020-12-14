@@ -2,12 +2,12 @@ objekat:VisokoskolskaUstanova
 tip_datoteke:serijska
 relativna_putanja:src\podaci
 sufiks:csv
-podaci:relativna_putanja\visokoskolske_ustanove.sufiks
+podaci:relativna_putanja\visokoskolska_ustanova.sufiks
 naziv_atributa:oznaka,naziv,adresa
 tipovi_atributa:character,character,character
 duzina_atributa:2,80,80
 obaveznost_atributa:True,True,True
-veze:child_StudijskiProgrami(oznaka=ustanova),child_NastavniPredmet(oznaka=ustanova),child_Student(oznaka=ustanova)
+veze:child_StudijskiProgram(oznaka=ustanova),child_NastavniPredmet(oznaka=ustanova),child_Student(oznaka=ustanova)
 nazivi_kolona:Naziv,Adresa
 nazivi_kol_atributa:naziv,adresa
 lista_kljuceva:oznaka
