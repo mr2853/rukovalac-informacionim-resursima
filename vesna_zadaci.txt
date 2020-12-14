@@ -1,0 +1,9 @@
+2.* Promeniti nazive datoteka podataka, da se razlikuju sekvencijalne od serijskih
+3.* Kreiranje datoteke
+4.* Promena imena datoteke
+6.* Brisanje datoteke
+9.* Dodavanje u datoteku
+10.* Izmena u datoteci
+16. Kada se unose neki podaci npr za nivo studija u studijski programi,
+ ponuditi da se izabere preko drop down liste a ne unosom, da korisnik ne bi morao
+ nagadjati koja je oznaka
