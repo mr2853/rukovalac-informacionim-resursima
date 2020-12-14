@@ -346,4 +346,5 @@ class PocetnaStrana(QWidget):
             tab.btn_down.clicked.connect(self.otvori_tabelu_dete)
             tab.btn_up.clicked.connect(self.otvori_tabelu_roditelj)
             self.central_widget.addTab(tab, neka_lista[0])
+            self.central_widget.setCurrentIndex(self.central_widget.currentIndex()+1)
             

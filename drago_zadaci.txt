@@ -1,0 +1,13 @@
+1.* Promeniti prikaz naslova datoteka i njihovih ikonica u dock-u
+2. Definisanje metode pristupa, da li ce biti serijska ili sekvencijalna
+3.* Spajanje datoteka
+4.* Razdvajanje datoteka
+5.* Izmeniti sortiranje u tabeli, da sortira listu deo po deo
+6. Parent_ child_ nije bilo obavezno za 1.kontrolnu tacku
+7.* Staviti parametar posle koliko izmena da se podatak sacuva
+ u datoteku, default= posles svake izmene
+8.* Pri sortiranju u tabeli, ako je serijska ponuditi korisniku da li zeli da sacuva 
+ sortiranu datoteku, ili zeli samo nesortiranu da sacuva ili zeli obe da sacuva
+9.* Za dodavanje u sekvencijalnu datoteku. Dodavati elemente u serijsku, sortirati serijsku,
+proveriti i izbaciti duplikate(iste elemente izbaciti kao gresku i onda korisnik da izabere koji
+ce da zadrzi), i onda spojiti sortiranu serijsku i sekvencijalnu
