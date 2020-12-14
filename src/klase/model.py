@@ -4,6 +4,8 @@ from PySide2.QtGui import Qt
 import operator
 from PySide2.QtCore import Signal
 
+from klase.merge_sort import merge_sort
+
 
 class Model(QtCore.QAbstractTableModel, QtCore.QObject):
     upisan_podatak = QtCore.Signal(int)
@@ -65,5 +67,7 @@ class Model(QtCore.QAbstractTableModel, QtCore.QObject):
         :param: index - oznacava po kojoj koloni/atributu se sortira
         :param: bool_nacin_sortiranja - oznacava da li je sortiranje prema vecem ili prema manjem elementu
         """
-        self.lista_prikaz.sort(key = lambda x: x.__getattribute__(self.nazivi_kol_atributa[index]) , reverse=bool_nacin_sortiranja)
+        self.lista_prikaz = merge_sort(self.lista_prikaz, self.nazivi_kol_atributa[index], bool_nacin_sortiranja)
+        
+        # self.lista_prikaz.sort(key = lambda x: x.__getattribute__(self.nazivi_kol_atributa[index]) , reverse=bool_nacin_sortiranja)
     

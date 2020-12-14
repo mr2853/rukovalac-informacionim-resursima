@@ -1,4 +1,4 @@
-1.* Promeniti prikaz naslova datoteka i njihovih ikonica u dock-u
+1.*zapoceto* Promeniti prikaz naslova datoteka i njihovih ikonica u dock-u (ideja metoda change u left_dock)
 2. Definisanje metode pristupa, da li ce biti serijska ili sekvencijalna
 3.* Spajanje datoteka
 4.* Razdvajanje datoteka

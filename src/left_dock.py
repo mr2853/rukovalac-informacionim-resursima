@@ -1,5 +1,8 @@
 from PySide2 import QtWidgets, QtCore
 from PySide2 import QtWidgets
+from PySide2.QtGui import QPainter
+from PySide2.QtWidgets import QStyleOptionViewItem
+
 class LeftDock(QtWidgets.QDockWidget):
     kliknut = QtCore.Signal(str)
     def __init__(self, title, parent):
@@ -17,4 +20,13 @@ class LeftDock(QtWidgets.QDockWidget):
     def file_clicked(self, index):
         path = self.model.filePath(index)
         self.kliknut.emit(path)
+    
+    # def change(self):
+    #     paint = QPainter()
+    #     style = QStyleOptionViewItem()
+    #     style.WrapText = "neki tekst"
+    #     index = QtCore.QModelIndex()
+    #     index.child(0,0)
+    #     self.tree.drawRow(paint, style, index)
+    #     paint.drawText = "da"
     
