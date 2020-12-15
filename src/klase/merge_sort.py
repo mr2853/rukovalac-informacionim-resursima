@@ -72,6 +72,11 @@ def merge(s1, s, atribut, bool_nacin_sortiranja):
             s[k] = s1[i]
 
 def merge_sort(s, atribut, bool_nacin_sortiranja):
+    """
+    :param s: lista koju je potrebno sortirati
+    :param atribut: kljuc po kom da se sortira lista
+    :param bool_nacin_sortiranja: True u rastucem redosledu, False u opadajucem
+    """
     if len(s) > 1: # ako nije trivijalni problem (jedan element u listi ili 0 elemenata)
         # podeli
         s1 = list_split(s)

@@ -57,6 +57,12 @@ class Tab(QtWidgets.QWidget):
         self.setLayout(self.main_layout)
 
     def delete_tab(self, index):
+        if hasattr(self, "sortirano"):
+            if self.meta_podaci[1] == "serijska":
+                ...
+                # pitati koje datoteke zeli da sacuva
+                # postoje 3 opcije: 1) staru 2) staru i novu 3) novu
+                
         self.main_layout.removeWidget(index)
 
     def delete_sub_tab(self, index):
@@ -83,6 +89,7 @@ class Tab(QtWidgets.QWidget):
         index = self.table.horizontalHeader().sortIndicatorSection() # dobavljamo vrednost selektovanog headera
         nacin_sortiranja = self.table.horizontalHeader().sortIndicatorOrder() # dobavljamo koja vrednost sortiranja je oznacena
         self.table.sortByColumn(index, nacin_sortiranja)
+        self.sortirano = True
         if nacin_sortiranja == Qt.AscendingOrder: # ako je prema vecem
             self.table.model().sort_list(index, False)
         else:                                   # ako nije prema vecem nego prema manjem
