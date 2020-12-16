@@ -321,12 +321,11 @@ class PocetnaStrana(QWidget):
         if self.central_widget.currentWidget() == None:
             msgBox = QMessageBox()
             msgBox.setText("Trenutno ni jedna datoteka nije otvorena")
-            msgBox.exec()
+            msgBox.exec_()
             return
 
         self.prikaz = PrikazElementa(self.central_widget.currentWidget(),
-                    self.central_widget.currentWidget().meta_podaci[5].split(","),
-                    self.central_widget.currentWidget().table.model().lista_prikaz)
+                    self.central_widget.currentWidget().meta_podaci)
     
     
     def otvori_pretragu(self):
