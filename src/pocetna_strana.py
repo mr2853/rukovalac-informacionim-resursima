@@ -16,6 +16,7 @@ from klase.metode import kreiraj_model
 from klase.prikaz_elementa import PrikazElementa
 from PySide2.QtCore import QModelIndex
 import csv
+import os
 import json
 
 
@@ -327,6 +328,59 @@ class PocetnaStrana(QWidget):
         self.central_widget.currentWidget().table.setModel(model)
 
     def delete_tab(self, index):
+        self.central_widget.setCurrentIndex(index)
+        tab = self.central_widget.currentWidget()
+
+        if hasattr(tab, "sortirano"):
+            if tab.meta_podaci[1] == "serijska":
+                while True:
+                    izabrano = -1
+                    list_tuple = ()
+                    lista = ["Samo stare podatke", "Samo nove podatke", "Ili i stare i nove podatke"]
+                    for i in range(len(lista)):
+                        list_tuple = list_tuple + (lista[i],)
+
+                    input = QtWidgets.QInputDialog.getItem(
+                        tab,
+                        "",
+                        "Posto ste sortirali tabelu\nIzaberite da li zelite da sacuvate:",
+                        list_tuple,
+                        0,
+                        editable=False)
+                        
+                    if input[1]:
+                        for i in range(len(lista)):
+                            if lista[i].find(input[0]) != -1:
+                                izabrano = i
+                                break
+                        break
+
+                putanja = tab.meta_podaci[4]
+
+                if izabrano == 2:
+                    i = 0
+                    while True:
+                        del1 = tab.meta_podaci[4].rfind(".")
+                        deo = tab.meta_podaci[4][0:del1]
+                        nastavak = tab.meta_podaci[4][del1:len(tab.meta_podaci[4])]
+                        if not os.path.exists(deo + "_new"+str(i+1) + nastavak):
+                            putanja = deo + "_new"+str(i+1) + nastavak
+                            break
+                        i += 1
+
+                if izabrano != 0:
+                    with open(putanja, 'w', newline='') as f:
+                        writer = csv.writer(f, delimiter = ",")
+                        for i in range(len(tab.table.model().lista_prikaz)):
+                            tekst = ""
+                            for j in range(len(tab.table.model().nazivi_atributa)):
+                                tekst += str(tab.table.model().lista_prikaz[i].__getattribute__(tab.table.model().nazivi_atributa[j]))
+                                if j < len(tab.table.model().nazivi_atributa)-1:
+                                    tekst += ","
+                                
+                            novi_red = tekst.split(",")
+                            writer.writerow(novi_red)
+
         self.central_widget.removeTab(index)
         self.lista_putanja.remove(self.lista_putanja[index])
 

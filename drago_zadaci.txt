@@ -4,8 +4,7 @@
 4.* Razdvajanje datoteka
 5.* Staviti parametar posle koliko izmena da se podatak sacuva
  u datoteku, default= posles svake izmene
-6.* ### zapoceto ### Pri sortiranju u tabeli, ako je serijska ponuditi korisniku da li zeli da sacuva 
- sortiranu datoteku, ili zeli samo nesortiranu da sacuva ili zeli obe da sacuva
-7.* ### zapoceto ### Za dodavanje u sekvencijalnu datoteku. Dodavati elemente u serijsku, sortirati serijsku,
+6.* ### zapoceto ### Za dodavanje u sekvencijalnu datoteku. Dodavati elemente u serijsku, sortirati serijsku,
 proveriti i izbaciti duplikate(iste elemente izbaciti kao gresku i onda korisnik da izabere koji
 ce da zadrzi), i onda spojiti sortiranu serijsku i sekvencijalnu
+7.* logicko/fizicko brisanje

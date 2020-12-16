@@ -12,6 +12,8 @@ from PySide2.QtCore import QModelIndex
 from PySide2.QtCore import QObject, Signal, Slot
 from klase.metode import citanje_meta_podataka, kreiraj_model
 import json
+import csv
+import os
 from klase.genericka_klasa import GenerickaKlasa
 
 class Tab(QtWidgets.QWidget):
@@ -55,15 +57,6 @@ class Tab(QtWidgets.QWidget):
         self.main_layout.addLayout(self.sub_layout)
         self.main_layout.addWidget(self.tab_widget)
         self.setLayout(self.main_layout)
-
-    def delete_tab(self, index):
-        if hasattr(self, "sortirano"):
-            if self.meta_podaci[1] == "serijska":
-                ...
-                # pitati koje datoteke zeli da sacuva
-                # postoje 3 opcije: 1) staru 2) staru i novu 3) novu
-                
-        self.main_layout.removeWidget(index)
 
     def delete_sub_tab(self, index):
         self.tab_widget.removeTab(index)
