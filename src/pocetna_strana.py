@@ -1,8 +1,9 @@
 
 import sys
 from PySide2 import QtWidgets, QtGui
-from PySide2.QtCore import QPoint
-from PySide2.QtGui import Qt
+from PySide2.QtCore import QCoreApplication, QEvent, QItemSelectionModel, QPoint
+from PySide2.QtGui import QKeyEvent, Qt
+from pynput import keyboard
 from klase.genericka_klasa import GenerickaKlasa
 from left_dock import LeftDock
 from PySide2.QtWidgets import QInputDialog, QMainWindow, QMessageBox, QWidget
@@ -10,14 +11,16 @@ from PySide2.QtWidgets import QAbstractItemView
 from tab import Tab
 from menu_bar import MenuBar
 from tool_bar import ToolBar
-from klase.metode import citanje_meta_podataka
-from klase.metode import pretraga_serijske
-from klase.metode import kreiraj_model
+from klase.metode import *
 from klase.prikaz_elementa import PrikazElementa
 from PySide2.QtCore import QModelIndex
+from pynput.keyboard import Key, Listener
 import csv
 import os
 import json
+
+
+
 
 
 class PocetnaStrana(QWidget):
@@ -36,6 +39,9 @@ class PocetnaStrana(QWidget):
         self.tool_bar.dodaj.triggered.connect(self.otvori_prikaz)
         self.tool_bar.pretrazi.triggered.connect(self.otvori_pretragu)
         self.tool_bar.ukloni_iz_tabele.triggered.connect(self.ukloni_iz_tabele)
+        
+        self.tool_bar.spoji_datoteke.triggered.connect(self.otvori_pretragu)
+        self.tool_bar.podeli_datoteku.triggered.connect(self.ukloni_iz_tabele)
         status_bar = QtWidgets.QStatusBar()
         status_bar.showMessage("Prikazan status bar!")
         self.main_window.setStatusBar(status_bar)
@@ -50,9 +56,22 @@ class PocetnaStrana(QWidget):
 
         self.dock = LeftDock("dock", parent=None)
         self.main_window.addDockWidget(Qt.LeftDockWidgetArea,self.dock)
+        self.dock.tree.setSelectionMode(QAbstractItemView.SingleSelection)
         self.dock.tree.clicked.connect(self.read)
-        
+        self.multi_selekt = []
+        self.listener = keyboard.Listener(on_press=self.pritisnuto_dugme, on_release=self.pusteno_dugme)
+        self.listener.start()
         self.main_window.show()
+                
+    def pritisnuto_dugme(self, key):
+        if key == Key.ctrl_l:
+            self.dock.tree.setSelectionMode(QAbstractItemView.MultiSelection)
+
+    def pusteno_dugme(self, key):
+        if key == Key.ctrl_l:
+            self.dock.tree.setSelectionMode(QAbstractItemView.SingleSelection)
+            self.multi_selekt = self.dock.tree.selectedIndexes()
+            
 
     def otvori_tabelu_levi_rodjak(self):...
     

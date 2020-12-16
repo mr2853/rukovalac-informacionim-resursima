@@ -8,3 +8,5 @@
 proveriti i izbaciti duplikate(iste elemente izbaciti kao gresku i onda korisnik da izabere koji
 ce da zadrzi), i onda spojiti sortiranu serijsku i sekvencijalnu
 7.* logicko/fizicko brisanje
+putanja_do_python.exe -m pip install pynput
+putanja_do_python.exe -m pip install --upgrade pip

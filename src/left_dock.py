@@ -20,7 +20,7 @@ class LeftDock(QtWidgets.QDockWidget):
     def file_clicked(self, index):
         path = self.model.filePath(index)
         self.kliknut.emit(path)
-    
+        
     # def change(self):
     #     paint = QPainter()
     #     style = QStyleOptionViewItem()
