@@ -2,7 +2,7 @@ objekat:NastavniPredmet
 tip_datoteke:serijska
 relativna_putanja:src\podaci
 sufiks:csv
-podaci:relativna_putanja\nastavni_predmet.sufiks
+podaci:relativna_putanja\nastavni_predmet_ser.sufiks
 nazivi_atributa:ustanova,oznaka,naziv,espb
 tipovi_atributa:character,character,character,int
 duzina_atributa:2,6,120,2

@@ -1,0 +1,13 @@
+objekat:Student
+tip_datoteke:sekvencijalna
+relativna_putanja:src\podaci
+sufiks:csv
+podaci:relativna_putanja\student_sek.sufiks
+nazivi_atributa:ustanova,struka,broj_indeksa,prezime,ime_roditelja,ime,pol,adresa_stanovanja,telefon,jmbg,datum_rodjenja
+tipovi_atributa:character,character,character,character,enum,character,character,character,character,character,date
+duzina_atributa:2,2,6,20,20,20,1,120,20,13,10
+obaveznost_atributa:True,True,True,True,False,True,True,False,False,False,False
+veze:parent_VisokoskolskaUstanova(ustanova=oznaka),child_TokStudija(ustanova#struka#broj_indeksa)
+nazivi_kolona:Struka,Broj indeksa,Prezime,Ime,Datum rodjenja
+nazivi_kol_atributa:struka,broj_indeksa,prezime,ime,datum_rodjenja
+lista_kljuceva:ustanova,struka,broj_indeksa
