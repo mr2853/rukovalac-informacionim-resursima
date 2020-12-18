@@ -29,9 +29,14 @@ def citanje_meta_podataka(putanja):
 
 def kreiraj_model(lista):
     model = Model(lista)
+    prva_linija = True
     with open(lista[4], newline='\n') as f:
         while True:
             podaci = f.readline().strip()
+            if prva_linija:
+                prva_linija = False
+                continue
+
             if podaci == "":
                 break
             
@@ -63,42 +68,62 @@ def pretraga_serijske(lista_kljuceva, lista_kriterijuma, meta_podaci):
 
 # prototip funkcije kako ce odprilike izgledati
 # implementirati kada to bude moguce i testirati
-def spoji_dve_sekvencijalne_datoteke(putanja_privremena, putanja_originalna, index_prvog_kljuca, nacin_sortiranja):
+def spoji_dve_sekvencijalne_datoteke(putanja_privremena, putanja_originalna, kljuc, nacin_sortiranja, nova_putanja=""):
+    """
+    :param putanja_privremena: putanja prve datoteke
+    :param putanja_originalna: putanja druge datoteke
+    :param kljuc: kljuc po kom se sortira kljuc = ["indeks_kljuca"-int, "vrednost_kljuca"-string]
+    :param nacin_sortiranja: True/False da li je u rastucem redosledu ili opadajucem
+
+    """
+    if nova_putanja == "":
+        nova_putanja = putanja_originalna
+
     lista_ser = []
+    prva_meta = ""
+    prva_linija = True
     with open(putanja_privremena, 'r', newline='') as f:
         reader = csv.reader(f, delimiter = ",")
         for row in reader:
-            if row[0] == "":
+            if len(row) == 0:
                 break
-            lista_ser.append(row[0].split(","))
+            if prva_linija:
+                prva_meta = row
+                prva_linija = False
+                continue
+            lista_ser.append(row)
 
     lista_sek = []
+    prva_linija = True
+    iste = True
     with open(putanja_originalna, 'r', newline='') as f:
         reader = csv.reader(f, delimiter = ",")
-        nadjen = False
         for row in reader:
-            if row[0] == "":
+            if len(row) == 0:
                 break
-            deo = row[0].split(",")
-            if nacin_sortiranja:
-                if deo[index_prvog_kljuca] > lista_ser[0][index_prvog_kljuca] or nadjen:
-                    lista_sek.append(deo)
-                    nadjen = True
-            else:
-                if deo[index_prvog_kljuca] < lista_ser[0][index_prvog_kljuca] or nadjen:
-                    lista_sek.append(deo)
-                    nadjen = True
-    
+            if prva_linija:
+                prva_linija = False
+                if row != prva_meta:
+                    iste = False
+                    break
+                continue
+            lista_sek.append(row)
+    if not iste:
+        msgBox = QtWidgets.QMessageBox()
+        msgBox.setText("Datoteke koje ste izabrali ne sadrze isti tip informacija")
+        msgBox.exec()
+        return
+
     for i in lista_ser:
         lista_sek.append(i)
-    
-    # ovde umesto index_prvog_kljuca treba proslediti string naziv kljuca
-    merge_sort(lista_sek, index_prvog_kljuca, nacin_sortiranja)
 
-    with open(putanja_originalna, 'w', newline='') as f:
+    merge_sort(lista_sek, kljuc[0], nacin_sortiranja)
+
+    with open(nova_putanja, 'a', newline='') as f:
         writer = csv.writer(f, delimiter = ",")
+        writer.writerow(prva_meta)
         for i in range(len(lista_sek)):
-            writer.writerow([lista_sek[i]])
+            writer.writerow(lista_sek[i])
         
 
 # prototip funkcije kako ce odprilike izgledati

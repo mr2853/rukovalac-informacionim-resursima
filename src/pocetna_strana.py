@@ -6,7 +6,7 @@ from PySide2.QtGui import QKeyEvent, Qt
 from pynput import keyboard
 from klase.genericka_klasa import GenerickaKlasa
 from left_dock import LeftDock
-from PySide2.QtWidgets import QInputDialog, QMainWindow, QMessageBox, QWidget
+from PySide2.QtWidgets import QDockWidget, QInputDialog, QMainWindow, QMessageBox, QWidget
 from PySide2.QtWidgets import QAbstractItemView
 from tab import Tab
 from menu_bar import MenuBar
@@ -39,8 +39,8 @@ class PocetnaStrana(QWidget):
         self.tool_bar.dodaj.triggered.connect(self.otvori_prikaz)
         self.tool_bar.pretrazi.triggered.connect(self.otvori_pretragu)
         self.tool_bar.ukloni_iz_tabele.triggered.connect(self.ukloni_iz_tabele)
+        self.tool_bar.spoji_datoteke.triggered.connect(self.spoji_datoteke)
         
-        self.tool_bar.spoji_datoteke.triggered.connect(self.otvori_pretragu)
         self.tool_bar.podeli_datoteku.triggered.connect(self.ukloni_iz_tabele)
         status_bar = QtWidgets.QStatusBar()
         status_bar.showMessage("Prikazan status bar!")
@@ -62,7 +62,40 @@ class PocetnaStrana(QWidget):
         self.listener = keyboard.Listener(on_press=self.pritisnuto_dugme, on_release=self.pusteno_dugme)
         self.listener.start()
         self.main_window.show()
-                
+
+    def spoji_datoteke(self):
+        kljuc = [2, "broj_indeksa"]
+        lista = []
+        self.multi_selekt.sort()
+        
+        brojac = 0
+        while brojac < len(self.multi_selekt):
+            nadjen = False
+            for j in range(len(lista)):
+                if self.multi_selekt[brojac].row() == lista[j]:
+                    nadjen = True
+                    break
+            if nadjen:
+                self.multi_selekt.pop(brojac)
+                brojac -= 1
+            lista.append(self.multi_selekt[brojac].row())
+            brojac += 1
+
+        text, ok = QtWidgets.QInputDialog.getText(None, "Spajanje datoteka", "Unesite ime nove datoteke:", QtWidgets.QLineEdit.Normal, "")
+        ime_nove_datoteke = "podaci/podaci/"
+        if ok:
+            ime_nove_datoteke += str(text) + ".csv"
+        
+        for i in range(0, len(self.multi_selekt)-1, 2):
+            spoji_dve_sekvencijalne_datoteke(
+                self.dock.model.filePath(self.multi_selekt[i]),
+                self.dock.model.filePath(self.multi_selekt[i+1]),
+                kljuc,
+                True,
+                ime_nove_datoteke)
+
+        self.multi_selekt = []
+
     def pritisnuto_dugme(self, key):
         if key == Key.ctrl_l:
             self.dock.tree.setSelectionMode(QAbstractItemView.MultiSelection)
@@ -224,16 +257,20 @@ class PocetnaStrana(QWidget):
                 nova_meta += ime_roditelja[s]
                 
         
-        nova_meta = meta_podaci[2] + "\\metaPodaci\\" + nova_meta + "_meta_podaci." + meta_podaci[3]
+        nova_meta = meta_podaci[2] + "\\" + nova_meta
+        if meta_podaci[1] == "serijska":
+            nova_meta += "_ser."
+        else:
+            nova_meta += "_sek."
+        nova_meta += meta_podaci[3]
         
         del1 = lista_roditelja[index].find("(") + 1
         del2 = lista_roditelja[index].find(")")
         lista_kljuceva.append(lista_roditelja[index][del1:del2].split("#"))
 
-        tab = Tab(self.central_widget)
+        tab = Tab(nova_meta, self.central_widget)
         # self.__getattribute__(ime).clicked.connect(self.element_selected)
-        lista = citanje_meta_podataka(nova_meta)
-        tab.read(lista)
+        tab.read()
         
         nova_lista = []
         for j in range(len(tab.table.model().lista_prikaz)):
@@ -271,7 +308,12 @@ class PocetnaStrana(QWidget):
                 meta += self.central_widget.currentWidget().meta_podaci[0][s]
                 
         meta = meta[1:len(meta)]
-        meta = self.central_widget.currentWidget().meta_podaci[2] + "\\metaPodaci\\" + meta + "_meta_podaci." + self.central_widget.currentWidget().meta_podaci[3]
+        meta = self.central_widget.currentWidget().meta_podaci[2] + "\\" + meta
+        if self.central_widget.currentWidget().meta_podaci[1] == "serijska":
+            meta += "_ser."
+        else:
+            meta += "_sek."
+        meta += self.central_widget.currentWidget().meta_podaci[3]
         
         self.lista_putanja.append(meta)
         self.lista_putanja.remove(self.lista_putanja[self.central_widget.currentIndex()])
@@ -294,8 +336,8 @@ class PocetnaStrana(QWidget):
             return
 
         child = self.central_widget.currentWidget().tab_widget.currentWidget()
-        tab = Tab(self.central_widget)
-        tab.read(child.meta_podaci)
+        tab = Tab(child.putanja, self.central_widget)
+        tab.read()
         tab.table.model().lista_prikaz = child.model.lista_prikaz
         
         tab.btn_down.clicked.connect(self.otvori_tabelu_dete)
@@ -312,8 +354,13 @@ class PocetnaStrana(QWidget):
                 meta += child.meta_podaci[0][s]
                 
         meta = meta[1:len(meta)]
-        meta = child.meta_podaci[2] + "\\metaPodaci\\" + meta + "_meta_podaci." + child.meta_podaci[3]
-         
+        meta = child.meta_podaci[2] + "\\" + meta
+        if child.meta_podaci[1] == "serijska":
+            meta += "_ser."
+        else:
+            meta += "_sek."
+        meta += child.meta_podaci[3]
+
         self.lista_putanja.append(meta)
         self.lista_putanja.remove(self.lista_putanja[self.central_widget.currentIndex()])
 
@@ -348,8 +395,8 @@ class PocetnaStrana(QWidget):
     def delete_tab(self, index):
         self.central_widget.setCurrentIndex(index)
         tab = self.central_widget.currentWidget()
-
-        if hasattr(tab, "sortirano"):
+        
+        if hasattr(tab, "sortirano") and len(tab.model().lista_prikaz) > 1:
             if tab.meta_podaci[1] == "serijska":
                 while True:
                     izabrano = -1
@@ -410,13 +457,12 @@ class PocetnaStrana(QWidget):
                 ista_putanja = True
                 return
         if not ista_putanja:
-            neka_lista = citanje_meta_podataka(putanja)
             self.lista_putanja.append(putanja)
 
             tab = Tab(putanja, self.central_widget)
-            tab.read(neka_lista)
+            tab.read()
             tab.btn_down.clicked.connect(self.otvori_tabelu_dete)
             tab.btn_up.clicked.connect(self.otvori_tabelu_roditelj)
-            self.central_widget.addTab(tab, neka_lista[0])
+            self.central_widget.addTab(tab, tab.meta_podaci[0])
             self.central_widget.setCurrentIndex(self.central_widget.currentIndex()+1)
             

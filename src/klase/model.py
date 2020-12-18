@@ -8,10 +8,8 @@ from klase.merge_sort import merge_sort
 
 
 class Model(QtCore.QAbstractTableModel, QtCore.QObject):
-    upisan_podatak = QtCore.Signal(int)
     def __init__(self, lista, parent=None):
         super().__init__(parent)
-        # self.upisan_podatak
         self.lista_prikaz = []
         self.nazivi_atributa = lista[5].split(",")
         self.nazivi_kolona = lista[10].split(",")
@@ -54,7 +52,6 @@ class Model(QtCore.QAbstractTableModel, QtCore.QObject):
     #     for i in range(self.broj_kolona):
     #         if index.column() == i and role == QtCore.Qt.EditRole:
     #             element.__setattr__(self.nazivi_atributa[i], value)
-    #             self.upisan_podatak.emit(0)
     #             return True
     #     return False
 
@@ -67,6 +64,7 @@ class Model(QtCore.QAbstractTableModel, QtCore.QObject):
         :param: index - oznacava po kojoj koloni/atributu se sortira
         :param: bool_nacin_sortiranja - oznacava da li je sortiranje prema vecem ili prema manjem elementu
         """
+        
         self.lista_prikaz = merge_sort(self.lista_prikaz, self.nazivi_kol_atributa[index], bool_nacin_sortiranja)
         
         # self.lista_prikaz.sort(key = lambda x: x.__getattribute__(self.nazivi_kol_atributa[index]) , reverse=bool_nacin_sortiranja)

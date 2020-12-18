@@ -1,12 +1,12 @@
 1.*### zapoceto ### Promeniti prikaz naslova datoteka i njihovih ikonica u dock-u (ideja metoda change u left_dock)
 2. Definisanje metode pristupa, da li ce biti serijska ili sekvencijalna
-3.* ### zapoceto ### Spajanje datoteka
+3.* ### pri kraju ### Spajanje datoteka
 4.* Razdvajanje datoteka
 5.* Staviti parametar posle koliko izmena da se podatak sacuva
- u datoteku, default= posles svake izmene
-6.* ### zapoceto ### Za dodavanje u sekvencijalnu datoteku. Dodavati elemente u serijsku, sortirati serijsku,
-proveriti i izbaciti duplikate(iste elemente izbaciti kao gresku i onda korisnik da izabere koji
-ce da zadrzi), i onda spojiti sortiranu serijsku i sekvencijalnu
+ u datoteku, default= posle svake izmene
+# 6.* Proveriti dal sam dobro zapoceo dodavanje u sekvencijalnu, nesto mi se tamo ne cini
+#  ok za dodavanje u listu_objekata 2x
 7.* logicko/fizicko brisanje
+8.* odraditi izuzetak ako u tabeli nema elemenata, dal da se moze kretati parent child ? ...
 putanja_do_python.exe -m pip install pynput
 putanja_do_python.exe -m pip install --upgrade pip

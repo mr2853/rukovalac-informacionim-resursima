@@ -19,7 +19,7 @@ from klase.genericka_klasa import GenerickaKlasa
 class Tab(QtWidgets.QWidget):
     def __init__(self, putanja, parent=None):
         super().__init__(parent)
-        self.putanja_meta_podaci = putanja
+        self.putanja = putanja
         self.main_layout = QtWidgets.QVBoxLayout()
         self.tab_widget = QtWidgets.QTabWidget(self)
         self.tab_widget.setTabsClosable(True)
@@ -61,18 +61,21 @@ class Tab(QtWidgets.QWidget):
     def delete_sub_tab(self, index):
         self.tab_widget.removeTab(index)
     
-    def read(self, lista):
-        model = kreiraj_model(lista)
-        self.meta_podaci = lista
+    def read(self):
+        with open(self.putanja, newline='\n') as f:
+            podaci = f.readline().strip()
+            f.close()
+            
+        self.meta_podaci = citanje_meta_podataka(podaci)
+        self.meta_podaci[4] = self.putanja
+        model = kreiraj_model(self.meta_podaci)
         self.table.setModel(model)
         self.table.setSortingEnabled(True)
         self.table.setSelectionMode(QAbstractItemView.SingleSelection)
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.horizontalHeader().sectionClicked.connect(self.sort_table) # kada se klikne na neki horizontalHeader da pozove self.sort_table
-        if lista[1] == "sekvencijalna":
+        if self.meta_podaci[1] == "sekvencijalna":
             self.sort_table(0)
-            self.table.model().upisan_podatak.connect(self.sort_table) # u slucaju izmene podataka da pozove sort_table
-
     
     def sort_table(self, index):
         """
@@ -99,7 +102,6 @@ class Tab(QtWidgets.QWidget):
         model = self.table.model()
         element_selected = model.get_element(index)
         self.tab_widget.clear()
-        self.meta_putanje_dece = []
         imena_dece = []
         lista_kljuceva = []
         veze = []
@@ -116,22 +118,20 @@ class Tab(QtWidgets.QWidget):
                 del1 = veze[counter].find("(")
                 ime_deteta = veze[counter][0:del1]
                 imena_dece.append(ime_deteta)
-                nova_meta = ""
+                nova_putanja = ""
                 for s in range(len(ime_deteta)):
                     if ime_deteta[s].isupper():
-                        nova_meta += "_" + ime_deteta[s].lower()
+                        nova_putanja += "_" + ime_deteta[s].lower()
                     else:
-                        nova_meta += ime_deteta[s]
+                        nova_putanja += ime_deteta[s]
 
-                nova_meta = nova_meta[1:len(nova_meta)]
-                nova_meta = self.meta_podaci[2] + "\\metaPodaci\\" + nova_meta + "_meta_podaci." + self.meta_podaci[3]
-                self.meta_putanje_dece.append(nova_meta)
-                # nadjeno = False
-                # for m in range(len(self.meta_putanje_dece)):
-                #     if self.meta_putanje_dece[m] == nova_meta:
-                #         nadjeno = True
-                # if nadjeno:
-                #     return
+                nova_putanja = nova_putanja[1:len(nova_putanja)]
+                nova_putanja = self.meta_podaci[2] + "\\" + nova_putanja
+                if self.meta_podaci[1] == "serijska":
+                    nova_putanja += "_ser."
+                else:
+                    nova_putanja += "_sek."
+                nova_putanja += self.meta_podaci[3]
                 
                 del1 = veze[counter].find("(") + 1
                 del2 = veze[counter].find(")")
@@ -141,10 +141,16 @@ class Tab(QtWidgets.QWidget):
         
                 ime = "sub_table" + str(i+1)
                 self.__setattr__(ime, QtWidgets.QTableView(self.tab_widget))
+                self.__getattribute__(ime).__setattr__("putanja", nova_putanja)
                 self.__getattribute__(ime).setSelectionMode(QAbstractItemView.SingleSelection)
                 self.__getattribute__(ime).setSelectionBehavior(QAbstractItemView.SelectRows)
                 # self.__getattribute__(ime).clicked.connect(self.element_selected)
-                lista = citanje_meta_podataka(nova_meta)
+                
+                with open(nova_putanja, newline='\n') as f:
+                    podaci = f.readline().strip()
+                    f.close()
+
+                lista = citanje_meta_podataka(podaci)
                 self.__getattribute__(ime).model = kreiraj_model(lista)
                 self.__getattribute__(ime).meta_podaci = lista
                 

@@ -1,6 +1,6 @@
 objekat:NastavniPredmet
 tip_datoteke:serijska
-relativna_putanja:src\podaci
+relativna_putanja:podaci\podaci
 sufiks:csv
 podaci:relativna_putanja\nastavni_predmet_ser.sufiks
 nazivi_atributa:ustanova,oznaka,naziv,espb

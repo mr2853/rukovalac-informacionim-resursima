@@ -21,8 +21,8 @@ def list_split(l):
 def merge(s1, s, atribut, bool_nacin_sortiranja):
     """
     Spaja sortirane sekvence s1 i s2 u rezultujucu sekvencu s.
-    :param s1: sortirana leva polovna liste s
-    :param s2: sortirana desna polovina liste s
+    :param s1: lista sortiranih listi
+    :param s: lista u koju se cuva
     :param s: lista koju cemo reorganizovati spram prethodno sortiranih polovina
     :return:
     """
@@ -34,15 +34,50 @@ def merge(s1, s, atribut, bool_nacin_sortiranja):
         while k < len(s1)-1:  # ukoliko nismo prosli bar jednu od listi
             if i == j:
                 i += 1
+            
+            if isinstance(atribut, int) != True:
+                prvi = 0
+                drugi = 0
+                try:
+                    prvi = int(s1[i][atribut])
+                    drugi = int(s1[j][atribut])
+                except ValueError:
+                    prvi = s1[i].__getattribute__(atribut)
+                    drugi = s1[j].__getattribute__(atribut)
+                except TypeError:
+                    prvi = s1[i].__getattribute__(atribut)
+                    drugi = s1[j].__getattribute__(atribut)
+
+                if prvi < drugi:  # uporedi trenutnim pozicijama listi s1 i s2 koji je manji element
+                    s[k] = s1[i]  # dodeli manji element u listu s
+                    i += 1 # inkrementiraj brojac i, kako se dodati broj vise ne bi poredio sa drugim elementima
+                    kraj = 0
+                else:  # ukoliko je veci
+                    s[k] = s1[j]  # dodeli veci element u listu s
+                    j += 1  # inkrementiraj brojac j
+                    kraj = 1
+            else:
+                prvi = 0
+                drugi = 0
                 
-            if s1[i].__getattribute__(atribut) < s1[j].__getattribute__(atribut):  # uporedi trenutnim pozicijama listi s1 i s2 koji je manji element
-                s[k] = s1[i]  # dodeli manji element u listu s
-                i += 1 # inkrementiraj brojac i, kako se dodati broj vise ne bi poredio sa drugim elementima
-                kraj = 0
-            else:  # ukoliko je veci
-                s[k] = s1[j]  # dodeli veci element u listu s
-                j += 1  # inkrementiraj brojac j
-                kraj = 1
+                try:
+                    prvi = int(s1[i][atribut])
+                    drugi = int(s1[j][atribut])
+                except ValueError:
+                    prvi = s1[i].__getattribute__(atribut)
+                    drugi = s1[j].__getattribute__(atribut)
+                except TypeError:
+                    prvi = s1[i].__getattribute__(atribut)
+                    drugi = s1[j].__getattribute__(atribut)
+
+                if prvi < drugi:  # uporedi trenutnim pozicijama listi s1 i s2 koji je manji element
+                    s[k] = s1[i]  # dodeli manji element u listu s
+                    i += 1 # inkrementiraj brojac i, kako se dodati broj vise ne bi poredio sa drugim elementima
+                    kraj = 0
+                else:  # ukoliko je veci
+                    s[k] = s1[j]  # dodeli veci element u listu s
+                    j += 1  # inkrementiraj brojac j
+                    kraj = 1
             k += 1  # inkrementiraj brojac k kojim označavamo da smo popunili odgovarajući element liste
         if kraj == 0:
             s[k] = s1[j]
@@ -56,20 +91,55 @@ def merge(s1, s, atribut, bool_nacin_sortiranja):
         while k < len(s1)-1:  # ukoliko nismo prosli bar jednu od listi
             if i == j:
                 i += 1
-                
-            if s1[i].__getattribute__(atribut) > s1[j].__getattribute__(atribut):  # uporedi trenutnim pozicijama listi s1 i s2 koji je manji element
-                s[k] = s1[i]  # dodeli manji element u listu s
-                i += 1 # inkrementiraj brojac i, kako se dodati broj vise ne bi poredio sa drugim elementima
-                kraj = 0
-            else:  # ukoliko je veci
-                s[k] = s1[j]  # dodeli veci element u listu s
-                j += 1  # inkrementiraj brojac j
-                kraj = 1
+            
+            if isinstance(atribut, int) != True:
+                prvi = 0
+                drugi = 0
+                try:
+                    prvi = int(s1[i][atribut])
+                    drugi = int(s1[j][atribut])
+                except ValueError:
+                    prvi = s1[i].__getattribute__(atribut)
+                    drugi = s1[j].__getattribute__(atribut)
+                except TypeError:
+                    prvi = s1[i].__getattribute__(atribut)
+                    drugi = s1[j].__getattribute__(atribut)
+
+                if prvi > drugi:  # uporedi trenutnim pozicijama listi s1 i s2 koji je manji element
+                    s[k] = s1[i]  # dodeli manji element u listu s
+                    i += 1 # inkrementiraj brojac i, kako se dodati broj vise ne bi poredio sa drugim elementima
+                    kraj = 0
+                else:  # ukoliko je veci
+                    s[k] = s1[j]  # dodeli veci element u listu s
+                    j += 1  # inkrementiraj brojac j
+                    kraj = 1
+            else:
+                prvi = 0
+                drugi = 0
+                try:
+                    prvi = int(s1[i][atribut])
+                    drugi = int(s1[j][atribut])
+                except ValueError:
+                    prvi = s1[i].__getattribute__(atribut)
+                    drugi = s1[j].__getattribute__(atribut)
+                except TypeError:
+                    prvi = s1[i].__getattribute__(atribut)
+                    drugi = s1[j].__getattribute__(atribut)
+
+                if prvi > drugi:  # uporedi trenutnim pozicijama listi s1 i s2 koji je manji element
+                    s[k] = s1[i]  # dodeli manji element u listu s
+                    i += 1 # inkrementiraj brojac i, kako se dodati broj vise ne bi poredio sa drugim elementima
+                    kraj = 0
+                else:  # ukoliko je veci
+                    s[k] = s1[j]  # dodeli veci element u listu s
+                    j += 1  # inkrementiraj brojac j
+                    kraj = 1
             k += 1  # inkrementiraj brojac k kojim označavamo da smo popunili odgovarajući element liste
         if kraj == 0:
             s[k] = s1[j]
         else:
             s[k] = s1[i]
+    return s
 
 def merge_sort(s, atribut, bool_nacin_sortiranja):
     """
@@ -80,7 +150,6 @@ def merge_sort(s, atribut, bool_nacin_sortiranja):
     if len(s) > 1: # ako nije trivijalni problem (jedan element u listi ili 0 elemenata)
         # podeli
         s1 = list_split(s)
-        
         # zavladaj
         for i in s1:
             quick_sort(i, atribut, bool_nacin_sortiranja)
@@ -90,7 +159,7 @@ def merge_sort(s, atribut, bool_nacin_sortiranja):
         for i in s1[0]:
             s2.append(i)
         
-        merge(s2, s, atribut, bool_nacin_sortiranja)
+        s = merge(s2, s, atribut, bool_nacin_sortiranja)
         return s
     else:
-        return
+        return s

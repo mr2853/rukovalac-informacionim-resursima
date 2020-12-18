@@ -1,6 +1,6 @@
 objekat:NivoStudija
 tip_datoteke:sekvencijalna
-relativna_putanja:src\podaci
+relativna_putanja:podaci\podaci
 sufiks:csv
 podaci:relativna_putanja\nivo_studija_sek.sufiks
 nazivi_atributa:oznaka,naziv
