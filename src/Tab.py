@@ -65,7 +65,7 @@ class Tab(QtWidgets.QWidget):
         with open(self.putanja, newline='\n') as f:
             podaci = f.readline().strip()
             f.close()
-            
+        self.putanja_meta = podaci
         self.meta_podaci = citanje_meta_podataka(podaci)
         self.meta_podaci[4] = self.putanja
         model = kreiraj_model(self.meta_podaci)

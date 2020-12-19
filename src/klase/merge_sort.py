@@ -6,7 +6,7 @@ def list_split(l):
     while True:
         pocetak = 0
         mid = len(l)//i
-        if mid < 100000:
+        if mid < 2:
             while i != 0:
                 if mid >= len(l):
                     lista.append(l[pocetak:len(l)])
@@ -79,10 +79,13 @@ def merge(s1, s, atribut, bool_nacin_sortiranja):
                     j += 1  # inkrementiraj brojac j
                     kraj = 1
             k += 1  # inkrementiraj brojac k kojim označavamo da smo popunili odgovarajući element liste
+        
         if kraj == 0:
-            s[k] = s1[j]
+            if k < len(s) and j < len(s1):
+                s[k] = s1[j]
         else:
-            s[k] = s1[i]
+            if k < len(s) and i < len(s1):
+                s[k] = s1[i]
     else:
         i = k = 0  # indeksi za kretanje po sekvencama s1, s2 i s
         j = 1
@@ -136,9 +139,11 @@ def merge(s1, s, atribut, bool_nacin_sortiranja):
                     kraj = 1
             k += 1  # inkrementiraj brojac k kojim označavamo da smo popunili odgovarajući element liste
         if kraj == 0:
-            s[k] = s1[j]
+            if k < len(s) and j < len(s1):
+                s[k] = s1[j]
         else:
-            s[k] = s1[i]
+            if k < len(s) and i < len(s1):
+                s[k] = s1[i]
     return s
 
 def merge_sort(s, atribut, bool_nacin_sortiranja):

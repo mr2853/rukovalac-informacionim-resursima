@@ -7,7 +7,7 @@ from PySide2 import QtWidgets
 
 def citanje_meta_podataka(putanja):
     neka_lista = []
-    with open(putanja, newline='') as csvfile:
+    with open(putanja, 'r', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter = "\n")
         counter = 0
         for row in spamreader:
@@ -30,7 +30,7 @@ def citanje_meta_podataka(putanja):
 def kreiraj_model(lista):
     model = Model(lista)
     prva_linija = True
-    with open(lista[4], newline='\n') as f:
+    with open(lista[4], 'r', newline='\n') as f:
         while True:
             podaci = f.readline().strip()
             if prva_linija:
@@ -47,9 +47,13 @@ def kreiraj_model(lista):
 
 def pretraga_serijske(lista_kljuceva, lista_kriterijuma, meta_podaci):
     model = Model(meta_podaci)
-    with open(meta_podaci[4], newline='\n') as f:
+    with open(meta_podaci[4], 'r', newline='\n') as f:
+        prva_linija = True
         while True:
             podaci = f.readline().strip()
+            if prva_linija:
+                prva_linija = False
+                continue
             if podaci == "":
                 break
             
@@ -66,8 +70,6 @@ def pretraga_serijske(lista_kljuceva, lista_kriterijuma, meta_podaci):
 
     return model
 
-# prototip funkcije kako ce odprilike izgledati
-# implementirati kada to bude moguce i testirati
 def spoji_dve_sekvencijalne_datoteke(putanja_privremena, putanja_originalna, kljuc, nacin_sortiranja, nova_putanja=""):
     """
     :param putanja_privremena: putanja prve datoteke

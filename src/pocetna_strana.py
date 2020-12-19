@@ -40,8 +40,8 @@ class PocetnaStrana(QWidget):
         self.tool_bar.pretrazi.triggered.connect(self.otvori_pretragu)
         self.tool_bar.ukloni_iz_tabele.triggered.connect(self.ukloni_iz_tabele)
         self.tool_bar.spoji_datoteke.triggered.connect(self.spoji_datoteke)
+        self.tool_bar.podeli_datoteku.triggered.connect(self.podeli_datoteke)
         
-        self.tool_bar.podeli_datoteku.triggered.connect(self.ukloni_iz_tabele)
         status_bar = QtWidgets.QStatusBar()
         status_bar.showMessage("Prikazan status bar!")
         self.main_window.setStatusBar(status_bar)
@@ -62,6 +62,8 @@ class PocetnaStrana(QWidget):
         self.listener = keyboard.Listener(on_press=self.pritisnuto_dugme, on_release=self.pusteno_dugme)
         self.listener.start()
         self.main_window.show()
+
+    def podeli_datoteke(self):...
 
     def spoji_datoteke(self):
         kljuc = [2, "broj_indeksa"]
@@ -114,13 +116,13 @@ class PocetnaStrana(QWidget):
         if self.central_widget.currentWidget() == None:
             msgBox = QMessageBox()
             msgBox.setText("Trenutno ni jedna datoteka nije otvorena")
-            msgBox.exec()
+            msgBox.exec_()
             return
         # hasattr proverava da li .table ima atribut selected_elem, kojeg mu dodeljujem kada se klikne na neki element
         elif not hasattr(self.central_widget.currentWidget().table, "selected_elem"):
             msgBox = QMessageBox()
             msgBox.setText("Trenutno ni jedan element nije selektovan")
-            msgBox.exec()
+            msgBox.exec_()
             return
             
         model = self.central_widget.currentWidget().table.model()
@@ -136,7 +138,7 @@ class PocetnaStrana(QWidget):
                 if len(self.central_widget.currentWidget().__getattribute__("sub_table"+str(i+1)).model.lista_prikaz) != 0:
                     msgBox = QMessageBox()
                     msgBox.setText("Selektovani element ne sme da se obrise zato sto se njegovi podaci koriste u pod tabelama, njegovoj deci")
-                    msgBox.exec()
+                    msgBox.exec_()
                     return
         
         self.central_widget.currentWidget().table.model().lista_prikaz = []
@@ -145,12 +147,17 @@ class PocetnaStrana(QWidget):
         top.child(0,0)
         self.central_widget.currentWidget().table.model().beginRemoveRows(top, 0, 0)
 
-        with open(putanja, newline='') as csvfile:
+        with open(putanja, 'r',newline='') as csvfile:
             spamreader = csv.reader(csvfile, delimiter = "\n")
             counter = 0
+            prva_linija = True
             for row in spamreader:
-                if row[0] == "":
+                if prva_linija:
+                    prva_linija = False
                     continue
+                if row[0] == "":
+                    break
+                
                 objekat = GenerickaKlasa(lista_atributa, row[0].split(","))
                 nadjen = True
                 for i in range(len(lista_kljuceva)):
@@ -166,6 +173,7 @@ class PocetnaStrana(QWidget):
         
         with open(putanja, 'w', newline='') as f:
             writer = csv.writer(f, delimiter = ",")
+            writer.writerow([self.central_widget.currentWidget().putanja_meta])
             for i in range(len(self.central_widget.currentWidget().table.model().lista_prikaz)):
                 tekst = ""
                 for j in range(len(lista_atributa)):
@@ -181,12 +189,12 @@ class PocetnaStrana(QWidget):
         if self.central_widget.currentWidget() == None:
             msgBox = QMessageBox()
             msgBox.setText("Trenutno ni jedna datoteka nije otvorena")
-            msgBox.exec()
+            msgBox.exec_()
             return
         elif not hasattr(self.central_widget.currentWidget().table, "selected_elem"):
             msgBox = QMessageBox()
             msgBox.setText("Trenutno ni jedan element nije selektovan")
-            msgBox.exec()
+            msgBox.exec_()
             return
 
         model = self.central_widget.currentWidget().table.model()
@@ -210,7 +218,7 @@ class PocetnaStrana(QWidget):
         if len(lista_roditelja) == 0:
             msgBox = QMessageBox()
             msgBox.setText("Selektovani element nema roditelja")
-            msgBox.exec()
+            msgBox.exec_()
             return
 
         elif len(lista_roditelja) > 1:
@@ -322,17 +330,17 @@ class PocetnaStrana(QWidget):
         if self.central_widget.currentWidget() == None:
             msgBox = QMessageBox()
             msgBox.setText("Trenutno ni jedna datoteka nije otvorena")
-            msgBox.exec()
+            msgBox.exec_()
             return
         elif not hasattr(self.central_widget.currentWidget().table, "selected_elem"):
             msgBox = QMessageBox()
             msgBox.setText("Trenutno ni jedan element nije selektovan")
-            msgBox.exec()
+            msgBox.exec_()
             return
         elif self.central_widget.currentWidget().tab_widget.currentWidget() == None:
             msgBox = QMessageBox()
             msgBox.setText("Selektovani element nema pod tabele")
-            msgBox.exec()
+            msgBox.exec_()
             return
 
         child = self.central_widget.currentWidget().tab_widget.currentWidget()
@@ -371,7 +379,7 @@ class PocetnaStrana(QWidget):
             msgBox.exec_()
             return
 
-        self.prikaz = PrikazElementa(self.central_widget.currentWidget(),
+        prikaz = PrikazElementa(self.central_widget.currentWidget(),
                     self.central_widget.currentWidget().meta_podaci)
     
     
@@ -379,12 +387,13 @@ class PocetnaStrana(QWidget):
         if self.central_widget.currentWidget() == None:
             msgBox = QMessageBox()
             msgBox.setText("Trenutno ni jedan element nije selektovan")
-            msgBox.exec()
+            msgBox.exec_()
             return
 
-        self.prikaz = PrikazElementa(self.central_widget.currentWidget(), self.central_widget.currentWidget().meta_podaci)
-        lista_kljuceva = self.prikaz.lista_atr
-        lista_kriterijuma = self.prikaz.lista_kriterijuma
+        prikaz = PrikazElementa(self.central_widget.currentWidget(), self.central_widget.currentWidget().meta_podaci)
+        prikaz.exec_()
+        lista_kljuceva = prikaz.lista_atr
+        lista_kriterijuma = prikaz.lista_kriterijuma
         model = self.central_widget.currentWidget().table.model()
         model = pretraga_serijske(
             lista_kljuceva, lista_kriterijuma, 
@@ -396,7 +405,7 @@ class PocetnaStrana(QWidget):
         self.central_widget.setCurrentIndex(index)
         tab = self.central_widget.currentWidget()
         
-        if hasattr(tab, "sortirano") and len(tab.model().lista_prikaz) > 1:
+        if hasattr(tab, "sortirano") and len(tab.table.model().lista_prikaz) > 1:
             if tab.meta_podaci[1] == "serijska":
                 while True:
                     izabrano = -1
@@ -436,6 +445,7 @@ class PocetnaStrana(QWidget):
                 if izabrano != 0:
                     with open(putanja, 'w', newline='') as f:
                         writer = csv.writer(f, delimiter = ",")
+                        writer.writerow(tab.putanja_meta)
                         for i in range(len(tab.table.model().lista_prikaz)):
                             tekst = ""
                             for j in range(len(tab.table.model().nazivi_atributa)):
