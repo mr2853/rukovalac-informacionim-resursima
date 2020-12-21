@@ -4,7 +4,7 @@ relativna_putanja:podaci\podaci
 sufiks:csv
 podaci:relativna_putanja\nivo_studija_sek.sufiks
 nazivi_atributa:oznaka,naziv
-tipovi_atributa:float,character
+tipovi_atributa:float,str
 duzina_atributa:2,80
 obaveznost_atributa:True,True
 veze:child_StudijskiProgram(oznaka=nivo)

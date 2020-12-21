@@ -4,7 +4,7 @@ relativna_putanja:podaci\podaci
 sufiks:csv
 podaci:relativna_putanja\nastavni_predmet_ser.sufiks
 nazivi_atributa:ustanova,oznaka,naziv,espb
-tipovi_atributa:character,character,character,int
+tipovi_atributa:str,str,str,int
 duzina_atributa:2,6,120,2
 obaveznost_atributa:True,True,True,True
 veze:parent_VisokoskolskaUstanova(ustanova=oznaka),child_PlanStudijskeGrupe(ustanova=ustanova_predmet#oznaka=oznaka_predmeta)

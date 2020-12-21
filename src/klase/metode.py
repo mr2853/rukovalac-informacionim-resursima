@@ -1,9 +1,12 @@
 import csv
 from types import new_class
+
+from PySide2.QtCore import QModelIndex
 from .model import Model
 from .genericka_klasa import GenerickaKlasa
 from .merge_sort import merge_sort
 from PySide2 import QtWidgets
+import os
 
 def citanje_meta_podataka(putanja):
     neka_lista = []
@@ -119,7 +122,7 @@ def spoji_dve_sekvencijalne_datoteke(putanja_privremena, putanja_originalna, klj
     for i in lista_ser:
         lista_sek.append(i)
 
-    merge_sort(lista_sek, kljuc[0], nacin_sortiranja)
+    merge_sort(lista_sek, kljuc[0], nacin_sortiranja) # za svaki slucaj i sortiramo
 
     with open(nova_putanja, 'a', newline='') as f:
         writer = csv.writer(f, delimiter = ",")
@@ -127,23 +130,36 @@ def spoji_dve_sekvencijalne_datoteke(putanja_privremena, putanja_originalna, klj
         for i in range(len(lista_sek)):
             writer.writerow(lista_sek[i])
         
+def sastavi_sekvencijalnu(parent):
+    lista_atributa = parent.lista_atributa
+    lista_kljuceva = parent.lista_kljuceva
+    putanja_serijske = parent.privremena_datoteka
+    putanja_sekvencijalne = parent.putanja_podaci
+    nacin_sortiranja = True
+    broj_novih_objekata = 0
 
-# prototip funkcije kako ce odprilike izgledati
-# implementirati kada to bude moguce i testirati
-def dodavanje_u_sekvencijalnu(lista_atributa, lista_kljuceva, putanja_serijske, putanja_sekvencijalne, nacin_sortiranja):
     lista_objekata = []
-    with open(putanja_serijske, newline='\n') as f: # mozda se ovaj pocetak moze bolje resiti da uporedo otvorim
-        while True:                            # dve datoteke pa da proveram da li je kljuc jednak, ali opet onda
-            podaci = f.readline().strip()   # treba videti kako korisniku ponuditi da izabere kojeg da sacuva...
+    with open(putanja_serijske, 'r', newline='\n') as f:
+        prva_linija = True
+        while True:
+            podaci = f.readline().strip()
+            if prva_linija:
+                prva_linija = False
+                continue
             if podaci == "":
                 break
             
             lista_podataka = podaci.split(",")
             lista_objekata.append(GenerickaKlasa(lista_atributa, lista_podataka))
+            broj_novih_objekata += 1
 
-    with open(putanja_sekvencijalne, newline='\n') as f:
+    with open(putanja_sekvencijalne, 'r', newline='\n') as f:
+        prva_linija = True
         while True:
             podaci = f.readline().strip()
+            if prva_linija:
+                prva_linija = False
+                continue
             if podaci == "":
                 break
             
@@ -151,19 +167,33 @@ def dodavanje_u_sekvencijalnu(lista_atributa, lista_kljuceva, putanja_serijske, 
             lista_objekata.append(GenerickaKlasa(lista_atributa, lista_podataka))
 
     lista_istih = []
-    for i in range(len(lista_kljuceva)):
-        for j in range(len(lista_objekata)):
-            for m in range(j, len(lista_objekata)):
+    for j in range(len(lista_objekata)-1):
+        for m in range(j+1, len(lista_objekata)):
+            nadjen = False
+            for i in range(len(lista_kljuceva)):
                 if lista_objekata[j].__getattribute__(lista_kljuceva[i]) == lista_objekata[m].__getattribute__(lista_kljuceva[i]):
-                    nadjen = False
-                    for n in range(len(lista_istih)):
-                        if lista_istih[n][0] == j:
+                    nadjen = True
+            if nadjen:
+                for n in range(len(lista_istih)):
+                    for z in range(len(lista_istih[n])):
+                        if lista_istih[n][z] == j:
+                            sadrzi = False
+                            for s in range(z+1, len(lista_istih[n])):
+                                if lista_istih[n][s] == m:
+                                    sadrzi = True
+                                    break
+                            if sadrzi:
+                                nadjen = False
+                                continue
+                            
                             lista_istih[n].append(m)
-                            nadjen = True
+                            nadjen = False
                             break
                     if not nadjen:
-                        lista_istih.append([j,m])
-                        
+                        break
+                if nadjen:
+                    lista_istih.append([j,m])
+
     while len(lista_istih) != 0:
         list_tuple = () # ponavljati ovo koliko ima elementa sa duplikatima
         for i in range(len(lista_istih[0])):
@@ -176,7 +206,7 @@ def dodavanje_u_sekvencijalnu(lista_atributa, lista_kljuceva, putanja_serijske, 
             list_tuple = list_tuple + (tekst,)
 
         input = QtWidgets.QInputDialog.getItem(
-            QtWidgets.QWidget, # staviti self umesto QtWidgets.QWidget ili videti sta proslediti ovde 
+            parent, 
             "",
             "Uneli ste vise elemenata sa nekim istim podacima koji moraju biti jedinstveni\n"
             "Izaberite koji element zelite da zadrzite:",
@@ -185,34 +215,39 @@ def dodavanje_u_sekvencijalnu(lista_atributa, lista_kljuceva, putanja_serijske, 
             editable=False)
             
         if input[1]:
-            index = -1
-            for i in range(list_tuple):
+            for i in lista_objekata:
+                print(i.naziv)
+            for i in range(len(list_tuple)):
                 if list_tuple[i].find(input[0]) != -1:
-                    index = i
+                    lista_istih[0].pop(i)
                     break
             
-            if index == -1:
-                ... # pogresan unos poruka
-                # nekako je izabrana nepostojeci element
-                # obavestiti korisnika i vratiti ga
-
             for i in range(len(lista_istih[0])):
-                if index != i:
-                    lista_objekata.remove(lista_objekata[lista_istih[0][i]])
+                lista_objekata.pop(lista_istih[0][i])
+                for j in range(len(lista_istih)):
+                    for m in range(len(lista_istih[j])):
+                        if lista_istih[0][i] <= lista_istih[j][m]:
+                            lista_istih[j][m] -= 1
 
-            lista_istih.remove(lista_istih[0])
+                broj_novih_objekata -= 1
+                
+            lista_istih.pop(0)
         else:
             ... # poruka da li zeli sigurno da prekine
             # ako da, prekinuti while petlju
             # ako ne, samo ga vratiti u petlju
-
-    merge_sort(lista_objekata, lista_kljuceva[0], True) # proveriti da li da bude po prvom kljucu
-                                                # i sortiranje da li treba da bude Ascending ili Descending
+            
+    merge_sort(lista_objekata, lista_kljuceva[0], nacin_sortiranja)
     
-    with open(putanja_serijske, 'w', newline='') as f:
+    model = parent.parent().table.model()
+    model.lista_prikaz = []
+    parent.parent().table
+    with open(putanja_sekvencijalne, 'w', newline='') as f:
         writer = csv.writer(f, delimiter = ",")
-        tekst = ""
+        writer.writerow([parent.parent().putanja_meta])
         for i in range(len(lista_objekata)):
+            tekst = ""
+            model.lista_prikaz.append(lista_objekata[i])
             for j in range(len(lista_atributa)):
                 tekst += str(lista_objekata[i].__getattribute__(lista_atributa[j]))
                 if j < len(lista_atributa)-1:
@@ -220,20 +255,24 @@ def dodavanje_u_sekvencijalnu(lista_atributa, lista_kljuceva, putanja_serijske, 
             novi_red = tekst.split(",")
             writer.writerow(novi_red)
 
-    index_prvog_kljuca = -1
-    for i in range(len(lista_atributa)):
-        if lista_atributa[i] == lista_kljuceva[0]:
-            index_prvog_kljuca = i
+    parent.parent().table.model().beginInsertRows(QModelIndex(), 0, broj_novih_objekata - 1)
+    parent.parent().table.setModel(model)
+    parent.parent().table.model().endInsertRows()
+    return True
 
-    spoji_dve_sekvencijalne_datoteke(putanja_serijske, 
-                    putanja_sekvencijalne,
-                    index_prvog_kljuca, nacin_sortiranja)
+def dodaj_u_serijsku(objekat, lista_atributa, putanja, meta_putanja):
+    postoji = True
+    relativna_putanja = ""
+    if not os.path.exists(putanja):
+        postoji = False
+        trenutni_direk = os.getcwd()
+        relativna_putanja = os.path.relpath(meta_putanja, trenutni_direk)
 
-# prototip funkcije kako ce odprilike izgledati
-# implementirati kada to bude moguce i testirati
-def dodaj_u_serijsku(objekat, lista_atributa, putanja):
-    with open(putanja, 'a', newline='') as f:
+    with open(putanja, 'a', newline='',encoding="utf-8") as f:
         writer = csv.writer(f, delimiter = ",")
+        if postoji == False:
+            writer.writerow([relativna_putanja])
+
         tekst = ""
         for j in range(len(lista_atributa)):
             tekst += str(objekat.__getattribute__(lista_atributa[j]))

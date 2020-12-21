@@ -4,7 +4,7 @@ relativna_putanja:podaci\podaci
 sufiks:csv
 podaci:relativna_putanja\visokoskolska_ustanova_sek.sufiks
 naziv_atributa:oznaka,naziv,adresa
-tipovi_atributa:character,character,character
+tipovi_atributa:str,str,str
 duzina_atributa:2,80,80
 obaveznost_atributa:True,True,True
 veze:child_StudijskiProgram(oznaka=ustanova),child_NastavniPredmet(oznaka=ustanova),child_Student(oznaka=ustanova)

@@ -4,7 +4,7 @@ relativna_putanja:podaci\podaci
 sufiks:csv
 podaci:relativna_putanja\plan_studijske_grupe_sek.sufiks
 nazivi_atributa:program_ustanove,oznaka_programa,blok,pozicija,ustanova_predmet,oznaka_predmeta
-tipovi_atributa:character,character,int,int,character,character
+tipovi_atributa:str,str,int,int,str,str
 duzina_atributa:2,3,2,2,2,6
 obaveznost_atributa:True,True,True,True,True,True
 veze:parent_NastavniPredmet(ustanova_predmet=ustanova#oznaka_predmeta=oznaka),parent_StudijskiProgram(program_ustanove=ustanova#oznaka_programa)

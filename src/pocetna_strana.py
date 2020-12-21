@@ -36,11 +36,12 @@ class PocetnaStrana(QWidget):
         meni_bar = MenuBar(self.main_window, parent=None)
 
         self.tool_bar = ToolBar(self.main_window,parent=None)
-        self.tool_bar.dodaj.triggered.connect(self.otvori_prikaz)
+        self.tool_bar.dodaj.triggered.connect(self.dodavanje_u_datoteku)
+        self.tool_bar.izmeni_tabelu.triggered.connect(self.izmena_u_datoteci)
         self.tool_bar.pretrazi.triggered.connect(self.otvori_pretragu)
         self.tool_bar.ukloni_iz_tabele.triggered.connect(self.ukloni_iz_tabele)
         self.tool_bar.spoji_datoteke.triggered.connect(self.spoji_datoteke)
-        self.tool_bar.podeli_datoteku.triggered.connect(self.podeli_datoteke)
+        # self.tool_bar.podeli_datoteku.triggered.connect(self.podeli_datoteke)
         
         status_bar = QtWidgets.QStatusBar()
         status_bar.showMessage("Prikazan status bar!")
@@ -66,6 +67,12 @@ class PocetnaStrana(QWidget):
     def podeli_datoteke(self):...
 
     def spoji_datoteke(self):
+        if len(self.multi_selekt) == 0:
+            msgBox = QMessageBox()
+            msgBox.setText("Trenutno ni jedna datoteka nije selektovana za spajanje")
+            msgBox.exec_()
+            return
+
         kljuc = [2, "broj_indeksa"]
         lista = []
         self.multi_selekt.sort()
@@ -256,27 +263,27 @@ class PocetnaStrana(QWidget):
         lista_roditelja[index] = lista_roditelja[index][del1:len(lista_roditelja[index])]
         del1 = lista_roditelja[index].find("(")
         ime_roditelja = lista_roditelja[index][0:del1]
-        nova_meta = ime_roditelja[0].lower()
+        nova_putanja = ime_roditelja[0].lower()
         
         for s in range(1, len(ime_roditelja)):
             if ime_roditelja[s].isupper():
-                nova_meta += "_" + ime_roditelja[s].lower()
+                nova_putanja += "_" + ime_roditelja[s].lower()
             else:
-                nova_meta += ime_roditelja[s]
+                nova_putanja += ime_roditelja[s]
                 
         
-        nova_meta = meta_podaci[2] + "\\" + nova_meta
+        nova_putanja = meta_podaci[2] + "\\" + nova_putanja
         if meta_podaci[1] == "serijska":
-            nova_meta += "_ser."
+            nova_putanja += "_ser."
         else:
-            nova_meta += "_sek."
-        nova_meta += meta_podaci[3]
+            nova_putanja += "_sek."
+        nova_putanja += meta_podaci[3]
         
         del1 = lista_roditelja[index].find("(") + 1
         del2 = lista_roditelja[index].find(")")
         lista_kljuceva.append(lista_roditelja[index][del1:del2].split("#"))
 
-        tab = Tab(nova_meta, self.central_widget)
+        tab = Tab(nova_putanja, self.central_widget)
         # self.__getattribute__(ime).clicked.connect(self.element_selected)
         tab.read()
         
@@ -302,8 +309,8 @@ class PocetnaStrana(QWidget):
 
         tab.btn_down.clicked.connect(self.otvori_tabelu_dete)
         tab.btn_up.clicked.connect(self.otvori_tabelu_roditelj)
-        tab.btn_left.clicked.connect(self.otvori_tabelu_levi_rodjak)
-        tab.btn_right.clicked.connect(self.otvori_tabelu_desni_rodjak)
+        # tab.btn_left.clicked.connect(self.otvori_tabelu_levi_rodjak)
+        # tab.btn_right.clicked.connect(self.otvori_tabelu_desni_rodjak)
 
         self.central_widget.removeTab(self.central_widget.currentIndex())
         self.central_widget.addTab(tab, ime_roditelja)
@@ -372,25 +379,45 @@ class PocetnaStrana(QWidget):
         self.lista_putanja.append(meta)
         self.lista_putanja.remove(self.lista_putanja[self.central_widget.currentIndex()])
 
-    def otvori_prikaz(self):
+    def izmena_u_datoteci(self): # tip = 0-dodavanje 1-izmena 2-pretraga
+        if self.central_widget.currentWidget() == None:
+            msgBox = QMessageBox()
+            msgBox.setText("Trenutno ni jedna datoteka nije otvorena")
+            msgBox.exec_()
+            return
+        elif not hasattr(self.central_widget.currentWidget().table, "selected_elem"):
+            msgBox = QMessageBox()
+            msgBox.setText("Trenutno ni jedan element nije selektovan")
+            msgBox.exec_()
+            return
+            
+        model = self.central_widget.currentWidget().table.model()
+        selektovani_element = model.get_element(self.central_widget.currentWidget().table.selected_elem)
+        prikaz = PrikazElementa(self.central_widget.currentWidget(),
+                self.central_widget.currentWidget().meta_podaci,False, selektovani_element)
+    
+        prikaz.exec_()
+
+    def dodavanje_u_datoteku(self): # tip = 0-dodavanje 1-izmena 2-pretraga
+        if self.central_widget.currentWidget() == None:
+            msgBox = QMessageBox()
+            msgBox.setText("Trenutno ni jedna datoteka nije otvorena")
+            msgBox.exec_()
+            return
+            
+        prikaz = PrikazElementa(self.central_widget.currentWidget(),
+                self.central_widget.currentWidget().meta_podaci)
+    
+        prikaz.exec_()
+
+    def otvori_pretragu(self):
         if self.central_widget.currentWidget() == None:
             msgBox = QMessageBox()
             msgBox.setText("Trenutno ni jedna datoteka nije otvorena")
             msgBox.exec_()
             return
 
-        prikaz = PrikazElementa(self.central_widget.currentWidget(),
-                    self.central_widget.currentWidget().meta_podaci)
-    
-    
-    def otvori_pretragu(self):
-        if self.central_widget.currentWidget() == None:
-            msgBox = QMessageBox()
-            msgBox.setText("Trenutno ni jedan element nije selektovan")
-            msgBox.exec_()
-            return
-
-        prikaz = PrikazElementa(self.central_widget.currentWidget(), self.central_widget.currentWidget().meta_podaci)
+        prikaz = PrikazElementa(self.central_widget.currentWidget(), self.central_widget.currentWidget().meta_podaci,True)
         prikaz.exec_()
         lista_kljuceva = prikaz.lista_atr
         lista_kriterijuma = prikaz.lista_kriterijuma

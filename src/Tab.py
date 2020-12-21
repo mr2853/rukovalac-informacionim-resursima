@@ -31,25 +31,25 @@ class Tab(QtWidgets.QWidget):
         self.table.setSelectionMode(QAbstractItemView.SingleSelection)
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.clicked.connect(self.element_selected)
-
+        
         self.sub_layout = QtWidgets.QHBoxLayout()
 
         self.btn_up = QtWidgets.QPushButton("↑", self)
         self.btn_down = QtWidgets.QPushButton("↓", self)
-        self.btn_left = QtWidgets.QPushButton("<", self)
-        self.btn_right = QtWidgets.QPushButton(">", self)
+        # self.btn_left = QtWidgets.QPushButton("<", self)
+        # self.btn_right = QtWidgets.QPushButton(">", self)
 
         self.btn_up.setFixedSize(50,80)
         self.btn_down.setFixedSize(50,80)
-        self.btn_left.setFixedSize(50,80)
-        self.btn_right.setFixedSize(50,80)
+        # self.btn_left.setFixedSize(50,80)
+        # self.btn_right.setFixedSize(50,80)
 
         self.sub_layout.addStretch()
 
         self.sub_layout.addWidget(self.btn_up)
         self.sub_layout.addWidget(self.btn_down)
-        self.sub_layout.addWidget(self.btn_left)
-        self.sub_layout.addWidget(self.btn_right)
+        # self.sub_layout.addWidget(self.btn_left)
+        # self.sub_layout.addWidget(self.btn_right)
         self.sub_layout.addStretch()
         self.sub_layout.setSpacing(0)
 
@@ -76,7 +76,7 @@ class Tab(QtWidgets.QWidget):
         self.table.horizontalHeader().sectionClicked.connect(self.sort_table) # kada se klikne na neki horizontalHeader da pozove self.sort_table
         if self.meta_podaci[1] == "sekvencijalna":
             self.sort_table(0)
-    
+        
     def sort_table(self, index):
         """
         sortira listu

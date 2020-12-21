@@ -4,7 +4,7 @@ relativna_putanja:podaci\podaci
 sufiks:csv
 podaci:relativna_putanja\tok_studija_ser.sufiks
 nazivi_atributa:ustanova,oznaka_programa,student_iz_ustanove,struka,broj_indeksa,skolska_godina,godina_studija,blok,redni_broj_upisa,datum_upisa,datum_overe,espb_pocetni,espb_krajnji
-tipovi_atributa:character,character,character,character,character,int,int,int,int,date,date,int,int
+tipovi_atributa:str,str,str,str,str,int,int,int,int,date,date,int,int
 duzina_atributa:2,3,2,2,6,4,1,2,2,10,10,3,3
 obaveznost_atributa:True,True,True,True,True,True,True,True,True,True,False,True,True
 veze:parent_Student(student_iz_ustanove=ustanova#struka#broj_indeksa),parent_StudijskiProgram(ustanova#oznaka_programa)
