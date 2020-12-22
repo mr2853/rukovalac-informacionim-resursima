@@ -189,9 +189,21 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
             elif self.tip == 0:
                 if self.tip_datoteke == "serijska":
                     dodaj_u_serijsku(self.element, self.lista_atributa, self.putanja_podaci, self.parent().putanja)
+                    self.parent().table.model().beginInsertRows(QModelIndex(), 0, 0)
+                    model = self.parent().table.model()
+                    model.lista_prikaz.append(self.element)
+                    self.parent().table.setModel(model)
+                    self.parent().table.model().endInsertRows()
 
                 elif self.tip_datoteke == "sekvencijalna":
                     dodaj_u_serijsku(self.element, self.lista_atributa, self.privremena_datoteka, self.parent().putanja)
+                
+                top = QModelIndex()
+                top.child(0,0)
+                bottom = QModelIndex()
+                bottom.child(len(self.parent().table.model().lista_prikaz), self.parent().table.model().broj_kolona)
+                self.parent().table.dataChanged(top, bottom) # da refresuje tabelu od top indexa to bottom indexa
+                
             elif self.tip == 2:
                 print("pretraga, bice odradjeno")
             
