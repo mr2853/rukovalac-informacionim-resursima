@@ -67,8 +67,8 @@ class PocetnaStrana(QWidget):
             poruka = QMessageBox()
             icon = QtGui.QIcon("src/ikonice/logo.jpg")
             poruka.setWindowIcon(icon)
-            poruka.setWindowTitle("Upozorenje")
-            poruka.setText("Trenutno ni jedna datoteka nije selektovana za spajanje")
+            poruka.setWindowTitle("Upozorenje!")
+            poruka.setText("Trenutno nijedna datoteka nije selektovana za spajanje!")
             poruka.exec_()
             return
 
@@ -123,8 +123,8 @@ class PocetnaStrana(QWidget):
             poruka = QMessageBox()
             icon = QtGui.QIcon("src/ikonice/logo.jpg")
             poruka.setWindowIcon(icon)
-            poruka.setWindowTitle("Upozorenje")
-            poruka.setText("Trenutno ni jedna datoteka nije otvorena")
+            poruka.setWindowTitle("Upozorenje!")
+            poruka.setText("Trenutno nijedna datoteka nije otvorena!")
             poruka.exec_()
             return
         # hasattr proverava da li .table ima atribut selected_elem, kojeg mu dodeljujem kada se klikne na neki element
@@ -133,7 +133,7 @@ class PocetnaStrana(QWidget):
             icon = QtGui.QIcon("src/ikonice/logo.jpg")
             poruka.setWindowIcon(icon)
             poruka.setWindowTitle("Upozorenje")
-            poruka.setText("Trenutno ni jedan element nije selektovan")
+            poruka.setText("Trenutno nijedan element nije selektovan!")
             poruka.exec_()
             return
             
@@ -151,8 +151,8 @@ class PocetnaStrana(QWidget):
                     poruka = QMessageBox()
                     icon = QtGui.QIcon("src/ikonice/logo.jpg")
                     poruka.setWindowIcon(icon)
-                    poruka.setWindowTitle("Upozorenje")
-                    poruka.setText("Selektovani element ne sme da se obrise zato sto se njegovi podaci koriste u pod tabelama, njegovoj deci")
+                    poruka.setWindowTitle("Upozorenje!")
+                    poruka.setText("Selektovani element ne sme da se obrise zato sto se njegovi podaci koriste u podtabelama, njegovoj deci!")
                     poruka.exec_()
                     return
         
@@ -205,16 +205,16 @@ class PocetnaStrana(QWidget):
             poruka = QMessageBox()
             icon = QtGui.QIcon("src/ikonice/logo.jpg")
             poruka.setWindowIcon(icon)
-            poruka.setWindowTitle("Upozorenje")
-            poruka.setText("Trenutno ni jedna datoteka nije otvorena")
+            poruka.setWindowTitle("Upozorenje!")
+            poruka.setText("Trenutno nijedna datoteka nije otvorena!")
             poruka.exec_()
             return
         elif not hasattr(self.central_widget.currentWidget().table, "selected_elem"):
             poruka = QMessageBox()
             icon = QtGui.QIcon("src/ikonice/logo.jpg")
             poruka.setWindowIcon(icon)
-            poruka.setWindowTitle("Upozorenje")
-            poruka.setText("Trenutno ni jedan element nije selektovan")
+            poruka.setWindowTitle("Upozorenje!")
+            poruka.setText("Trenutno nijedan element nije selektovan!")
             poruka.exec_()
             return
 
@@ -240,8 +240,8 @@ class PocetnaStrana(QWidget):
             poruka = QMessageBox()
             icon = QtGui.QIcon("src/ikonice/logo.jpg")
             poruka.setWindowIcon(icon)
-            poruka.setWindowTitle("Upozorenje")
-            poruka.setText("Selektovani element nema roditelja")
+            poruka.setWindowTitle("Upozorenje!")
+            poruka.setText("Selektovani element nema roditelja!")
             poruka.exec_()
             return
 
@@ -355,24 +355,24 @@ class PocetnaStrana(QWidget):
             poruka = QMessageBox()
             icon = QtGui.QIcon("src/ikonice/logo.jpg")
             poruka.setWindowIcon(icon)
-            poruka.setWindowTitle("Upozorenje")
-            poruka.setText("Trenutno ni jedna datoteka nije otvorena")
+            poruka.setWindowTitle("Upozorenje!")
+            poruka.setText("Trenutno nijedna datoteka nije otvorena!")
             poruka.exec_()
             return
         elif not hasattr(self.central_widget.currentWidget().table, "selected_elem"):
             poruka = QMessageBox()
             icon = QtGui.QIcon("src/ikonice/logo.jpg")
             poruka.setWindowIcon(icon)
-            poruka.setWindowTitle("Upozorenje")
-            poruka.setText("Trenutno ni jedan element nije selektovan")
+            poruka.setWindowTitle("Upozorenje!")
+            poruka.setText("Trenutno nijedan element nije selektovan!")
             poruka.exec_()
             return
         elif self.central_widget.currentWidget().tab_widget.currentWidget() == None:
             poruka = QMessageBox()
             icon = QtGui.QIcon("src/ikonice/logo.jpg")
             poruka.setWindowIcon(icon)
-            poruka.setWindowTitle("Upozorenje")
-            poruka.setText("Selektovani element nema pod tabele")
+            poruka.setWindowTitle("Upozorenje!")
+            poruka.setText("Selektovani element nema podtabele!")
             poruka.exec_()
             return
 
@@ -410,16 +410,16 @@ class PocetnaStrana(QWidget):
             poruka = QMessageBox()
             icon = QtGui.QIcon("src/ikonice/logo.jpg")
             poruka.setWindowIcon(icon)
-            poruka.setWindowTitle("Upozorenje")
-            poruka.setText("Trenutno ni jedna datoteka nije otvorena")
+            poruka.setWindowTitle("Upozorenje!")
+            poruka.setText("Trenutno nijedna datoteka nije otvorena!")
             poruka.exec_()
             return
         elif not hasattr(self.central_widget.currentWidget().table, "selected_elem"):
             poruka = QMessageBox()
             icon = QtGui.QIcon("src/ikonice/logo.jpg")
             poruka.setWindowIcon(icon)
-            poruka.setWindowTitle("Upozorenje")
-            poruka.setText("Trenutno ni jedan element nije selektovan")
+            poruka.setWindowTitle("Upozorenje!")
+            poruka.setText("Trenutno nijedan element nije selektovan!")
             poruka.exec_()
             return
             
@@ -435,8 +435,8 @@ class PocetnaStrana(QWidget):
             poruka = QMessageBox()
             icon = QtGui.QIcon("src/ikonice/logo.jpg")
             poruka.setWindowIcon(icon)
-            poruka.setWindowTitle("Upozorenje")
-            poruka.setText("Trenutno ni jedna datoteka nije otvorena")
+            poruka.setWindowTitle("Upozorenje!")
+            poruka.setText("Trenutno nijedna datoteka nije otvorena!")
             poruka.exec_()
             return
             
@@ -450,8 +450,8 @@ class PocetnaStrana(QWidget):
             poruka = QMessageBox()
             icon = QtGui.QIcon("src/ikonice/logo.jpg")
             poruka.setWindowIcon(icon)
-            poruka.setWindowTitle("Upozorenje")
-            poruka.setText("Trenutno ni jedna datoteka nije otvorena")
+            poruka.setWindowTitle("Upozorenje!")
+            poruka.setText("Trenutno nijedna datoteka nije otvorena!")
             poruka.exec_()
             return
 
