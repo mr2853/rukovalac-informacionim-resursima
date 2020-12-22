@@ -319,6 +319,15 @@ class PocetnaStrana(QWidget):
                     print("pocetna_strana.py, 124 linija, eror u len(klucevi):", len(kljucevi), "// ", kljucevi)
             if pronadjen:
                 nova_lista.append(tab.table.model().lista_prikaz[j])
+        
+        if len(nova_lista) == 0:
+            poruka = QMessageBox()
+            icon = QtGui.QIcon("src/ikonice/logo.jpg")
+            poruka.setWindowIcon(icon)
+            poruka.setWindowTitle("Upozorenje!")
+            poruka.setText("Selektovani element nema roditelja sa istim kljucem kao kod selektovanog!")
+            poruka.exec_()
+            return
 
         tab.table.model().lista_prikaz = nova_lista
 
@@ -375,6 +384,14 @@ class PocetnaStrana(QWidget):
             poruka.setText("Selektovani element nema podtabele!")
             poruka.exec_()
             return
+        elif len(self.central_widget.currentWidget().tab_widget.currentWidget().model.lista_prikaz) == 0:
+            poruka = QMessageBox()
+            icon = QtGui.QIcon("src/ikonice/logo.jpg")
+            poruka.setWindowIcon(icon)
+            poruka.setWindowTitle("Upozorenje!")
+            poruka.setText("Selektovani element nema decu u selektovanoj podtabeli!")
+            poruka.exec_()
+            return
 
         child = self.central_widget.currentWidget().tab_widget.currentWidget()
         tab = Tab(child.putanja, self.central_widget)
@@ -405,7 +422,7 @@ class PocetnaStrana(QWidget):
         self.lista_putanja.append(meta)
         self.lista_putanja.remove(self.lista_putanja[self.central_widget.currentIndex()])
 
-    def izmena_u_datoteci(self): # tip = 0-dodavanje 1-izmena 2-pretraga
+    def izmena_u_datoteci(self):
         if self.central_widget.currentWidget() == None:
             poruka = QMessageBox()
             icon = QtGui.QIcon("src/ikonice/logo.jpg")
@@ -430,7 +447,7 @@ class PocetnaStrana(QWidget):
     
         prikaz.exec_()
 
-    def dodavanje_u_datoteku(self): # tip = 0-dodavanje 1-izmena 2-pretraga
+    def dodavanje_u_datoteku(self):
         if self.central_widget.currentWidget() == None:
             poruka = QMessageBox()
             icon = QtGui.QIcon("src/ikonice/logo.jpg")
@@ -457,14 +474,31 @@ class PocetnaStrana(QWidget):
 
         prikaz = PrikazElementa(self.central_widget.currentWidget(), self.central_widget.currentWidget().meta_podaci,True)
         prikaz.exec_()
-        lista_kljuceva = prikaz.lista_atr
-        lista_kriterijuma = prikaz.lista_kriterijuma
-        model = self.central_widget.currentWidget().table.model()
-        model = pretraga_serijske(
-            lista_kljuceva, lista_kriterijuma, 
-            self.central_widget.currentWidget().meta_podaci)
+        if len(prikaz.lista_atr) != 0 and len(prikaz.lista_kriterijuma) != 0:
+            model = self.central_widget.currentWidget().table.model()
+            model = pretraga(
+                prikaz.lista_atr, prikaz.lista_kriterijuma,
+                prikaz.lista_vece_manje, 
+                self.central_widget.currentWidget().meta_podaci)
 
-        self.central_widget.currentWidget().table.setModel(model)
+            if len(model.lista_prikaz) == 0:
+                poruka = QMessageBox()
+                icon = QtGui.QIcon("src/ikonice/logo.jpg")
+                poruka.setWindowIcon(icon)
+                poruka.setWindowTitle("Upozorenje!")
+                poruka.setText("Zadata pretraga nije pronasla vrednosti koje odgovaraju zadatim kriterijumima")
+                poruka.exec_()
+                return
+
+            self.central_widget.currentWidget().table.setModel(model)
+        else:
+            poruka = QMessageBox()
+            icon = QtGui.QIcon("src/ikonice/logo.jpg")
+            poruka.setWindowIcon(icon)
+            poruka.setWindowTitle("Upozorenje!")
+            poruka.setText("Niste zadali ni jedan kriterijum za pretragu, pretraga je prekinuta")
+            poruka.exec_()
+            return
 
     def delete_tab(self, index):
         self.central_widget.setCurrentIndex(index)

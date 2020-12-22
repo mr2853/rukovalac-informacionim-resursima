@@ -24,7 +24,7 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
         icon = QtGui.QIcon("src/ikonice/logo.jpg")
         self.setWindowIcon(icon)
         self.layout = QtWidgets.QGridLayout()
-        self.tip = 0  # tip == 0 -dodavanje / tip == 1 -izmena / tip == 3 -pretraga
+        self.tip = 0  # tip == 0 -dodavanje / tip == 1 -izmena / tip == 2 -pretraga
         
         if element != None:
             self.dugme = QtWidgets.QPushButton("Izmena")
@@ -40,14 +40,12 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
             self.tip = 2
             
         self.zatvori = QtWidgets.QPushButton("Zatvori")
-        #self.dugme = QtWidgets.QPushButton("Dodaj")
-        # parent.table.hide()
-        # parent.tab_widget.hide()
         self.lista_atr = [] # ovu listu koristim za pretragu, dodaju se samo
         # atributi cija input polja nisu prazna, i onda znam po kojim atributima
         # da vrsim pretragu
         self.lista_kriterijuma = [] # lista kriterijuma, isto kao lista gore sto
         # cuva nazive atributa, ova lista cuva vrednosti tih atributa
+        self.lista_vece_manje = []
 
         for i in range(len(self.lista_atributa)):
             naziv = self.lista_atributa[i][0].upper()
@@ -57,15 +55,30 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                     naziv += " "
                 else:
                     naziv += self.lista_atributa[i][s]
+
             ime = QtWidgets.QLabel(naziv + " :")
             self.layout.addWidget(ime)
             self.__setattr__(self.lista_atributa[i], QtWidgets.QLineEdit())
+
+            if self.tip == 2:
+                self.__setattr__(self.lista_atributa[i]+"_vece_manje", QtWidgets.QComboBox())
+                self.__getattribute__(self.lista_atributa[i]+"_vece_manje").addItem("manje od")
+                self.__getattribute__(self.lista_atributa[i]+"_vece_manje").addItem("manje ili jednako od")
+                self.__getattribute__(self.lista_atributa[i]+"_vece_manje").addItem("vece od")
+                self.__getattribute__(self.lista_atributa[i]+"_vece_manje").addItem("vece ili jednako od")
+                self.__getattribute__(self.lista_atributa[i]+"_vece_manje").addItem("jednako")
+                self.__getattribute__(self.lista_atributa[i]+"_vece_manje").setCurrentIndex(0)
+                self.__getattribute__(self.lista_atributa[i]+"_vece_manje").setEditable(False)
+
             if element == None and not pretraga:
                 self.__getattribute__(self.lista_atributa[i]).setPlaceholderText("Do " + self.lista_duzine_atributa[i] + " karaktera")
             elif element != None:
                 self.element = element
                 self.__getattribute__(self.lista_atributa[i]).setText(element.__getattribute__(self.lista_atributa[i]))
+
             self.layout.addWidget(self.__getattribute__(self.lista_atributa[i]))
+            if self.tip == 2:
+                self.layout.addWidget(self.__getattribute__(self.lista_atributa[i]+"_vece_manje"))
             
         self.layout.addWidget(self.dugme)
         self.layout.addWidget(self.zatvori)
@@ -87,6 +100,9 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
     def sacuvaj_podatke(self):
         if os.path.exists(self.privremena_datoteka):
             if self.tip_datoteke == "sekvencijalna":
+                top = QModelIndex()
+                top.child(0,0)
+                self.parent().table.model().beginRemoveRows(top, 0, 0)
                 if sastavi_sekvencijalnu(self):
                     if os.path.exists(self.privremena_datoteka):
                         os.remove(self.privremena_datoteka)
@@ -97,6 +113,8 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                         poruka.setWindowTitle("Upozorenje!")
                         poruka.setText("Privremena datoteka ne postoji!")
                         poruka.exec_()
+                        
+                self.parent().table.model().endRemoveRows()
 
     def zatvori_prikaz(self):
         self.close()
@@ -110,8 +128,12 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
             for i in range(len(self.lista_atributa)):
                 vrijednost = self.__getattribute__(self.lista_atributa[i]).text()
 
+                if self.tip == 2:
+                    if len(vrijednost.strip()) == 0:
+                        continue
+
                 if len(vrijednost) <= int(self.lista_duzine_atributa[i]):
-                    if bool(self.lista_obaveznosti_atributa[i]) == True and not self.pretraga:
+                    if bool(self.lista_obaveznosti_atributa[i]) == True and self.tip != 2:
                         if vrijednost == "":
                             poruka = QtWidgets.QMessageBox()
                             icon = QtGui.QIcon("src/ikonice/logo.jpg")
@@ -131,15 +153,19 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                             poruka.exec_()
                             return
                     except ValueError:
-                        msgBox = QtWidgets.QMessageBox()
+                        poruka = QtWidgets.QMessageBox()
                         icon = QtGui.QIcon("src/ikonice/logo.jpg")
                         poruka.setWindowIcon(icon)
                         poruka.setWindowTitle("Upozorenje!")
-                        msgBox.setText(str(self.lista_atributa[i]).capitalize()+" polje pogresna vrednost! Pokusajte ponovo!")
-                        msgBox.exec_()
+                        poruka.setText(str(self.lista_atributa[i]).capitalize()+" polje pogresna vrednost! Pokusajte ponovo!")
+                        poruka.exec_()
                         return
 
                     self.element.__setattr__(self.lista_atributa[i], vrijednost)
+                    self.lista_atr.append(self.lista_atributa[i])
+                    self.lista_kriterijuma.append(vrijednost)
+                    if self.tip == 2:
+                        self.lista_vece_manje.append(self.__getattribute__(self.lista_atributa[i]+"_vece_manje").currentIndex())
                 else:
                     poruka = QtWidgets.QMessageBox()
                     icon = QtGui.QIcon("src/ikonice/logo.jpg")
@@ -148,9 +174,6 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                     poruka.setText("Prekoracili ste duzinu karaktera!")
                     poruka.exec_()
                     return
-
-                #self.__getattribute__(self.lista_atributa[i]).setPlaceholderText("Do " + self.lista_duzine_atributa[i] + " karaktera")
-                
             
             if self.tip == 1:
                 self.parent().table.model().lista_prikaz = []
@@ -175,13 +198,16 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                         if not nadjen:
                             self.parent().table.model().lista_prikaz.append(objekat)
                         else:
-                            for i in range(len(self.lista_atributa)):
-                                objekat.__setattr__(self.lista_atributa[i], self.element.__getattribute__(self.lista_atributa[i]))
+                            if self.tip_datoteke == "sekvencijalna":
+                                dodaj_u_serijsku(self.element, self.lista_atributa, self.privremena_datoteka, self.parent().putanja)
+                            else:
+                                for i in range(len(self.lista_atributa)):
+                                    objekat.__setattr__(self.lista_atributa[i], self.element.__getattribute__(self.lista_atributa[i]))
 
-                            self.parent().table.model().lista_prikaz.append(objekat)
+                                self.parent().table.model().lista_prikaz.append(objekat)
                             
                         counter += 1
-    
+
                 with open(self.putanja_podaci, 'w', newline='') as f:
                     writer = csv.writer(f, delimiter = ",")
                     writer.writerow([self.parent().putanja_meta])
@@ -191,15 +217,15 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                             tekst += str(self.parent().table.model().lista_prikaz[i].__getattribute__(self.lista_atributa[j]))
                             if j < len(self.lista_atributa)-1:
                                 tekst += ","
-                                
+                            
                         novi_red = tekst.split(",")
                         writer.writerow(novi_red)
 
-                    top = QModelIndex()
-                    top.child(0,0)
-                    bottom = QModelIndex()
-                    bottom.child(len(self.parent().table.model().lista_prikaz), self.parent().table.model().broj_kolona)
-                    self.parent().table.dataChanged(top, bottom) # da refresuje tabelu od top indexa to bottom indexa
+                top = QModelIndex()
+                top.child(0,0)
+                bottom = QModelIndex()
+                bottom.child(len(self.parent().table.model().lista_prikaz), self.parent().table.model().broj_kolona)
+                self.parent().table.dataChanged(top, bottom) 
 
             elif self.tip == 0:
                 if self.tip_datoteke == "serijska":
@@ -217,10 +243,10 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                 top.child(0,0)
                 bottom = QModelIndex()
                 bottom.child(len(self.parent().table.model().lista_prikaz), self.parent().table.model().broj_kolona)
-                self.parent().table.dataChanged(top, bottom) # da refresuje tabelu od top indexa to bottom indexa
+                self.parent().table.dataChanged(top, bottom) 
                 
             elif self.tip == 2:
-                print("pretraga, bice odradjeno")
+                self.close()
             
         except ValueError:
             poruka = QtWidgets.QMessageBox()

@@ -48,7 +48,7 @@ def kreiraj_model(lista):
 
     return model
 
-def pretraga_serijske(lista_kljuceva, lista_kriterijuma, meta_podaci):
+def pretraga(lista_kljuceva, lista_kriterijuma, lista_vece_manje, meta_podaci):
     model = Model(meta_podaci)
     with open(meta_podaci[4], 'r', newline='\n') as f:
         prva_linija = True
@@ -66,8 +66,21 @@ def pretraga_serijske(lista_kljuceva, lista_kriterijuma, meta_podaci):
                 proslo = False
                 for j in range(len(lista_kljuceva)):
                     if lista_atributa[i] == lista_kljuceva[j]:
-                        if lista_podataka[i] == lista_kriterijuma[j]:
-                            proslo = True
+                        if lista_vece_manje[j] == 0:
+                            if lista_podataka[i] < lista_kriterijuma[j]:
+                                proslo = True
+                        elif lista_vece_manje[j] == 1:
+                            if lista_podataka[i] <= lista_kriterijuma[j]:
+                                proslo = True
+                        elif lista_vece_manje[j] == 2:
+                            if lista_podataka[i] > lista_kriterijuma[j]:
+                                proslo = True
+                        elif lista_vece_manje[j] == 3:
+                            if lista_podataka[i] >= lista_kriterijuma[j]:
+                                proslo = True
+                        elif lista_vece_manje[j] == 4:
+                            if lista_podataka[i] == lista_kriterijuma[j]:
+                                proslo = True
                 if proslo:
                     model.lista_prikaz.append(GenerickaKlasa(lista_atributa, lista_podataka))
 
@@ -215,8 +228,6 @@ def sastavi_sekvencijalnu(parent):
             editable=False)
             
         if input[1]:
-            for i in lista_objekata:
-                print(i.naziv)
             for i in range(len(list_tuple)):
                 if list_tuple[i].find(input[0]) != -1:
                     lista_istih[0].pop(i)
@@ -233,9 +244,7 @@ def sastavi_sekvencijalnu(parent):
                 
             lista_istih.pop(0)
         else:
-            ... # poruka da li zeli sigurno da prekine
-            # ako da, prekinuti while petlju
-            # ako ne, samo ga vratiti u petlju
+            return False
             
     merge_sort(lista_objekata, lista_kljuceva[0], nacin_sortiranja)
     
