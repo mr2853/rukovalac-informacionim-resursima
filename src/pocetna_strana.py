@@ -19,10 +19,6 @@ import csv
 import os
 import json
 
-
-
-
-
 class PocetnaStrana(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)

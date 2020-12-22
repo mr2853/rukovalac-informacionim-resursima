@@ -70,7 +70,10 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
         self.zatvori.clicked.connect(self.zatvori_prikaz)
         
         if element != None:
+            self.original_elem = GenerickaKlasa([],[])
             self.element = element
+            for i in range(len(self.lista_kljuceva)):
+                self.original_elem.__setattr__(self.lista_kljuceva[i], self.element.__getattribute__(self.lista_kljuceva[i]))
             # ispisuje njegove podatke
             # self.__getattribute__(self.lista_atributa[i]). npr setText(element.__getattribute(self.lista_atributa[i]))
             
@@ -134,58 +137,53 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                 
             
             if self.element != None:
-                if self.tip_datoteke == "sekvencijalna":
-                    self.parent().table.model().lista_prikaz = []
+                self.parent().table.model().lista_prikaz = []
 
-                    with open(self.putanja_podaci, 'r',newline='') as csvfile:
-                        spamreader = csv.reader(csvfile, delimiter = "\n")
-                        counter = 0
-                        prva_linija = True
-                        for row in spamreader:
-                            if prva_linija:
-                                prva_linija = False
-                                continue
-                            if row[0] == "":
-                                break
-                
-                            objekat = GenerickaKlasa(self.lista_atributa, row[0].split(","))
-                            nadjen = True
-                            for i in range(len(self.lista_kljuceva)):
-                                if objekat.__getattribute__(self.lista_kljuceva[i]) != self.element.__getattribute__(self.lista_kljuceva[i]):
-                                    nadjen = False
-                            if not nadjen:
-                                self.parent().table.model().lista_prikaz.append(objekat)
-                            else:
-                                for i in range(len(self.lista_kljuceva)):
-                                    objekat.__setattr__(self.lista_kljuceva[i], self.element.getattribute(self.lista_kljuceva[i]))
+                with open(self.putanja_podaci, 'r',newline='') as csvfile:
+                    spamreader = csv.reader(csvfile, delimiter = "\n")
+                    counter = 0
+                    prva_linija = True
+                    for row in spamreader:
+                        if prva_linija:
+                            prva_linija = False
+                            continue
+                        if row[0] == "":
+                            break
+            
+                        objekat = GenerickaKlasa(self.lista_atributa, row[0].split(","))
+                        nadjen = True
+                        
+                        for i in range(len(self.lista_kljuceva)):
+                            if objekat.__getattribute__(self.lista_kljuceva[i]) !=  self.original_elem.__getattribute__(self.lista_kljuceva[i]):
+                                nadjen = False
+                        if not nadjen:
+                            self.parent().table.model().lista_prikaz.append(objekat)
+                        else:
+                            for i in range(len(self.lista_atributa)):
+                                objekat.__setattr__(self.lista_atributa[i], self.element.__getattribute__(self.lista_atributa[i]))
 
+                            self.parent().table.model().lista_prikaz.append(objekat)
+                            
+                        counter += 1
+    
+                with open(self.putanja_podaci, 'w', newline='') as f:
+                    writer = csv.writer(f, delimiter = ",")
+                    writer.writerow([self.parent().putanja_meta])
+                    for i in range(len(self.parent().table.model().lista_prikaz)):
+                        tekst = ""
+                        for j in range(len(self.lista_atributa)):
+                            tekst += str(self.parent().table.model().lista_prikaz[i].__getattribute__(self.lista_atributa[j]))
+                            if j < len(self.lista_atributa)-1:
+                                tekst += ","
                                 
-                                self.parent().table.model().lista_prikaz.append(objekat)
-                            counter += 1
-        
-                    
-        
-                    with open(self.putanja_podaci, 'w', newline='') as f:
-                        writer = csv.writer(f, delimiter = ",")
-                        writer.writerow([self.parent().putanja_meta])
-                        for i in range(len(self.parent().table.model().lista_prikaz)):
-                            tekst = ""
-                            for j in range(len(self.lista_atributa)):
-                                tekst += str(self.parent().table.model().lista_prikaz[i].__getattribute__(self.lista_atributa[j]))
-                                if j < len(self.lista_atributa)-1:
-                                    tekst += ","
-                                    
-                            novi_red = tekst.split(",")
-                            writer.writerow(novi_red)
+                        novi_red = tekst.split(",")
+                        writer.writerow(novi_red)
 
                     top = QModelIndex()
                     top.child(0,0)
                     bottom = QModelIndex()
                     bottom.child(len(self.parent().table.model().lista_prikaz), self.parent().table.model().broj_kolona)
                     self.parent().table.dataChanged(top, bottom) # da refresuje tabelu od top indexa to bottom indexa
-                
-                elif self.tip_datoteke == "serijska":
-                   pass
 
 
             
