@@ -7,7 +7,7 @@ import csv
 import os
 
 class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
-    def __init__(self, parent, meta_podaci, pretraga=False, element=None): # tip == 0 -dodavanje / tip == 1 -pretraga
+    def __init__(self, parent, meta_podaci, pretraga=False, element=None):
         super(PrikazElementa,self).__init__(parent)
         self.lista_atributa = meta_podaci[5].split(",")
         self.lista_tipovi_atributa = meta_podaci[6].split(",")
@@ -24,16 +24,20 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
         icon = QtGui.QIcon("src/ikonice/logo.jpg")
         self.setWindowIcon(icon)
         self.layout = QtWidgets.QGridLayout()
+        self.tip = 0  # tip == 0 -dodavanje / tip == 1 -izmena / tip == 3 -pretraga
         
         if element != None:
             self.dugme = QtWidgets.QPushButton("Izmena")
             self.setWindowTitle("Izmena")
+            self.tip = 1
         elif element == None and not pretraga:
             self.dugme = QtWidgets.QPushButton("Dodaj")
             self.setWindowTitle("Dodavanje")
+            self.tip = 0
         else:
             self.dugme = QtWidgets.QPushButton("Pretraga")
             self.setWindowTitle("Pretraga")
+            self.tip = 2
             
         self.zatvori = QtWidgets.QPushButton("Zatvori")
         #self.dugme = QtWidgets.QPushButton("Dodaj")
@@ -69,14 +73,11 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
         self.dugme.clicked.connect(self.dugme_kliknuto)
         self.zatvori.clicked.connect(self.zatvori_prikaz)
         
-        if element != None:
+        if self.tip == 1:
             self.original_elem = GenerickaKlasa([],[])
             self.element = element
             for i in range(len(self.lista_kljuceva)):
                 self.original_elem.__setattr__(self.lista_kljuceva[i], self.element.__getattribute__(self.lista_kljuceva[i]))
-            # ispisuje njegove podatke
-            # self.__getattribute__(self.lista_atributa[i]). npr setText(element.__getattribute(self.lista_atributa[i]))
-            
         else:
             self.element = GenerickaKlasa([],[])
         
@@ -136,7 +137,7 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                 #self.__getattribute__(self.lista_atributa[i]).setPlaceholderText("Do " + self.lista_duzine_atributa[i] + " karaktera")
                 
             
-            if self.element != None:
+            if self.tip == 1:
                 self.parent().table.model().lista_prikaz = []
 
                 with open(self.putanja_podaci, 'r',newline='') as csvfile:
@@ -185,15 +186,14 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                     bottom.child(len(self.parent().table.model().lista_prikaz), self.parent().table.model().broj_kolona)
                     self.parent().table.dataChanged(top, bottom) # da refresuje tabelu od top indexa to bottom indexa
 
-
-            
-            
-            elif self.element == None and not self.pretraga:
+            elif self.tip == 0:
                 if self.tip_datoteke == "serijska":
                     dodaj_u_serijsku(self.element, self.lista_atributa, self.putanja_podaci, self.parent().putanja)
 
                 elif self.tip_datoteke == "sekvencijalna":
                     dodaj_u_serijsku(self.element, self.lista_atributa, self.privremena_datoteka, self.parent().putanja)
+            elif self.tip == 2:
+                print("pretraga, bice odradjeno")
             
         except ValueError:
             msgBox = QtWidgets.QMessageBox()
