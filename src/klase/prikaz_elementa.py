@@ -91,9 +91,12 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                     if os.path.exists(self.privremena_datoteka):
                         os.remove(self.privremena_datoteka)
                     else:
-                        msgBox = QtWidgets.QMessageBox()
-                        msgBox.setText("Privremena datoteka ne postoji")
-                        msgBox.exec_()
+                        poruka = QtWidgets.QMessageBox()
+                        icon = QtGui.QIcon("src/ikonice/logo.jpg")
+                        poruka.setWindowIcon(icon)
+                        poruka.setWindowTitle("Upozorenje")
+                        poruka.setText("Privremena datoteka ne postoji")
+                        poruka.exec_()
 
     def zatvori_prikaz(self):
         self.close()
@@ -111,25 +114,37 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                     if bool(self.lista_obaveznosti_atributa[i]) == True and not self.pretraga:
                         if vrijednost == "":
                             poruka = QtWidgets.QMessageBox()
-                            poruka.setText(self.lista_atributa[i]+" polje ne sme biti prazno! Pokusajte ponovo!")
+                            icon = QtGui.QIcon("src/ikonice/logo.jpg")
+                            poruka.setWindowIcon(icon)
+                            poruka.setWindowTitle("Upozorenje")
+                            poruka.setText(str(self.lista_atributa[i]).capitalize()+" polje ne sme biti prazno! Pokusajte ponovo!")
                             poruka.exec_()
                             return
                     
                     try:
                         if isinstance(locate(self.lista_tipovi_atributa[i])(vrijednost), locate(self.lista_tipovi_atributa[i])) == False:
                             poruka = QtWidgets.QMessageBox()
-                            poruka.setText(self.lista_atributa[i]+" polje pogresna vrednost! Pokusajte ponovo!")
+                            icon = QtGui.QIcon("src/ikonice/logo.jpg")
+                            poruka.setWindowIcon(icon)
+                            poruka.setWindowTitle("Upozorenje")
+                            poruka.setText(str(self.lista_atributa[i]).capitalize+" polje pogresna vrednost! Pokusajte ponovo!")
                             poruka.exec_()
                             return
                     except ValueError:
                         msgBox = QtWidgets.QMessageBox()
-                        msgBox.setText(self.lista_atributa[i]+" polje pogresna vrednost! Pokusajte ponovo!")
+                        icon = QtGui.QIcon("src/ikonice/logo.jpg")
+                        poruka.setWindowIcon(icon)
+                        poruka.setWindowTitle("Upozorenje")
+                        msgBox.setText(str(self.lista_atributa[i]).capitalize()+" polje pogresna vrednost! Pokusajte ponovo!")
                         msgBox.exec_()
                         return
 
                     self.element.__setattr__(self.lista_atributa[i], vrijednost)
                 else:
                     poruka = QtWidgets.QMessageBox()
+                    icon = QtGui.QIcon("src/ikonice/logo.jpg")
+                    poruka.setWindowIcon(icon)
+                    poruka.setWindowTitle("Upozorenje")
                     poruka.setText("Prekoracili ste duzinu karaktera!")
                     poruka.exec_()
                     return
@@ -208,8 +223,11 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                 print("pretraga, bice odradjeno")
             
         except ValueError:
-            msgBox = QtWidgets.QMessageBox()
-            msgBox.setText("Pogresna vrednost")
-            msgBox.exec_()
+            poruka = QtWidgets.QMessageBox()
+            icon = QtGui.QIcon("src/ikonice/logo.jpg")
+            poruka.setWindowIcon(icon)
+            poruka.setWindowTitle("Upozorenje")
+            poruka.setText("Pogresna vrednost")
+            poruka.exec_()
             return    
             
