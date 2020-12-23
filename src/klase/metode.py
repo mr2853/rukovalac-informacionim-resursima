@@ -183,10 +183,14 @@ def sastavi_sekvencijalnu(parent):
     for j in range(len(lista_objekata)-1):
         for m in range(j+1, len(lista_objekata)):
             nadjen = False
+            nadjen1 = True
             for i in range(len(lista_kljuceva)):
                 if lista_objekata[j].__getattribute__(lista_kljuceva[i]) == lista_objekata[m].__getattribute__(lista_kljuceva[i]):
                     nadjen = True
-            if nadjen:
+                else:
+                    nadjen = False
+                    nadjen1 = False
+            if nadjen and nadjen1:
                 for n in range(len(lista_istih)):
                     for z in range(len(lista_istih[n])):
                         if lista_istih[n][z] == j:

@@ -171,7 +171,7 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                     icon = QtGui.QIcon("src/ikonice/logo.jpg")
                     poruka.setWindowIcon(icon)
                     poruka.setWindowTitle("Upozorenje!")
-                    poruka.setText("Prekoracili ste duzinu karaktera!")
+                    poruka.setText(str(self.lista_atributa[i]).capitalize() + ". Prekoracili ste duzinu karaktera!")
                     poruka.exec_()
                     return
             

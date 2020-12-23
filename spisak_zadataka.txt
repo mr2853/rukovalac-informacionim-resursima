@@ -16,6 +16,4 @@ Zadatke koje trebamo jos odraditi:
 	8.* Logicko brisanje
 	9.* Parametrizacija aplikacije (jezik, pismo).
 	10.* Dodati atribut posle koliko unosa da sacuvava promene
-
-
-
+	11.* Referencijalni integritet
