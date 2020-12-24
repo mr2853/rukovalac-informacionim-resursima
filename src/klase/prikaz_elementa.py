@@ -31,7 +31,7 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
             self.setWindowTitle("Izmena")
             self.tip = 1
         elif element == None and not pretraga:
-            self.dugme = QtWidgets.QPushButton("Dodaj")
+            self.dugme = QtWidgets.QPushButton("Dodavanje")
             self.setWindowTitle("Dodavanje")
             self.tip = 0
         else:
@@ -39,7 +39,7 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
             self.setWindowTitle("Pretraga")
             self.tip = 2
             
-        self.zatvori = QtWidgets.QPushButton("Zatvori")
+        self.zatvori = QtWidgets.QPushButton("Zatvaranje")
         self.lista_atr = [] # ovu listu koristim za pretragu, dodaju se samo
         # atributi cija input polja nisu prazna, i onda znam po kojim atributima
         # da vrsim pretragu

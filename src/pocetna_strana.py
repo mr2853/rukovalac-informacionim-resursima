@@ -486,7 +486,7 @@ class PocetnaStrana(QWidget):
                 icon = QtGui.QIcon("src/ikonice/logo.jpg")
                 poruka.setWindowIcon(icon)
                 poruka.setWindowTitle("Upozorenje!")
-                poruka.setText("Zadata pretraga nije pronasla vrednosti koje odgovaraju zadatim kriterijumima")
+                poruka.setText("Zadata pretraga nije pronasla vrednosti koje odgovaraju zadatim kriterijumima.")
                 poruka.exec_()
                 return
 
@@ -496,7 +496,7 @@ class PocetnaStrana(QWidget):
             icon = QtGui.QIcon("src/ikonice/logo.jpg")
             poruka.setWindowIcon(icon)
             poruka.setWindowTitle("Upozorenje!")
-            poruka.setText("Niste zadali ni jedan kriterijum za pretragu, pretraga je prekinuta")
+            poruka.setText("Niste zadali ni jedan kriterijum za pretragu, pretraga je prekinuta.")
             poruka.exec_()
             return
 
