@@ -43,21 +43,21 @@ class PocetnaStrana(QWidget):
         status_bar.showMessage("Prikazan status bar!")
         self.main_window.setStatusBar(status_bar)
         
-        self.central_widget = QtWidgets.QTabWidget(self.main_window) #centralni widget tj tab koji se otvara u kojima se prikazuju tabele
+        self.central_widget = QtWidgets.QTabWidget(self.main_window) 
         # tab = Tab(self.central_widget)
         # self.central_widget.addTab(tab, "Naslov")
-        self.central_widget.setTabsClosable(True) #da se tabovi koji se otvaraju mogu zatvoriti
-        self.central_widget.tabCloseRequested.connect(self.delete_tab) #kada se zatvara poziva se funkcija delete tab
+        self.central_widget.setTabsClosable(True) 
+        self.central_widget.tabCloseRequested.connect(self.delete_tab)
         self.main_window.setCentralWidget(self.central_widget)
 
 
         self.dock = LeftDock("dock", parent=None)
-        self.main_window.addDockWidget(Qt.LeftDockWidgetArea,self.dock) #When the user selects an item, any already-selected item becomes unselected. It is possible for the user to deselect the selected item by pressing the Ctrl key when clicking the selected item.
-        self.dock.tree.setSelectionMode(QAbstractItemView.SingleSelection) #The QAbstractItemView class provides the basic functionality for item view classes.
-        self.dock.tree.clicked.connect(self.read) # ako se klikne na fajl u treeView zove funkciju read iz tab clase
+        self.main_window.addDockWidget(Qt.LeftDockWidgetArea,self.dock) 
+        self.dock.tree.setSelectionMode(QAbstractItemView.SingleSelection) 
+        self.dock.tree.clicked.connect(self.read) 
         self.multi_selekt = [] 
-        #The package pynput.keyboard contains classes for controlling and monitoring the keyboard.
-        self.listener = keyboard.Listener(on_press=self.pritisnuto_dugme, on_release=self.pusteno_dugme) #STA JE OVO_
+        
+        self.listener = keyboard.Listener(on_press=self.pritisnuto_dugme, on_release=self.pusteno_dugme) 
         self.listener.start()
         self.main_window.show()
 
@@ -107,7 +107,7 @@ class PocetnaStrana(QWidget):
 
     def pritisnuto_dugme(self, key):
         if key == Key.ctrl_l:
-            self.dock.tree.setSelectionMode(QAbstractItemView.MultiSelection) #When the user selects an item in the usual way, the selection status of that item is toggled and the other items are left alone. Multiple items can be toggled by dragging the mouse over them.
+            self.dock.tree.setSelectionMode(QAbstractItemView.MultiSelection) 
 
     def pusteno_dugme(self, key):
         if key == Key.ctrl_l:
@@ -128,7 +128,7 @@ class PocetnaStrana(QWidget):
             poruka.setText("Trenutno nijedna datoteka nije otvorena!")
             poruka.exec_()
             return
-        # hasattr proverava da li .table ima atribut selected_elem, kojeg mu dodeljujem kada se klikne na neki element
+        
         elif not hasattr(self.central_widget.currentWidget().table, "selected_elem"):
             poruka = QMessageBox()
             icon = QtGui.QIcon("src/ikonice/logo.jpg")
@@ -509,7 +509,7 @@ class PocetnaStrana(QWidget):
         tab = self.central_widget.currentWidget()
         
         if hasattr(tab, "sortirano") and len(tab.table.model().lista_prikaz) > 1:
-            if tab.meta_podaci[1] == "serijska":  #serijska
+            if tab.meta_podaci[1] == "serijska": 
                 while True:
                     izabrano = -1
                     list_tuple = ()
@@ -562,7 +562,7 @@ class PocetnaStrana(QWidget):
         self.central_widget.removeTab(index)
         self.lista_putanja.remove(self.lista_putanja[index])
 
-    def read(self, index): #kad se klikne
+    def read(self, index):
         putanja = self.dock.model.filePath(index)
         ista_putanja = False
         for i in range(len(self.lista_putanja)):

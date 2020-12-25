@@ -25,7 +25,7 @@ class Tab(QtWidgets.QWidget):
         self.tab_widget.setTabsClosable(True)
         self.tab_widget.tabCloseRequested.connect(self.delete_sub_tab)
 
-        self.table = QtWidgets.QTableView(self.tab_widget) #QTableView implements a table view that displays items from a model. I prikazuje u tabeli objekte
+        self.table = QtWidgets.QTableView(self.tab_widget) 
         
         self.table.setUpdatesEnabled(True)
         self.table.setSelectionMode(QAbstractItemView.SingleSelection)
@@ -58,17 +58,17 @@ class Tab(QtWidgets.QWidget):
         self.main_layout.addWidget(self.tab_widget)
         self.setLayout(self.main_layout)
 
-    def delete_sub_tab(self, index): #zatvaranje dijete taba
+    def delete_sub_tab(self, index): 
         self.tab_widget.removeTab(index)
     
-    def read(self): #metoda za citanje podataka u tabelu
+    def read(self):
         with open(self.putanja, newline='\n') as f:
             podaci = f.readline().strip()
             f.close()
         self.putanja_meta = podaci
         self.meta_podaci = citanje_meta_podataka(podaci)
-        self.meta_podaci[4] = self.putanja #podaci:relativna_putanja\studijski_program_sek.sufiks
-        model = kreiraj_model(self.meta_podaci) #ovdje se poziva model klasa i kao parametar se šalje citanje meta podataka
+        self.meta_podaci[4] = self.putanja 
+        model = kreiraj_model(self.meta_podaci) 
         self.table.setModel(model)
         self.table.setSortingEnabled(True)
         self.table.setSelectionMode(QAbstractItemView.SingleSelection)
@@ -98,7 +98,7 @@ class Tab(QtWidgets.QWidget):
         self.table.dataChanged(top, bottom) # da refresuje tabelu od top indexa to bottom indexa
     
     def element_selected(self, index):
-        print("izabran")
+        
         self.table.selected_elem = index
         model = self.table.model()
         element_selected = model.get_element(index)
