@@ -8,7 +8,7 @@ from .merge_sort import merge_sort
 from PySide2 import QtWidgets
 import os
 
-def citanje_meta_podataka(putanja):
+def citanje_meta_podataka(putanja): 
     neka_lista = []
     with open(putanja, 'r', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter = "\n")

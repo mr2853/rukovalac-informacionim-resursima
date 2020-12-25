@@ -7,7 +7,7 @@ from PySide2.QtCore import Signal
 from klase.merge_sort import merge_sort
 
 
-class Model(QtCore.QAbstractTableModel, QtCore.QObject):
+class Model(QtCore.QAbstractTableModel, QtCore.QObject): #genericki model koji sadrzi sve objekte koje kreiramo
     def __init__(self, lista, parent=None):
         super().__init__(parent)
         self.lista_prikaz = []
@@ -25,8 +25,8 @@ class Model(QtCore.QAbstractTableModel, QtCore.QObject):
 
     def columnCount(self, index):
         return self.broj_kolona
-
-    def data(self, index, role=QtCore.Qt.DisplayRole):
+    #  #Each item in the model has a set of data elements associated with it, each with its own role. The roles are used by the view to indicate to the model which type of data it needs. Custom models should return data in these types. DisplayRole The key data to be rendered in the form of text.
+    def data(self, index, role=QtCore.Qt.DisplayRole): #dobavljanje elemenata
         # TODO: dodati obradu uloga (role)
         element = self.get_element(index)
         for i in range(self.broj_kolona):
@@ -34,7 +34,7 @@ class Model(QtCore.QAbstractTableModel, QtCore.QObject):
                 return element.__getattribute__(self.nazivi_kol_atributa[i])
         return None
 
-    def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
+    def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole): #prikazivanje hedera tipa ime prezime itd
         for i in range(self.broj_kolona):
             if i == section and orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole:
                 return self.nazivi_kolona[i]
@@ -58,7 +58,7 @@ class Model(QtCore.QAbstractTableModel, QtCore.QObject):
     # def flags(self, index):
     #     return super().flags(index) | QtCore.Qt.ItemIsEditable # ili nad bitovima
 
-    def sort_list(self, index, bool_nacin_sortiranja):
+    def sort_list(self, index, bool_nacin_sortiranja): #ova metoda se zove u tabu da se sortiraju podaci ukoliko je datoteka sekvencijalna
         """
         sortira listu
         :param: index - oznacava po kojoj koloni/atributu se sortira

@@ -43,20 +43,21 @@ class PocetnaStrana(QWidget):
         status_bar.showMessage("Prikazan status bar!")
         self.main_window.setStatusBar(status_bar)
         
-        self.central_widget = QtWidgets.QTabWidget(self.main_window)
+        self.central_widget = QtWidgets.QTabWidget(self.main_window) #centralni widget tj tab koji se otvara u kojima se prikazuju tabele
         # tab = Tab(self.central_widget)
         # self.central_widget.addTab(tab, "Naslov")
-        self.central_widget.setTabsClosable(True)
-        self.central_widget.tabCloseRequested.connect(self.delete_tab)
+        self.central_widget.setTabsClosable(True) #da se tabovi koji se otvaraju mogu zatvoriti
+        self.central_widget.tabCloseRequested.connect(self.delete_tab) #kada se zatvara poziva se funkcija delete tab
         self.main_window.setCentralWidget(self.central_widget)
 
 
         self.dock = LeftDock("dock", parent=None)
-        self.main_window.addDockWidget(Qt.LeftDockWidgetArea,self.dock)
-        self.dock.tree.setSelectionMode(QAbstractItemView.SingleSelection)
-        self.dock.tree.clicked.connect(self.read)
-        self.multi_selekt = []
-        self.listener = keyboard.Listener(on_press=self.pritisnuto_dugme, on_release=self.pusteno_dugme)
+        self.main_window.addDockWidget(Qt.LeftDockWidgetArea,self.dock) #When the user selects an item, any already-selected item becomes unselected. It is possible for the user to deselect the selected item by pressing the Ctrl key when clicking the selected item.
+        self.dock.tree.setSelectionMode(QAbstractItemView.SingleSelection) #The QAbstractItemView class provides the basic functionality for item view classes.
+        self.dock.tree.clicked.connect(self.read) # ako se klikne na fajl u treeView zove funkciju read iz tab clase
+        self.multi_selekt = [] 
+        #The package pynput.keyboard contains classes for controlling and monitoring the keyboard.
+        self.listener = keyboard.Listener(on_press=self.pritisnuto_dugme, on_release=self.pusteno_dugme) #STA JE OVO_
         self.listener.start()
         self.main_window.show()
 
@@ -72,7 +73,7 @@ class PocetnaStrana(QWidget):
             poruka.exec_()
             return
 
-        kljuc = [2, "broj_indeksa"]
+        kljuc = [2, "broj_indeksa"] #po kom kljucu da sortira, nije zavrseno
         lista = []
         self.multi_selekt.sort()
         
@@ -106,7 +107,7 @@ class PocetnaStrana(QWidget):
 
     def pritisnuto_dugme(self, key):
         if key == Key.ctrl_l:
-            self.dock.tree.setSelectionMode(QAbstractItemView.MultiSelection)
+            self.dock.tree.setSelectionMode(QAbstractItemView.MultiSelection) #When the user selects an item in the usual way, the selection status of that item is toggled and the other items are left alone. Multiple items can be toggled by dragging the mouse over them.
 
     def pusteno_dugme(self, key):
         if key == Key.ctrl_l:
@@ -166,6 +167,7 @@ class PocetnaStrana(QWidget):
             spamreader = csv.reader(csvfile, delimiter = "\n")
             counter = 0
             prva_linija = True
+            izbrisan = False
             for row in spamreader:
                 if prva_linija:
                     prva_linija = False
@@ -178,10 +180,12 @@ class PocetnaStrana(QWidget):
                 for i in range(len(lista_kljuceva)):
                     if objekat.__getattribute__(lista_kljuceva[i]) != element_selected.__getattribute__(lista_kljuceva[i]):
                         nadjen = False
-                if not nadjen:
-                    self.central_widget.currentWidget().table.model().lista_prikaz.append(objekat)
-                else:
+            
+                if not izbrisan and nadjen:
+                    izbrisan = True
                     self.central_widget.currentWidget().table.model().removeRow(counter)
+                else:
+                    self.central_widget.currentWidget().table.model().lista_prikaz.append(objekat)
                 counter += 1
         
         self.central_widget.currentWidget().table.model().endRemoveRows()
@@ -505,7 +509,7 @@ class PocetnaStrana(QWidget):
         tab = self.central_widget.currentWidget()
         
         if hasattr(tab, "sortirano") and len(tab.table.model().lista_prikaz) > 1:
-            if tab.meta_podaci[1] == "serijska":
+            if tab.meta_podaci[1] == "serijska":  #serijska
                 while True:
                     izabrano = -1
                     list_tuple = ()
@@ -544,7 +548,7 @@ class PocetnaStrana(QWidget):
                 if izabrano != 0:
                     with open(putanja, 'w', newline='') as f:
                         writer = csv.writer(f, delimiter = ",")
-                        writer.writerow(tab.putanja_meta)
+                        writer.writerow([tab.putanja_meta])
                         for i in range(len(tab.table.model().lista_prikaz)):
                             tekst = ""
                             for j in range(len(tab.table.model().nazivi_atributa)):
@@ -558,7 +562,7 @@ class PocetnaStrana(QWidget):
         self.central_widget.removeTab(index)
         self.lista_putanja.remove(self.lista_putanja[index])
 
-    def read(self, index):
+    def read(self, index): #kad se klikne
         putanja = self.dock.model.filePath(index)
         ista_putanja = False
         for i in range(len(self.lista_putanja)):

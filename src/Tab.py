@@ -25,7 +25,7 @@ class Tab(QtWidgets.QWidget):
         self.tab_widget.setTabsClosable(True)
         self.tab_widget.tabCloseRequested.connect(self.delete_sub_tab)
 
-        self.table = QtWidgets.QTableView(self.tab_widget)
+        self.table = QtWidgets.QTableView(self.tab_widget) #QTableView implements a table view that displays items from a model. I prikazuje u tabeli objekte
         
         self.table.setUpdatesEnabled(True)
         self.table.setSelectionMode(QAbstractItemView.SingleSelection)
@@ -58,24 +58,24 @@ class Tab(QtWidgets.QWidget):
         self.main_layout.addWidget(self.tab_widget)
         self.setLayout(self.main_layout)
 
-    def delete_sub_tab(self, index):
+    def delete_sub_tab(self, index): #zatvaranje dijete taba
         self.tab_widget.removeTab(index)
     
-    def read(self):
+    def read(self): #metoda za citanje podataka u tabelu
         with open(self.putanja, newline='\n') as f:
             podaci = f.readline().strip()
             f.close()
         self.putanja_meta = podaci
         self.meta_podaci = citanje_meta_podataka(podaci)
-        self.meta_podaci[4] = self.putanja
-        model = kreiraj_model(self.meta_podaci)
+        self.meta_podaci[4] = self.putanja #podaci:relativna_putanja\studijski_program_sek.sufiks
+        model = kreiraj_model(self.meta_podaci) #ovdje se poziva model klasa i kao parametar se šalje citanje meta podataka
         self.table.setModel(model)
         self.table.setSortingEnabled(True)
         self.table.setSelectionMode(QAbstractItemView.SingleSelection)
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.horizontalHeader().sectionClicked.connect(self.sort_table) # kada se klikne na neki horizontalHeader da pozove self.sort_table
         if self.meta_podaci[1] == "sekvencijalna":
-            self.sort_table(0)
+            self.sort_table(0) #sortiranje tabele ako je sekvencijalna
         
     def sort_table(self, index):
         """
@@ -91,13 +91,14 @@ class Tab(QtWidgets.QWidget):
         else:                                   # ako nije prema vecem nego prema manjem
             self.table.model().sort_list(index, True)
             
-        top = QModelIndex()
+        top = QModelIndex() 
         top.child(0,0)
         bottom = QModelIndex()
         bottom.child(len(self.table.model().lista_prikaz), self.table.model().broj_kolona)
         self.table.dataChanged(top, bottom) # da refresuje tabelu od top indexa to bottom indexa
     
     def element_selected(self, index):
+        print("izabran")
         self.table.selected_elem = index
         model = self.table.model()
         element_selected = model.get_element(index)
