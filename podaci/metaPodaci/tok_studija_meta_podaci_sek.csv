@@ -8,6 +8,5 @@ tipovi_atributa:str,str,str,str,str,int,int,int,int,str,str,int,int
 duzina_atributa:2,3,2,2,6,4,1,2,2,10,10,3,3
 obaveznost_atributa:True,True,True,True,True,True,True,True,True,True,False,True,True
 veze:parent_Student(student_iz_ustanove=ustanova#struka#broj_indeksa),parent_StudijskiProgram(ustanova#oznaka_programa)
-nazivi_kolona:Oznaka programa,Student iz ustanove,Struka,Broj indeksa,Skolska godina,Godina studija,Redni broj upisa
-nazivi_kol_atributa:oznaka_programa,student_iz_ustanove,struka,broj_indeksa,skolska_godina,godina_studija,redni_broj_upisa
+nazivi_kolona:Ustanova,Oznaka programa,Student iz ustanove,Struka,Broj indeksa,Skolska godina,Godina studija,Redni broj upisa,Datum upisa,Datum overe,Espb pocetni,Espb krajnji
 lista_kljuceva:ustanova,oznaka_programa,student_iz_ustanove,struka,broj_indeksa,skolska_godina,godina_studija,blok,redni_broj_upisa

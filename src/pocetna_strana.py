@@ -40,7 +40,7 @@ class PocetnaStrana(QWidget):
         # self.tool_bar.podeli_datoteku.triggered.connect(self.podeli_datoteke)
         
         status_bar = QtWidgets.QStatusBar()
-        status_bar.showMessage("Prikazan status bar!")
+        #status_bar.showMessage("Prikazan status bar!")
         self.main_window.setStatusBar(status_bar)
         
         self.central_widget = QtWidgets.QTabWidget(self.main_window) 

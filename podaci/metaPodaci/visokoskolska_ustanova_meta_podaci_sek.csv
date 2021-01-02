@@ -8,6 +8,5 @@ tipovi_atributa:str,str,str
 duzina_atributa:2,80,80
 obaveznost_atributa:True,True,True
 veze:child_StudijskiProgram(oznaka=ustanova),child_NastavniPredmet(oznaka=ustanova),child_Student(oznaka=ustanova)
-nazivi_kolona:Naziv,Adresa
-nazivi_kol_atributa:naziv,adresa
+nazivi_kolona:Oznaka,Naziv,Adresa
 lista_kljuceva:oznaka

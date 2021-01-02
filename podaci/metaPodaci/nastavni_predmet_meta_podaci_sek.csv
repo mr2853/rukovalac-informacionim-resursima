@@ -8,6 +8,5 @@ tipovi_atributa:str,str,str,int
 duzina_atributa:2,6,120,2
 obaveznost_atributa:True,True,True,True
 veze:parent_VisokoskolskaUstanova(ustanova=oznaka),child_PlanStudijskeGrupe(ustanova=ustanova_predmet#oznaka=oznaka_predmeta)
-nazivi_kolona:Ustanova,Oznaka,Naziv
-nazivi_kol_atributa:ustanova,oznaka,naziv
+nazivi_kolona:Ustanova,Oznaka,Naziv,Espb
 lista_kljuceva:ustanova,oznaka

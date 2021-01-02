@@ -9,5 +9,4 @@ duzina_atributa:2,80
 obaveznost_atributa:True,True
 veze:child_StudijskiProgram(oznaka=nivo)
 nazivi_kolona:Oznaka,Naziv
-nazivi_kol_atributa:oznaka,naziv
 lista_kljuceva:oznaka

@@ -76,6 +76,13 @@ class Tab(QtWidgets.QWidget):
         self.table.horizontalHeader().sectionClicked.connect(self.sort_table) # kada se klikne na neki horizontalHeader da pozove self.sort_table
         if self.meta_podaci[1] == "sekvencijalna":
             self.sort_table(0) #sortiranje tabele ako je sekvencijalna
+        # self.table.resizeColumnsToContents()
+        # self.table.resizeRowsToContents()
+        # self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+        header = self.table.horizontalHeader()
+        header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
+        for i in range(1, len(model.lista_prikaz)):
+            header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeToContents)
         
     def sort_table(self, index):
         """

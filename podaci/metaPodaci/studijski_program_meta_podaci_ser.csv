@@ -9,5 +9,4 @@ duzina_atributa:2,2,3,120
 obaveznost_atributa:True,True,True,True
 veze:parent_VisokoskolskaUstanova(ustanova=oznaka),parent_NivoStudija(nivo=oznaka),child_PlanStudijskeGrupe(ustanova=program_ustanove#oznaka_programa),child_TokStudija(ustanova#oznaka_programa)
 nazivi_kolona:Nivo,Oznaka programa,Naziv programa
-nazivi_kol_atributa:nivo,oznaka_programa,naziv_programa
 lista_kljuceva:ustanova,nivo,oznaka_programa

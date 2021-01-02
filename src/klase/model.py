@@ -13,7 +13,6 @@ class Model(QtCore.QAbstractTableModel, QtCore.QObject): #genericki model koji s
         self.lista_prikaz = []
         self.nazivi_atributa = lista[5].split(",")
         self.nazivi_kolona = lista[10].split(",")
-        self.nazivi_kol_atributa = lista[11].split(",")
         self.broj_kolona = len(self.nazivi_kolona)
         
     # pomocna metoda
@@ -31,7 +30,7 @@ class Model(QtCore.QAbstractTableModel, QtCore.QObject): #genericki model koji s
         element = self.get_element(index)
         for i in range(self.broj_kolona):
             if i == index.column() and role == QtCore.Qt.DisplayRole:
-                return element.__getattribute__(self.nazivi_kol_atributa[i])
+                return element.__getattribute__(self.nazivi_atributa[i])
         return None
 
     def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole): #prikazivanje hedera tipa ime prezime itd
@@ -65,7 +64,7 @@ class Model(QtCore.QAbstractTableModel, QtCore.QObject): #genericki model koji s
         :param: bool_nacin_sortiranja - oznacava da li je sortiranje prema vecem ili prema manjem elementu
         """
         
-        self.lista_prikaz = merge_sort(self.lista_prikaz, self.nazivi_kol_atributa[index], bool_nacin_sortiranja)
+        self.lista_prikaz = merge_sort(self.lista_prikaz, self.nazivi_atributa[index], bool_nacin_sortiranja)
         
-        # self.lista_prikaz.sort(key = lambda x: x.__getattribute__(self.nazivi_kol_atributa[index]) , reverse=bool_nacin_sortiranja)
+        # self.lista_prikaz.sort(key = lambda x: x.__getattribute__(self.nazivi_atributa[index]) , reverse=bool_nacin_sortiranja)
     
