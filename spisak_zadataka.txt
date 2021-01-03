@@ -19,4 +19,4 @@ Zadatke koje trebamo jos odraditi:
 Za baze:
 	1.* Model
 	2.* Instrukcije za sve
-	3.* Povezati sa pythonom
+	3.* Povezati sa pythonom.
