@@ -51,7 +51,7 @@ class PocetnaStrana(QWidget):
         self.main_window.setCentralWidget(self.central_widget)
 
 
-        self.dock = LeftDock("dock", parent=None)
+        self.dock = LeftDock("", parent=None)
         self.main_window.addDockWidget(Qt.LeftDockWidgetArea,self.dock) 
         self.dock.tree.setSelectionMode(QAbstractItemView.SingleSelection) 
         self.dock.tree.clicked.connect(self.read) 
@@ -141,7 +141,7 @@ class PocetnaStrana(QWidget):
         model = self.central_widget.currentWidget().table.model()
         element_selected = model.get_element(self.central_widget.currentWidget().table.selected_elem)
         putanja = self.central_widget.currentWidget().meta_podaci[4]
-        lista_kljuceva = self.central_widget.currentWidget().meta_podaci[12].split(",")
+        lista_kljuceva = self.central_widget.currentWidget().meta_podaci[11].split(",")
         lista_atributa = self.central_widget.currentWidget().meta_podaci[5].split(",")
         veze = []
         veze = self.central_widget.currentWidget().meta_podaci[9].split(",")
@@ -571,7 +571,6 @@ class PocetnaStrana(QWidget):
                 return
         if not ista_putanja:
             self.lista_putanja.append(putanja)
-
             tab = Tab(putanja, self.central_widget)
             tab.read()
             tab.btn_down.clicked.connect(self.otvori_tabelu_dete)

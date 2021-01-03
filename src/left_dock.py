@@ -1,17 +1,24 @@
 from PySide2 import QtWidgets, QtCore
 from PySide2 import QtWidgets
+from PySide2 import QtGui
 from PySide2.QtGui import QPainter
 from PySide2.QtWidgets import QStyleOptionViewItem
+from klase.file_system import FileSystem
 
 class LeftDock(QtWidgets.QDockWidget):
     kliknut = QtCore.Signal(str)
     def __init__(self, title, parent):
         super().__init__(title, parent)
 
-        self.model = QtWidgets.QFileSystemModel() 
-        self.model.setRootPath("podaci\\podaci") 
+        self.model = FileSystem(self)
+        self.model.setRootPath("podaci\\podaci")
+        
+        # top = QtCore.QModelIndex()
+        # top.child(0,0)
+        # self.model.setData(top, QtGui.QIcon("src/ikonice/izmeni_tabelu.png"), QtCore.Qt.DecorationRole)
+
         self.setFeatures(self.DockWidgetFeature.NoDockWidgetFeatures)
-        self.tree = QtWidgets.QTreeView() 
+        self.tree = QtWidgets.QTreeView()
         self.tree.setModel(self.model)
         self.tree.setRootIndex(self.model.index("podaci\\podaci")) 
         self.tree.hideColumn(1) 

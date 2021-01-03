@@ -68,20 +68,16 @@ class Tab(QtWidgets.QWidget):
         self.putanja_meta = podaci
         self.meta_podaci = citanje_meta_podataka(podaci)
         self.meta_podaci[4] = self.putanja 
-        model = kreiraj_model(self.meta_podaci) 
+        model = kreiraj_model(self.meta_podaci)
         self.table.setModel(model)
         self.table.setSortingEnabled(True)
         self.table.setSelectionMode(QAbstractItemView.SingleSelection)
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.horizontalHeader().sectionClicked.connect(self.sort_table) # kada se klikne na neki horizontalHeader da pozove self.sort_table
-        if self.meta_podaci[1] == "sekvencijalna":
-            self.sort_table(0) #sortiranje tabele ako je sekvencijalna
-        # self.table.resizeColumnsToContents()
-        # self.table.resizeRowsToContents()
-        # self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+            
         header = self.table.horizontalHeader()
         header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
-        for i in range(1, len(model.lista_prikaz)):
+        for i in range(1, len(self.meta_podaci[10].split(","))):
             header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeToContents)
         
     def sort_table(self, index):
@@ -105,7 +101,6 @@ class Tab(QtWidgets.QWidget):
         self.table.dataChanged(top, bottom) # da refresuje tabelu od top indexa to bottom indexa
     
     def element_selected(self, index):
-        
         self.table.selected_elem = index
         model = self.table.model()
         element_selected = model.get_element(index)
@@ -116,6 +111,10 @@ class Tab(QtWidgets.QWidget):
         veze = self.meta_podaci[9].split(",")
         counter = len(veze)-1
 
+
+        if self.meta_podaci[1] == "serijska":
+            return
+        
         for i in range(len(veze)):
             if veze[counter].rfind("child_") == -1:
                 veze.pop(counter)

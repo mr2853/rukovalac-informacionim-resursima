@@ -13,7 +13,7 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
         self.lista_tipovi_atributa = meta_podaci[6].split(",")
         self.lista_duzine_atributa = meta_podaci[7].split(",")
         self.lista_obaveznosti_atributa = meta_podaci[8].split(",")
-        self.lista_kljuceva = meta_podaci[12].split(",")
+        self.lista_kljuceva = meta_podaci[11].split(",")
         self.tip_datoteke = meta_podaci[1]
         self.relativna_putanja = meta_podaci[2]
         self.sufiks = meta_podaci[3]
@@ -62,11 +62,13 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
 
             if self.tip == 2:
                 self.__setattr__(self.lista_atributa[i]+"_vece_manje", QtWidgets.QComboBox())
-                self.__getattribute__(self.lista_atributa[i]+"_vece_manje").addItem("manje od")
-                self.__getattribute__(self.lista_atributa[i]+"_vece_manje").addItem("manje ili jednako od")
-                self.__getattribute__(self.lista_atributa[i]+"_vece_manje").addItem("vece od")
-                self.__getattribute__(self.lista_atributa[i]+"_vece_manje").addItem("vece ili jednako od")
                 self.__getattribute__(self.lista_atributa[i]+"_vece_manje").addItem("jednako")
+                if self.lista_tipovi_atributa[i] !=  "str":
+                    self.__getattribute__(self.lista_atributa[i]+"_vece_manje").addItem("manje od")
+                    self.__getattribute__(self.lista_atributa[i]+"_vece_manje").addItem("manje ili jednako od")
+                    self.__getattribute__(self.lista_atributa[i]+"_vece_manje").addItem("vece od")
+                    self.__getattribute__(self.lista_atributa[i]+"_vece_manje").addItem("vece ili jednako od")
+
                 self.__getattribute__(self.lista_atributa[i]+"_vece_manje").setCurrentIndex(0)
                 self.__getattribute__(self.lista_atributa[i]+"_vece_manje").setEditable(False)
 
@@ -164,7 +166,7 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                     self.element.__setattr__(self.lista_atributa[i], vrijednost)
                     self.lista_atr.append(self.lista_atributa[i])
                     self.lista_kriterijuma.append(vrijednost)
-                    if self.tip == 2:
+                    if self.tip == 2 and self.lista_tipovi_atributa[i] !=  "str":
                         self.lista_vece_manje.append(self.__getattribute__(self.lista_atributa[i]+"_vece_manje").currentIndex())
                 else:
                     poruka = QtWidgets.QMessageBox()

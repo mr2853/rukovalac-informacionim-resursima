@@ -67,19 +67,19 @@ def pretraga(lista_kljuceva, lista_kriterijuma, lista_vece_manje, meta_podaci):
                 for j in range(len(lista_kljuceva)):
                     if lista_atributa[i] == lista_kljuceva[j]:
                         if lista_vece_manje[j] == 0:
-                            if lista_podataka[i] < lista_kriterijuma[j]:
+                            if lista_podataka[i] == lista_kriterijuma[j]:
                                 proslo = True
                         elif lista_vece_manje[j] == 1:
-                            if lista_podataka[i] <= lista_kriterijuma[j]:
+                            if lista_podataka[i] < lista_kriterijuma[j]:
                                 proslo = True
                         elif lista_vece_manje[j] == 2:
-                            if lista_podataka[i] > lista_kriterijuma[j]:
+                            if lista_podataka[i] <= lista_kriterijuma[j]:
                                 proslo = True
                         elif lista_vece_manje[j] == 3:
-                            if lista_podataka[i] >= lista_kriterijuma[j]:
+                            if lista_podataka[i] > lista_kriterijuma[j]:
                                 proslo = True
                         elif lista_vece_manje[j] == 4:
-                            if lista_podataka[i] == lista_kriterijuma[j]:
+                            if lista_podataka[i] >= lista_kriterijuma[j]:
                                 proslo = True
                 if proslo:
                     model.lista_prikaz.append(GenerickaKlasa(lista_atributa, lista_podataka))

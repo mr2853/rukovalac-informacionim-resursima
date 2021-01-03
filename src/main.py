@@ -7,4 +7,4 @@ if __name__ == '__main__':
     
     pocetna_strana = PocetnaStrana()
     
-    sys.exit(app.exec_()) 
+    sys.exit(app.exec_())
