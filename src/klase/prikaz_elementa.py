@@ -7,8 +7,9 @@ import csv
 import os
 
 class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
-    def __init__(self, parent, meta_podaci, pretraga=False, element=None):
+    def __init__(self, parent, pretraga=False, element=None):
         super(PrikazElementa,self).__init__(parent)
+        meta_podaci = parent.meta_podaci
         self.lista_atributa = meta_podaci[5].split(",")
         self.lista_tipovi_atributa = meta_podaci[6].split(",")
         self.lista_duzine_atributa = meta_podaci[7].split(",")
@@ -117,6 +118,14 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                         poruka.exec_()
                         
                 self.parent().table.model().endRemoveRows()
+                
+                self.parent().table.model().beginInsertRows(QModelIndex(), 0, 0)
+                top = QModelIndex()
+                top.child(0,0)
+                bottom = QModelIndex()
+                bottom.child(len(self.parent().table.model().lista_prikaz), self.parent().table.model().broj_kolona)
+                self.parent().table.dataChanged(top, bottom) 
+                self.parent().table.model().endInsertRows()
 
     def zatvori_prikaz(self):
         self.close()

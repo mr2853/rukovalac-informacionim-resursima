@@ -446,8 +446,7 @@ class PocetnaStrana(QWidget):
             
         model = self.central_widget.currentWidget().table.model()
         selektovani_element = model.get_element(self.central_widget.currentWidget().table.selected_elem)
-        prikaz = PrikazElementa(self.central_widget.currentWidget(),
-                self.central_widget.currentWidget().meta_podaci,False, selektovani_element)
+        prikaz = PrikazElementa(self.central_widget.currentWidget(), False, selektovani_element)
     
         prikaz.exec_()
 
@@ -461,8 +460,7 @@ class PocetnaStrana(QWidget):
             poruka.exec_()
             return
             
-        prikaz = PrikazElementa(self.central_widget.currentWidget(),
-                self.central_widget.currentWidget().meta_podaci)
+        prikaz = PrikazElementa(self.central_widget.currentWidget())
     
         prikaz.exec_()
 
@@ -476,7 +474,7 @@ class PocetnaStrana(QWidget):
             poruka.exec_()
             return
 
-        prikaz = PrikazElementa(self.central_widget.currentWidget(), self.central_widget.currentWidget().meta_podaci,True)
+        prikaz = PrikazElementa(self.central_widget.currentWidget(),True)
         prikaz.exec_()
         if len(prikaz.lista_atr) != 0 and len(prikaz.lista_kriterijuma) != 0:
             model = self.central_widget.currentWidget().table.model()

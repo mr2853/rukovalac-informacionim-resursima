@@ -12,10 +12,6 @@ class LeftDock(QtWidgets.QDockWidget):
 
         self.model = FileSystem(self)
         self.model.setRootPath("podaci\\podaci")
-        
-        # top = QtCore.QModelIndex()
-        # top.child(0,0)
-        # self.model.setData(top, QtGui.QIcon("src/ikonice/izmeni_tabelu.png"), QtCore.Qt.DecorationRole)
 
         self.setFeatures(self.DockWidgetFeature.NoDockWidgetFeatures)
         self.tree = QtWidgets.QTreeView()

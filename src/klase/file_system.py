@@ -8,7 +8,6 @@ class FileSystem(QtWidgets.QFileSystemModel):
     def data(self, index, role=Qt.DecorationRole):
         if role == Qt.DecorationRole:
             putanja = self.filePath(index)
-            
             if putanja.find("_ser") != -1:
                 return QtGui.QIcon("src/ikonice/serijska.png")
             elif putanja.find("_sek") != -1:
