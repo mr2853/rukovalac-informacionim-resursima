@@ -24,7 +24,7 @@ class PocetnaStrana(QWidget):
         super().__init__(parent)
         self.lista_putanja = []
         self.main_window = QtWidgets.QMainWindow()
-        self.main_window.resize(640, 480)
+        self.main_window.resize(1040, 680)
         self.main_window.setWindowTitle("Rukovalac informacionim resursima")
         icon = QtGui.QIcon("src/ikonice/logo.jpg")
         self.main_window.setWindowIcon(icon)

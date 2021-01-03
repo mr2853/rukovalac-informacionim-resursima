@@ -1,0 +1,106 @@
+QWidget {
+    background-color:white;
+    color: black;
+    
+    
+ }
+ 
+ QLineEdit {
+    background-color:white;
+    color: #618b38;
+    
+    font-weight: bold;
+ }
+
+ QDialog {
+     background-color: aliceblue;
+     
+ }
+ 
+ QLabel {
+    background-color: aliceblue;
+    color: black;
+    font-weight: bold;
+ }
+
+
+
+
+
+ QPushButton {
+    background-color:black;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    border-radius: 10px;
+    border-style: none;
+    height: 25px;
+ }
+
+ 
+QPushButton:hover {
+    
+   background: #ffc107;
+   color: #000;
+
+}
+
+ QComboBox {
+   background-color: white;
+    color: #618b38;
+    
+    font-weight: bold;
+ }
+
+ QToolBar {
+    margin-left: 30px;
+ }
+ QToolButton { 
+   background-color: black;
+   margin: 2px;
+   
+   }
+
+ QToolButton:hover { 
+   background-color:#4e3d0c;
+   border-radius: 2px;
+   }
+
+   QDockWidget {
+      background-color:black;
+      font-weight: bold;
+   }
+
+   QTreeView {
+      background-color:aliceblue;
+      color: #618b38;
+      font-weight: bold;
+   }
+  QMenuBar {
+     font-weight: bold;
+     background-color:black;
+     color: #618b38;
+    
+  }
+
+  QMenu:hover {
+   background-color:white;
+   color: black;
+   
+  }
+
+  QTableView {
+     color: #618b38;
+     background-color: aliceblue;
+     border-radius: 15px;
+  }
+
+  QHeaderView {
+     font-weight: bold;
+     
+     color: black;
+     
+  }
+
+
+

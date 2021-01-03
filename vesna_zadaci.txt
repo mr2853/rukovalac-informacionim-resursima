@@ -1,9 +1,10 @@
-2.* Promeniti nazive datoteka podataka, da se razlikuju sekvencijalne od serijskih
-3.* Kreiranje datoteke
-4.* Promena imena datoteke
-6.* Brisanje datoteke
-9.* Dodavanje u datoteku
-10.* Izmena u datoteci
-16. Kada se unose neki podaci npr za nivo studija u studijski programi,
- ponuditi da se izabere preko drop down liste a ne unosom, da korisnik ne bi morao
- nagadjati koja je oznaka
+1.* Kreiranje datoteke
+2.% Promena imena datoteke
+3.* Brisanje datoteke
+5.* Kreiranje meta podataka
+6.* Brisanje meta podataka
+
+Za baze:
+	1.* Model (zajedno)
+	2.* Instrukcije za sve (ne sve)
+	3.* Povezati sa pythonom (zajedno)
