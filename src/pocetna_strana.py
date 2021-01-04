@@ -1,4 +1,5 @@
 
+from io import FileIO
 import sys
 from PySide2 import QtWidgets, QtGui
 from PySide2.QtCore import QCoreApplication, QEvent, QItemSelectionModel, QPoint
@@ -562,6 +563,9 @@ class PocetnaStrana(QWidget):
 
     def read(self, index):
         putanja = self.dock.model.filePath(index)
+        if os.path.isdir(putanja):
+            return
+
         ista_putanja = False
         for i in range(len(self.lista_putanja)):
             if putanja == self.lista_putanja[i]:

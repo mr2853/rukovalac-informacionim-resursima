@@ -79,6 +79,11 @@ class Tab(QtWidgets.QWidget):
         header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
         for i in range(1, len(self.meta_podaci[10].split(","))):
             header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeToContents)
+
+        if self.meta_podaci[1] == "serijska":
+            self.tab_widget.hide()
+            self.btn_down.hide()
+            self.btn_up.hide()
         
     def sort_table(self, index):
         """
