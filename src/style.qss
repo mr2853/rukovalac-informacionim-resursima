@@ -28,7 +28,7 @@ QWidget {
 
 
  QPushButton {
-    background-color:black;
+    background-color:#51adcf;
     color: white;
     font-weight: bold;
     font-size: 16px;
@@ -56,18 +56,18 @@ QPushButton:hover {
     margin-left: 30px;
  }
  QToolButton { 
-   background-color: black;
-   margin: 2px;
+   background-color: #51adcf;
+   margin: 3px;
    
    }
 
  QToolButton:hover { 
-   background-color:#4e3d0c;
+   background-color:#ffc107;
    border-radius: 2px;
    }
 
    QDockWidget {
-      background-color:black;
+      background-color:#51adcf;
       font-weight: bold;
    }
 
@@ -78,8 +78,8 @@ QPushButton:hover {
    }
   QMenuBar {
      font-weight: bold;
-     background-color:black;
-     color: #618b38;
+     background-color:#51adcf;
+     color:black;
     
   }
 
@@ -91,8 +91,11 @@ QPushButton:hover {
 
   QTableView {
      color: #618b38;
+     font-weight: 500;
      background-color: aliceblue;
      border-radius: 15px;
+     border : 2px solid black;
+     gridline-color: 3px solid black;
   }
 
   QHeaderView {
@@ -101,6 +104,7 @@ QPushButton:hover {
      color: black;
      
   }
+
 
 
 
