@@ -1,6 +1,6 @@
 objekat:StudijskiProgram
 tip_datoteke:sekvencijalna
-relativna_putanja:podaci\podaci
+relativna_putanja:podaci\podaci\sekvencijalne
 sufiks:csv
 podaci:relativna_putanja\studijski_program_sek.sufiks
 nazivi_atributa:ustanova,nivo,oznaka_programa,naziv_programa

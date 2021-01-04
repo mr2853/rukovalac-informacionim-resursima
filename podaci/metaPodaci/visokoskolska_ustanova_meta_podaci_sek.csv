@@ -1,6 +1,6 @@
 objekat:VisokoskolskaUstanova
 tip_datoteke:sekvencijalna
-relativna_putanja:podaci\podaci
+relativna_putanja:podaci\podaci\sekvencijalne
 sufiks:csv
 podaci:relativna_putanja\visokoskolska_ustanova_sek.sufiks
 naziv_atributa:oznaka,naziv,adresa

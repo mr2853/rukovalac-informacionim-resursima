@@ -2,12 +2,12 @@
 2.* Razdvajanje datoteka
 3.* Podela datoteke (split)
 greske:
-	1. Serijska nema veze
-	2. Dodavanje u VSU doda element, ali ne doda novi red
+	1.# Serijska nema veze
+	2.# Dodavanje u VSU doda element, ali ne doda novi red
 	3. Testirati dodavanje elemenata pa kada ih vise istih, pokaze neki element 2 puta
-	4. Podeliti dock na ser i sek, i ikonice
-	5. Promeniti dock naslov
-	6. Za pretragu, string ne treba da ima < >, odraditi to po proveri tipa atributa
+	4.# Podeliti dock na ser i sek, i ikonice
+	5.# Promeniti dock naslov
+	6.# Za pretragu, string ne treba da ima < >, odraditi to po proveri tipa atributa
 
 putanja_do_python.exe -m pip install pynput
 putanja_do_python.exe -m pip install --upgrade pip

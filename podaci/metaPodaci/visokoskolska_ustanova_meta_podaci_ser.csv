@@ -1,6 +1,6 @@
 objekat:VisokoskolskaUstanova
 tip_datoteke:serijska
-relativna_putanja:podaci\podaci
+relativna_putanja:podaci\podaci\serijske
 sufiks:csv
 podaci:relativna_putanja\visokoskolska_ustanova_ser.sufiks
 naziv_atributa:oznaka,naziv,adresa

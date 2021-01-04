@@ -1,6 +1,6 @@
 objekat:PlanStudijskeGrupe
 tip_datoteke:sekvencijalna
-relativna_putanja:podaci\podaci
+relativna_putanja:podaci\podaci\sekvencijalne
 sufiks:csv
 podaci:relativna_putanja\plan_studijske_grupe_sek.sufiks
 nazivi_atributa:program_ustanove,oznaka_programa,blok,pozicija,ustanova_predmet,oznaka_predmeta

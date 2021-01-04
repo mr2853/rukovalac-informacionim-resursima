@@ -1,6 +1,6 @@
 objekat:Student
 tip_datoteke:sekvencijalna
-relativna_putanja:podaci\podaci
+relativna_putanja:podaci\podaci\sekvencijalne
 sufiks:csv
 podaci:relativna_putanja\student_sek.sufiks
 nazivi_atributa:ustanova,struka,broj_indeksa,prezime,ime_roditelja,ime,pol,adresa_stanovanja,telefon,jmbg,datum_rodjenja

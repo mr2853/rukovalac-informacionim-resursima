@@ -1,6 +1,6 @@
 objekat:NivoStudija
 tip_datoteke:serijska
-relativna_putanja:podaci\podaci
+relativna_putanja:podaci\podaci\serijske
 sufiks:csv
 podaci:relativna_putanja\nivo_studija_ser.sufiks
 nazivi_atributa:oznaka,naziv
