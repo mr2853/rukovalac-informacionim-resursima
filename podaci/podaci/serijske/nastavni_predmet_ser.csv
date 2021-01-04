@@ -1,8 +1,8 @@
 podaci\metaPodaci\nastavni_predmet_meta_podaci_ser.csv
-TF,ARR,Arhitektura racunara,8
-TF,MAT,Matematika,8
-TF,OPR,Osnove programiranja,8
-TF,MEN,Menadzment,6
+IR,ARR,Arhitektura racunara,8
+IR,MAT,Matematika,8
+IR,OPR,Osnove programiranja,8
+IR,MEN,Menadzment,6
 TF,DIM,Diskretna Matematika,8
 TF,WED,Web Dizajn,8
 TF,EJ1,Engleski jezik 1,6
@@ -13,3 +13,4 @@ TF,EJ2,Engleski jezik 2,6
 TF,OOP2,Objektno orijentisano programiranje 2,8
 TF,OPS,Operativni sistemi,8
 TF,RAM,Racunarske mreze,8
+PF,EKO,Ekonomija,8
