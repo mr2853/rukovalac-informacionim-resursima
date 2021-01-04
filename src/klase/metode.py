@@ -180,16 +180,25 @@ def sastavi_sekvencijalnu(parent):
             lista_objekata.append(GenerickaKlasa(lista_atributa, lista_podataka))
 
     lista_istih = []
+    list_klj = [[]]
     for j in range(len(lista_objekata)-1):
         for m in range(j+1, len(lista_objekata)):
             nadjen = False
             nadjen1 = True
             for i in range(len(lista_kljuceva)):
                 if lista_objekata[j].__getattribute__(lista_kljuceva[i]) == lista_objekata[m].__getattribute__(lista_kljuceva[i]):
+                    pretraga = False
+                    for k in list_klj[-1]:
+                        if k == lista_kljuceva[i]:
+                            pretraga = True
+                    if not pretraga:
+                        list_klj[-1].append(lista_kljuceva[i])
+
                     nadjen = True
                 else:
                     nadjen = False
                     nadjen1 = False
+
             if nadjen and nadjen1:
                 for n in range(len(lista_istih)):
                     for z in range(len(lista_istih[n])):
@@ -207,9 +216,12 @@ def sastavi_sekvencijalnu(parent):
                             nadjen = False
                             break
                     if not nadjen:
+                        list_klj.append([])
                         break
                 if nadjen:
                     lista_istih.append([j,m])
+            else:
+                list_klj[-1] = []
 
     while len(lista_istih) != 0:
         list_tuple = () # ponavljati ovo koliko ima elementa sa duplikatima
@@ -221,12 +233,15 @@ def sastavi_sekvencijalnu(parent):
                     tekst += ","
 
             list_tuple = list_tuple + (tekst,)
-
+        tekst = "Elementi imaju iste vrednosti na sledecim primarnim kljucevima koji moraju biti razliciti: "
+        for i in range(len(list_klj[0])):
+            tekst += str(i+1) + "." + list_klj[0][i] + " "
+        list_klj.pop(0)
         input = QtWidgets.QInputDialog.getItem(
             parent, 
             "",
-            "Uneli ste vise elemenata sa nekim istim podacima koji moraju biti jedinstveni\n"
-            "Izaberite koji element zelite da zadrzite:",
+            tekst+
+            "\nIzaberite koji element zelite da zadrzite:",
             list_tuple,
             0,
             editable=False)
@@ -248,6 +263,7 @@ def sastavi_sekvencijalnu(parent):
                 
             lista_istih.pop(0)
         else:
+            os.remove(putanja_serijske)
             return False
             
     merge_sort(lista_objekata, lista_kljuceva[0], nacin_sortiranja)
