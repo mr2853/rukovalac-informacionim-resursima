@@ -75,7 +75,7 @@ def merge(s1, s, atribut, bool_nacin_sortiranja):
         if kraj == 0:
             if k < len(s) and j < len(s1):
                 s[k] = s1[j]
-        else:
+        elif kraj == 1:
             if k < len(s) and i < len(s1):
                 s[k] = s1[i]
     else:
@@ -158,7 +158,7 @@ def merge_sort(s, atribut, bool_nacin_sortiranja):
     :param bool_nacin_sortiranja: True u rastucem redosledu, False u opadajucem
     """
     if len(s) > 1: 
-        # podeli
+        # podelis
         s1 = list_split(s)
         # zavladaj
         for i in s1:

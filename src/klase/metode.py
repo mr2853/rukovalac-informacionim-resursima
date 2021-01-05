@@ -185,13 +185,17 @@ def sastavi_sekvencijalnu(parent):
         for m in range(j+1, len(lista_objekata)):
             nadjen = False
             nadjen1 = True
+            if j == m:
+                continue
             for i in range(len(lista_kljuceva)):
                 if lista_objekata[j].__getattribute__(lista_kljuceva[i]) == lista_objekata[m].__getattribute__(lista_kljuceva[i]):
-                    pretraga = False
-                    for k in list_klj[-1]:
-                        if k == lista_kljuceva[i]:
-                            pretraga = True
-                    if not pretraga:
+                    nije_nadjen = True
+                    for z in list_klj[-1]:
+                        if z == lista_kljuceva[i]:
+                            nije_nadjen = False
+                            break
+
+                    if nije_nadjen:     
                         list_klj[-1].append(lista_kljuceva[i])
 
                     nadjen = True
@@ -204,24 +208,26 @@ def sastavi_sekvencijalnu(parent):
                     for z in range(len(lista_istih[n])):
                         if lista_istih[n][z] == j:
                             sadrzi = False
-                            for s in range(z+1, len(lista_istih[n])):
+                            for s in range(1, len(lista_istih[n])):
                                 if lista_istih[n][s] == m:
                                     sadrzi = True
+                                    nadjen = False
                                     break
-                            if sadrzi:
-                                nadjen = False
-                                continue
+                            if sadrzi or not nadjen:
+                                break
                             
                             lista_istih[n].append(m)
                             nadjen = False
                             break
                     if not nadjen:
-                        list_klj.append([])
                         break
-                if nadjen:
-                    lista_istih.append([j,m])
-            else:
-                list_klj[-1] = []
+            
+            if nadjen:
+                lista_istih.append([j,m])
+                list_klj.append([])
+                    
+    if len(list_klj[-1]) == 0:
+        list_klj.pop(-1)
 
     while len(lista_istih) != 0:
         list_tuple = () # ponavljati ovo koliko ima elementa sa duplikatima
@@ -234,6 +240,7 @@ def sastavi_sekvencijalnu(parent):
 
             list_tuple = list_tuple + (tekst,)
         tekst = "Elementi imaju iste vrednosti na sledecim primarnim kljucevima koji moraju biti razliciti: "
+        
         for i in range(len(list_klj[0])):
             tekst += str(i+1) + "." + list_klj[0][i] + " "
         list_klj.pop(0)
@@ -247,15 +254,20 @@ def sastavi_sekvencijalnu(parent):
             editable=False)
             
         if input[1]:
+            indeks = 0
             for i in range(len(list_tuple)):
                 if list_tuple[i].find(input[0]) != -1:
+                    indeks = lista_istih[0][i]
                     lista_istih[0].pop(i)
                     break
-            
+                
             for i in range(len(lista_istih[0])):
                 lista_objekata.pop(lista_istih[0][i])
+
                 for j in range(len(lista_istih)):
                     for m in range(len(lista_istih[j])):
+                        if j == 0 and i == m:
+                            continue
                         if lista_istih[0][i] <= lista_istih[j][m]:
                             lista_istih[j][m] -= 1
 
@@ -266,6 +278,7 @@ def sastavi_sekvencijalnu(parent):
             os.remove(putanja_serijske)
             return False
             
+
     merge_sort(lista_objekata, lista_kljuceva[0], nacin_sortiranja)
     
     model = parent.parent().table.model()
