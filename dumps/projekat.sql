@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.22, for Win64 (x86_64)
 --
--- Host: localhost    Database: model_projekat
+-- Host: localhost    Database: projekat
 -- ------------------------------------------------------
 -- Server version	8.0.22
 
@@ -23,13 +23,13 @@ DROP TABLE IF EXISTS `nastavni_predmet`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `nastavni_predmet` (
-  `ustanova` char(2) NOT NULL,
-  `oznaka_predmeta` varchar(6) NOT NULL,
-  `naziv` varchar(120) NOT NULL,
-  `ESPB` int NOT NULL,
-  PRIMARY KEY (`oznaka_predmeta`,`ustanova`),
-  KEY `fk_Nastavni predmet_Visokoskolska ustanova1_idx` (`ustanova`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `VU_OZNAKA` char(2) NOT NULL,
+  `NP_OZNAKA` varchar(6) NOT NULL,
+  `NP_NAZIV` varchar(120) NOT NULL,
+  `NP_ESPB` decimal(2,0) NOT NULL,
+  PRIMARY KEY (`VU_OZNAKA`,`NP_OZNAKA`),
+  CONSTRAINT `FK_IZVODI_PREDMETE` FOREIGN KEY (`VU_OZNAKA`) REFERENCES `visokoskolska_ustanova` (`VU_OZNAKA`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +38,7 @@ CREATE TABLE `nastavni_predmet` (
 
 LOCK TABLES `nastavni_predmet` WRITE;
 /*!40000 ALTER TABLE `nastavni_predmet` DISABLE KEYS */;
-INSERT INTO `nastavni_predmet` VALUES ('IR','ARR','Arhitektura racunara',8),('TF','DIM','Diskretna matematika',8),('IR','MAT','Matematika',8),('TF','WED','Web Dizajn',8);
+INSERT INTO `nastavni_predmet` VALUES ('IR','ARR','Arhitektura racunara',8),('IR','MAT','Matematika',8),('TF','DIM','Diskretna matematika',8),('TF','WED','Web Dizajn',8);
 /*!40000 ALTER TABLE `nastavni_predmet` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -50,10 +50,10 @@ DROP TABLE IF EXISTS `nivo_studija`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `nivo_studija` (
-  `oznaka` int NOT NULL,
-  `naziv` varchar(80) NOT NULL,
-  PRIMARY KEY (`oznaka`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `NIV_OZNAKA` decimal(2,0) NOT NULL,
+  `NIV_NAZIV` varchar(80) NOT NULL,
+  PRIMARY KEY (`NIV_OZNAKA`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -74,18 +74,17 @@ DROP TABLE IF EXISTS `plan_studijske_grupe`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `plan_studijske_grupe` (
-  `program_ustanove` char(2) NOT NULL,
-  `oznaka_programa` varchar(3) NOT NULL,
-  `blok` int NOT NULL,
-  `pozicija` int NOT NULL,
-  `oznaka_predmeta` varchar(6) NOT NULL,
-  `Ustanova predmet` char(2) NOT NULL,
-  PRIMARY KEY (`program_ustanove`,`blok`,`pozicija`,`oznaka_programa`),
-  KEY `fk_Plan studijske grupe_Studijski programi1_idx` (`oznaka_programa`,`program_ustanove`),
-  KEY `fk_Plan studijske grupe_Nastavni predmet1_idx` (`oznaka_predmeta`,`Ustanova predmet`),
-  CONSTRAINT `fk_Plan studijske grupe_Nastavni predmet1` FOREIGN KEY (`oznaka_predmeta`, `Ustanova predmet`) REFERENCES `nastavni_predmet` (`oznaka_predmeta`, `ustanova`),
-  CONSTRAINT `fk_Plan studijske grupe_Studijski programi1` FOREIGN KEY (`oznaka_programa`, `program_ustanove`) REFERENCES `studijski_programi` (`oznaka_programa`, `ustanova`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `STU_VU_OZNAKA` char(2) NOT NULL,
+  `SP_OZNAKA` varchar(3) NOT NULL,
+  `SPB_BLOK` decimal(2,0) NOT NULL,
+  `SPB_POZICIJA` decimal(2,0) NOT NULL,
+  `VU_OZNAKA` char(2) NOT NULL,
+  `NP_OZNAKA` varchar(6) NOT NULL,
+  PRIMARY KEY (`STU_VU_OZNAKA`,`SP_OZNAKA`,`SPB_BLOK`,`SPB_POZICIJA`),
+  KEY `FK_NA_POZICIJI` (`VU_OZNAKA`,`NP_OZNAKA`),
+  CONSTRAINT `FK_NA_POZICIJI` FOREIGN KEY (`VU_OZNAKA`, `NP_OZNAKA`) REFERENCES `nastavni_predmet` (`VU_OZNAKA`, `NP_OZNAKA`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_STRUKTURA_PO_BLOKOVIMA` FOREIGN KEY (`STU_VU_OZNAKA`, `SP_OZNAKA`) REFERENCES `studijski_programi` (`VU_OZNAKA`, `SP_OZNAKA`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -94,7 +93,7 @@ CREATE TABLE `plan_studijske_grupe` (
 
 LOCK TABLES `plan_studijske_grupe` WRITE;
 /*!40000 ALTER TABLE `plan_studijske_grupe` DISABLE KEYS */;
-INSERT INTO `plan_studijske_grupe` VALUES ('IR','IT',2,3,'ARR','IR'),('TF','SI',1,2,'DIM','TF'),('TF','SI',1,1,'WED','TF');
+INSERT INTO `plan_studijske_grupe` VALUES ('IR','IT',2,3,'IR','ARR'),('TF','SI',1,1,'TF','DIM'),('TF','SI',1,2,'TF','WED');
 /*!40000 ALTER TABLE `plan_studijske_grupe` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -106,21 +105,20 @@ DROP TABLE IF EXISTS `studenti`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `studenti` (
-  `ustanova` char(2) NOT NULL,
-  `struka` char(2) NOT NULL,
-  `broj_indeksa` varchar(6) NOT NULL,
-  `prezime` varchar(20) NOT NULL,
-  `ime_roditelja` varchar(20) DEFAULT NULL,
-  `ime` varchar(20) NOT NULL,
-  `pol` char(1) DEFAULT NULL,
-  `adresa_stanovanja` varchar(80) DEFAULT NULL,
-  `Telefon` varchar(20) DEFAULT NULL,
-  `JMBG` char(13) DEFAULT NULL,
-  `datum_rodjenja` date DEFAULT NULL,
-  PRIMARY KEY (`struka`,`broj_indeksa`,`ustanova`),
-  KEY `fk_Studenti_Visokoskolska ustanova_idx` (`ustanova`),
-  CONSTRAINT `fk_Studenti_Visokoskolska ustanova` FOREIGN KEY (`ustanova`) REFERENCES `visokoskolska_ustanova` (`oznaka`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `VU_OZNAKA` char(2) NOT NULL,
+  `STU_STRUKA` char(2) NOT NULL,
+  `STU_BROJ_INDEKSA` varchar(6) NOT NULL,
+  `STU_PREZIME` varchar(20) NOT NULL,
+  `STU_IME_RODITELJA` varchar(20) DEFAULT NULL,
+  `STU_IME` varchar(20) NOT NULL,
+  `STU_POL` char(1) NOT NULL DEFAULT 'N',
+  `STU_ADRESA_STANOVANJA` varchar(80) DEFAULT NULL,
+  `STU_TELEFON` varchar(20) DEFAULT NULL,
+  `STU_JMBG` char(13) DEFAULT NULL,
+  `STU_DATUM_RODJENJA` date DEFAULT NULL,
+  PRIMARY KEY (`VU_OZNAKA`,`STU_STRUKA`,`STU_BROJ_INDEKSA`),
+  CONSTRAINT `FK_STUDIRAJU_NA` FOREIGN KEY (`VU_OZNAKA`) REFERENCES `visokoskolska_ustanova` (`VU_OZNAKA`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -141,14 +139,15 @@ DROP TABLE IF EXISTS `studijski_programi`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `studijski_programi` (
-  `ustanova` char(2) NOT NULL,
-  `nivo_studija` int NOT NULL,
-  `oznaka_programa` varchar(3) NOT NULL,
-  `naziv_programa` varchar(120) NOT NULL,
-  PRIMARY KEY (`oznaka_programa`,`ustanova`),
-  KEY `fk_Studijski programi_Nivo studija1_idx` (`nivo_studija`),
-  CONSTRAINT `fk_Studijski programi_Nivo studija1` FOREIGN KEY (`nivo_studija`) REFERENCES `nivo_studija` (`oznaka`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `VU_OZNAKA` char(2) NOT NULL,
+  `NIV_OZNAKA` decimal(2,0) NOT NULL,
+  `SP_OZNAKA` varchar(3) NOT NULL,
+  `SP_NAZIV` varchar(120) NOT NULL,
+  PRIMARY KEY (`VU_OZNAKA`,`SP_OZNAKA`),
+  KEY `FK_KLASIFIKACIJA_PO_NIVOU` (`NIV_OZNAKA`),
+  CONSTRAINT `FK_KLASIFIKACIJA_PO_NIVOU` FOREIGN KEY (`NIV_OZNAKA`) REFERENCES `nivo_studija` (`NIV_OZNAKA`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_OBRAZUJE_ZA` FOREIGN KEY (`VU_OZNAKA`) REFERENCES `visokoskolska_ustanova` (`VU_OZNAKA`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -169,25 +168,24 @@ DROP TABLE IF EXISTS `tok_studija`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `tok_studija` (
-  `ustanova` char(2) NOT NULL,
-  `oznaka_programa` varchar(3) NOT NULL,
-  `student_iz_ustanove` char(2) NOT NULL,
-  `struka` char(2) NOT NULL,
-  `broj_indeksa` varchar(6) NOT NULL,
-  `skolska_godina` int NOT NULL,
-  `godina_studija` int NOT NULL,
-  `blok` int NOT NULL,
-  `redni_broj_upisa` int NOT NULL,
-  `datum_upisa` date NOT NULL,
-  `datum_overe` date DEFAULT NULL,
-  `ESPB_pocetni` int NOT NULL,
-  `ESPB_krajnji` int NOT NULL,
-  PRIMARY KEY (`ustanova`,`oznaka_programa`,`student_iz_ustanove`,`struka`,`broj_indeksa`,`skolska_godina`,`godina_studija`,`blok`,`redni_broj_upisa`),
-  KEY `fk_Tok studija_Studijski programi1_idx` (`oznaka_programa`,`ustanova`),
-  KEY `fk_Tok studija_Studenti1_idx` (`struka`,`broj_indeksa`,`student_iz_ustanove`),
-  CONSTRAINT `fk_Tok studija_Studenti1` FOREIGN KEY (`struka`, `broj_indeksa`, `student_iz_ustanove`) REFERENCES `studenti` (`struka`, `broj_indeksa`, `ustanova`),
-  CONSTRAINT `fk_Tok studija_Studijski programi1` FOREIGN KEY (`oznaka_programa`, `ustanova`) REFERENCES `studijski_programi` (`oznaka_programa`, `ustanova`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `STU_VU_OZNAKA` char(2) NOT NULL,
+  `SP_OZNAKA` varchar(3) NOT NULL,
+  `VU_OZNAKA` char(2) NOT NULL,
+  `STU_STRUKA` char(2) NOT NULL,
+  `STU_BROJ_INDEKSA` varchar(6) NOT NULL,
+  `TOK_SKOLSKA_GODINA` decimal(4,0) NOT NULL,
+  `TOK_GODINA_STUDIJA` decimal(1,0) NOT NULL,
+  `TOK_BLOK` decimal(2,0) NOT NULL,
+  `TOK_REDNI_BROJ_UPISA` decimal(2,0) NOT NULL,
+  `TOK_DATUM_UPISA` date NOT NULL,
+  `TOK_DATUM_OVERE` date DEFAULT NULL,
+  `TOK_ESPB_POCETNI` decimal(3,0) NOT NULL DEFAULT '0',
+  `TOK_ESPB_KRAJNJI` decimal(3,0) NOT NULL,
+  PRIMARY KEY (`STU_VU_OZNAKA`,`SP_OZNAKA`,`VU_OZNAKA`,`STU_STRUKA`,`STU_BROJ_INDEKSA`,`TOK_SKOLSKA_GODINA`,`TOK_GODINA_STUDIJA`,`TOK_REDNI_BROJ_UPISA`,`TOK_BLOK`),
+  KEY `FK_STUDIRANJE` (`VU_OZNAKA`,`STU_STRUKA`,`STU_BROJ_INDEKSA`),
+  CONSTRAINT `FK_KO_STUDIRA` FOREIGN KEY (`STU_VU_OZNAKA`, `SP_OZNAKA`) REFERENCES `studijski_programi` (`VU_OZNAKA`, `SP_OZNAKA`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `FK_STUDIRANJE` FOREIGN KEY (`VU_OZNAKA`, `STU_STRUKA`, `STU_BROJ_INDEKSA`) REFERENCES `studenti` (`VU_OZNAKA`, `STU_STRUKA`, `STU_BROJ_INDEKSA`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -208,11 +206,11 @@ DROP TABLE IF EXISTS `visokoskolska_ustanova`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `visokoskolska_ustanova` (
-  `oznaka` char(2) NOT NULL,
-  `naziv` varchar(80) NOT NULL,
-  `adresa` varchar(80) NOT NULL,
-  PRIMARY KEY (`oznaka`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `VU_OZNAKA` char(2) NOT NULL,
+  `VU_NAZIV` varchar(80) NOT NULL,
+  `VU_ADRESA` varchar(80) NOT NULL,
+  PRIMARY KEY (`VU_OZNAKA`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -234,4 +232,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-01-05 14:10:31
+-- Dump completed on 2021-01-07 20:23:30
