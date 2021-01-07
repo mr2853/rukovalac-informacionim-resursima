@@ -19,6 +19,8 @@ from pynput.keyboard import Key, Listener
 import csv
 import os
 import json
+from klase.file_system import FileSystem
+import mysql.connector
 
 class PocetnaStrana(QWidget):
     def __init__(self, parent=None):
@@ -38,7 +40,7 @@ class PocetnaStrana(QWidget):
         self.tool_bar.pretrazi.triggered.connect(self.otvori_pretragu)
         self.tool_bar.ukloni_iz_tabele.triggered.connect(self.ukloni_iz_tabele)
         self.tool_bar.spoji_datoteke.triggered.connect(self.spoji_datoteke)
-        # self.tool_bar.podeli_datoteku.triggered.connect(self.podeli_datoteke)
+        # self.tool_bar.podeli_datoteku.triggered.connect(self.podeli_datoteku)
         
         status_bar = QtWidgets.QStatusBar()
         #status_bar.showMessage("Prikazan status bar!")
@@ -55,14 +57,50 @@ class PocetnaStrana(QWidget):
         self.dock = LeftDock("", parent=None)
         self.main_window.addDockWidget(Qt.LeftDockWidgetArea,self.dock) 
         self.dock.tree.setSelectionMode(QAbstractItemView.SingleSelection) 
-        self.dock.tree.clicked.connect(self.read) 
-        self.multi_selekt = [] 
+        self.dock.tree.clicked.connect(self.read)
+        self.multi_selekt = []
         
         self.listener = keyboard.Listener(on_press=self.pritisnuto_dugme, on_release=self.pusteno_dugme) 
         self.listener.start()
         self.main_window.show()
 
-    def podeli_datoteke(self):...
+    def podeli_datoteku(self): # kopirano od metode pretrage
+        if len(self.multi_selekt) == 0:
+            poruka = QMessageBox()
+            icon = QtGui.QIcon("src/ikonice/logo.jpg")
+            poruka.setWindowIcon(icon)
+            poruka.setWindowTitle("Upozorenje!")
+            poruka.setText("Trenutno nijedna datoteka nije selektovana za spajanje!")
+            poruka.exec_()
+            return
+        
+        prikaz = PrikazElementa(self.central_widget.currentWidget(),True)
+        prikaz.exec_()
+        if len(prikaz.lista_atr) != 0 and len(prikaz.lista_kriterijuma) != 0:
+            model = self.central_widget.currentWidget().table.model()
+            model = pretraga(
+                prikaz.lista_atr, prikaz.lista_kriterijuma,
+                prikaz.lista_vece_manje, 
+                self.central_widget.currentWidget().meta_podaci)
+
+            if len(model.lista_prikaz) == 0:
+                poruka = QMessageBox()
+                icon = QtGui.QIcon("src/ikonice/logo.jpg")
+                poruka.setWindowIcon(icon)
+                poruka.setWindowTitle("Upozorenje!")
+                poruka.setText("Zadata pretraga nije pronasla vrednosti koje odgovaraju zadatim kriterijumima.")
+                poruka.exec_()
+                return
+
+            self.central_widget.currentWidget().table.setModel(model)
+        else:
+            poruka = QMessageBox()
+            icon = QtGui.QIcon("src/ikonice/logo.jpg")
+            poruka.setWindowIcon(icon)
+            poruka.setWindowTitle("Upozorenje!")
+            poruka.setText("Niste zadali ni jedan kriterijum za pretragu, pretraga je prekinuta.")
+            poruka.exec_()
+            return
 
     def spoji_datoteke(self):
         if len(self.multi_selekt) == 0:
@@ -74,7 +112,7 @@ class PocetnaStrana(QWidget):
             poruka.exec_()
             return
 
-        kljuc = [2, "broj_indeksa"] #po kom kljucu da sortira, nije zavrseno
+        kljuc = [0, "vrednost"] #po kom kljucu da sortira, nije zavrseno
         lista = []
         self.multi_selekt.sort()
         
@@ -573,6 +611,10 @@ class PocetnaStrana(QWidget):
                 return
         if not ista_putanja:
             self.lista_putanja.append(putanja)
+            if putanja.find(".mwb") != 1:...
+                # self.connection = mysql.connector.connect(user="root", password="root", host="127.0.0.1", database="model_projekat")
+                # self.csor = self.connection.cursor()
+                
             tab = Tab(putanja, self.central_widget)
             tab.read()
             tab.btn_down.clicked.connect(self.otvori_tabelu_dete)

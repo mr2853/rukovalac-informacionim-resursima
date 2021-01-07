@@ -1,0 +1,5 @@
+baza:model_projekat
+korisnicko_ime:root
+lozinka:root
+host:127.0.0.1
+tabele:Nastavni predmet,Nivo studija,Plan studijske grupe,Studenti,Studijski programi,Tok studija,Visokoskolska ustanova
