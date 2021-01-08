@@ -8,7 +8,7 @@ from tree import Tree
 
 class LeftDock(QtWidgets.QDockWidget):
     kliknut = QtCore.Signal(str)
-    def __init__(self, title, parent):
+    def __init__(self, title="", parent=None):
         super().__init__(title, parent)
         self.main_layout = QVBoxLayout()
         self.model = FileSystem(self)

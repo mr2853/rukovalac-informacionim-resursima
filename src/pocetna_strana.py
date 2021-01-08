@@ -2,12 +2,13 @@
 from io import FileIO
 import sys
 from PySide2 import QtWidgets, QtGui
+from PySide2 import QtCore
 from PySide2.QtCore import QCoreApplication, QEvent, QItemSelectionModel, QPoint
-from PySide2.QtGui import QKeyEvent, Qt
+from PySide2.QtGui import QKeyEvent, QStandardItem, QStandardItemModel, Qt
 from pynput import keyboard
 from klase.genericka_klasa import GenerickaKlasa
 from left_dock import LeftDock
-from PySide2.QtWidgets import QDockWidget, QInputDialog, QMainWindow, QMessageBox, QWidget
+from PySide2.QtWidgets import QDockWidget, QInputDialog, QMainWindow, QMessageBox, QPushButton, QTreeView, QWidget
 from PySide2.QtWidgets import QAbstractItemView
 from tab import Tab
 from menu_bar import MenuBar
@@ -22,11 +23,14 @@ import json
 from klase.file_system import FileSystem
 import mysql.connector
 
+from tree import Tree
+
 class PocetnaStrana(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.lista_putanja = []
-        self.main_window = QtWidgets.QMainWindow()
+        self.lista_baza = []
+        self.main_window = QtWidgets.QMainWindow(parent=self)
         self.main_window.resize(1040, 680)
         self.main_window.setWindowTitle("Rukovalac informacionim resursima")
         icon = QtGui.QIcon("src/ikonice/logo.jpg")
@@ -544,7 +548,13 @@ class PocetnaStrana(QWidget):
     def delete_tab(self, index):
         self.central_widget.setCurrentIndex(index)
         tab = self.central_widget.currentWidget()
-        
+        if tab.is_baza:
+            for i in range(len(self.lista_baza)):
+                if self.lista_baza[i] == tab.indeks:
+                    self.lista_baza.pop(i)
+                    self.central_widget.removeTab(index)
+                    break
+            return
         if hasattr(tab, "sortirano") and len(tab.table.model().lista_prikaz) > 1:
             if tab.meta_podaci[1] == "serijska": 
                 while True:
@@ -611,14 +621,88 @@ class PocetnaStrana(QWidget):
                 return
         if not ista_putanja:
             self.lista_putanja.append(putanja)
-            if putanja.find(".mwb") != 1:...
-                # self.connection = mysql.connector.connect(user="root", password="root", host="127.0.0.1", database="model_projekat")
-                # self.csor = self.connection.cursor()
+            if putanja.find(".sql") != -1:
+                self.connection = mysql.connector.connect(user="root", password="root", host="127.0.0.1", database="model_projekat")
+                self.csor = self.connection.cursor()
+                putanja = "podaci\metaPodaci\model_projekat_meta_podaci.csv"
+                meta_podaci = citanje_meta_podataka(putanja, True)
+                self.imena_tabela = meta_podaci[4].split(",")
+
+                self.treeView = QTreeView()
+                self.treeView.setContextMenuPolicy(Qt.CustomContextMenu)
+                self.treeView.customContextMenuRequested.connect(self.dugme_baza)
                 
-            tab = Tab(putanja, self.central_widget)
-            tab.read()
+                model = QStandardItemModel(parent=self.dock.tree.sub_layout)
+                item = QStandardItem("zatvori")
+                model.appendRow(item)
+                for text in self.imena_tabela:
+                    item = QStandardItem(text)
+                    model.appendRow(item)
+                
+                self.treeView.setModel(model)
+                self.treeView.clicked.connect(self.dugme_baza)
+                self.treeView.PositionAtBottom
+
+                si = self.dock.tree.sub_layout.sizeHint()
+                si.setWidth(self.dock.width())
+                si.setHeight(200)
+                self.treeView.setFixedSize(si.width(), si.height())
+
+                self.treeView.setHeaderHidden(True)
+                self.dock.tree.sub_layout.addWidget(self.treeView)
+                self.dock.tree.sub_layout.setAlignment(self.treeView, QtCore.Qt.AlignBottom)
+                return
+
+            tab = Tab(putanja, parent=self.central_widget)
+            if putanja != "":
+                tab.read()
+            else:
+                tab.read(putanja)
             tab.btn_down.clicked.connect(self.otvori_tabelu_dete)
             tab.btn_up.clicked.connect(self.otvori_tabelu_roditelj)
             self.central_widget.addTab(tab, tab.meta_podaci[0])
             self.central_widget.setCurrentIndex(self.central_widget.currentIndex()+1)
-            
+    
+    def dugme_baza(self, model_indeks):
+        indeks = model_indeks.row()
+        if indeks == 0:
+            self.treeView.close()
+            for i in range(len(self.lista_putanja)):
+                if self.lista_putanja[i].find(".sql") != 1:
+                    self.lista_putanja.pop(i)
+                    break
+
+            self.central_widget.setCurrentIndex(indeks)
+            brojac = 0
+            while len(self.lista_baza) != 0:
+                tab = self.central_widget.currentWidget()
+                if tab.is_baza:
+                    for i in range(brojac, len(self.lista_baza)):
+                        if self.lista_baza[brojac] == tab.indeks:
+                            self.lista_baza.pop(brojac)
+                            self.central_widget.removeTab(indeks)
+                            break
+                        else:
+                            brojac += 1
+                else:
+                    indeks += 1
+                    self.central_widget.setCurrentIndex(indeks)
+
+            self.csor.close()
+            self.connection.close()
+            return
+        else:
+            indeks -= 1
+            for i in range(len(self.lista_baza)):
+                if self.lista_baza[i] == indeks:
+                    return
+            self.lista_baza.append(indeks)
+
+        tab = Tab(parent=self.central_widget)
+        tab.indeks = indeks
+        tab.naziv = self.imena_tabela[indeks]
+        tab.read("podaci\metaPodaci\model_projekat_meta_podaci.csv", self.imena_tabela[indeks])
+        tab.btn_down.clicked.connect(self.otvori_tabelu_dete)
+        tab.btn_up.clicked.connect(self.otvori_tabelu_roditelj)
+        self.central_widget.addTab(tab, tab.naziv)
+        self.central_widget.setCurrentIndex(self.central_widget.currentIndex()+1)

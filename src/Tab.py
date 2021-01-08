@@ -17,8 +17,12 @@ import os
 from klase.genericka_klasa import GenerickaKlasa
 
 class Tab(QtWidgets.QWidget):
-    def __init__(self, putanja, parent=None):
+    def __init__(self, putanja="", parent=None):
         super().__init__(parent)
+        if putanja == "":
+            self.is_baza = True
+        else:
+            self.is_baza = False
         self.putanja = putanja
         self.main_layout = QtWidgets.QVBoxLayout()
         self.tab_widget = QtWidgets.QTabWidget(self)
@@ -61,14 +65,19 @@ class Tab(QtWidgets.QWidget):
     def delete_sub_tab(self, index): 
         self.tab_widget.removeTab(index)
     
-    def read(self):
-        with open(self.putanja, newline='\n') as f:
-            podaci = f.readline().strip()
-            f.close()
+    def read(self, podaci="", naziv=""):
+        if self.putanja != "":
+            with open(self.putanja, newline='\n') as f:
+                podaci = f.readline().strip()
+                f.close()
         self.putanja_meta = podaci
         self.meta_podaci = citanje_meta_podataka(podaci)
-        self.meta_podaci[4] = self.putanja 
-        model = kreiraj_model(self.meta_podaci)
+        if not self.is_baza:
+            self.meta_podaci[4] = self.putanja
+        if self.is_baza:
+            model = kreiraj_model(self.meta_podaci, self)
+        else:
+            model = kreiraj_model(self.meta_podaci)
         self.table.setModel(model)
         self.table.setSortingEnabled(True)
         self.table.setSelectionMode(QAbstractItemView.SingleSelection)
@@ -77,13 +86,14 @@ class Tab(QtWidgets.QWidget):
             
         header = self.table.horizontalHeader()
         header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
-        for i in range(1, len(self.meta_podaci[10].split(","))):
-            header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeToContents)
+        if not self.is_baza:
+            for i in range(1, len(self.meta_podaci[10].split(","))):
+                header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeToContents)
 
-        if self.meta_podaci[1] == "serijska":
-            self.tab_widget.hide()
-            self.btn_down.hide()
-            self.btn_up.hide()
+            if self.meta_podaci[1] == "serijska":
+                self.tab_widget.hide()
+                self.btn_down.hide()
+                self.btn_up.hide()
         
     def sort_table(self, index):
         """

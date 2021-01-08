@@ -8,7 +8,7 @@ from .merge_sort import merge_sort
 from PySide2 import QtWidgets
 import os
 
-def citanje_meta_podataka(putanja): 
+def citanje_meta_podataka(putanja, bez_putanje=False): 
     neka_lista = []
     with open(putanja, 'r', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter = "\n")
@@ -19,7 +19,7 @@ def citanje_meta_podataka(putanja):
             dve_tacke = row[0].find(":")+1
             row[0] = row[0][dve_tacke:len(row[0])]
 
-            if counter == 4:
+            if counter == 4 and not bez_putanje:
                 del1 = row[0].find("\\")
                 del2 = row[0].find(".") + 1
                 row[0] = row[0][del1:del2]
@@ -30,26 +30,46 @@ def citanje_meta_podataka(putanja):
             
     return neka_lista
 
-def kreiraj_model(lista):
-    model = Model(lista)
-    prva_linija = True
-    with open(lista[4], 'r', newline='\n') as f:
-        while True:
-            podaci = f.readline().strip()
-            if prva_linija:
-                prva_linija = False
-                continue
+def kreiraj_model(meta_podaci, tab=None):
+    if meta_podaci[0] != "model_projekat":
+        model = Model(meta_podaci[5].split(","), meta_podaci[10].split(","))
+        prva_linija = True
+        with open(meta_podaci[4], 'r', newline='\n') as f:
+            while True:
+                podaci = f.readline().strip()
+                if prva_linija:
+                    prva_linija = False
+                    continue
 
-            if podaci == "":
-                break
+                if podaci == "":
+                    break
+                
+                lista_podataka = podaci.split(",")
+                model.lista_prikaz.append(GenerickaKlasa(meta_podaci[5].split(","), lista_podataka))
+    else:
+        parent = tab.parent().parent().parent()
+
+        query = "SELECT COLUMN_NAME FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='model_projekat' AND `TABLE_NAME`='"+ tab.naziv +"';"
+        
+        parent.csor.execute(query)
+        nazivi_kolona = []
+        for result in parent.csor.fetchall():
+            nazivi_kolona.append(result[0])
             
-            lista_podataka = podaci.split(",")
-            model.lista_prikaz.append(GenerickaKlasa(lista[5].split(","), lista_podataka))
+        model = Model(nazivi_kolona)
+        query = "SELECT * FROM " + tab.naziv
+        parent.csor.execute(query)
+
+        for result in parent.csor.fetchall():
+            lista_podataka = []
+            for i in result:
+                lista_podataka.append(str(i))
+            model.lista_prikaz.append(GenerickaKlasa(nazivi_kolona, lista_podataka))
 
     return model
 
 def pretraga(lista_kljuceva, lista_kriterijuma, lista_vece_manje, meta_podaci):
-    model = Model(meta_podaci)
+    model = Model(meta_podaci[5], meta_podaci[10])
     with open(meta_podaci[4], 'r', newline='\n') as f:
         prva_linija = True
         while True:

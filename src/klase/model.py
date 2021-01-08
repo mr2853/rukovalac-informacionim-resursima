@@ -8,11 +8,15 @@ from klase.merge_sort import merge_sort
 
 
 class Model(QtCore.QAbstractTableModel, QtCore.QObject): #genericki model koji sadrzi sve objekte koje kreiramo
-    def __init__(self, lista, parent=None):
+    def __init__(self, lista1, lista2=[], parent=None):
         super().__init__(parent)
         self.lista_prikaz = []
-        self.nazivi_atributa = lista[5].split(",")
-        self.nazivi_kolona = lista[10].split(",")
+        self.nazivi_atributa = lista1
+        if len(lista2) != 0:
+            self.nazivi_kolona = lista2
+        else:
+            self.nazivi_kolona = lista1
+
         self.broj_kolona = len(self.nazivi_kolona)
         
     # pomocna metoda
@@ -24,6 +28,7 @@ class Model(QtCore.QAbstractTableModel, QtCore.QObject): #genericki model koji s
 
     def columnCount(self, index):
         return self.broj_kolona
+        
     #  #Each item in the model has a set of data elements associated with it, each with its own role. The roles are used by the view to indicate to the model which type of data it needs. Custom models should return data in these types. DisplayRole The key data to be rendered in the form of text.
     def data(self, index, role=QtCore.Qt.DisplayRole): #dobavljanje elemenata
         # TODO: dodati obradu uloga (role)
