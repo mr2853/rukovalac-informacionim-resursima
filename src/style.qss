@@ -13,14 +13,16 @@ QWidget {
  }
 
  QDialog {
-     background-color: aliceblue;
+     background-color: #f8efd4;
+     
      
  }
  
  QLabel {
-    background-color: aliceblue;
+    background-color: #f8efd4;
     color: black;
     font-weight: bold;
+    font-size: 14px;
  }
 
 
@@ -28,13 +30,17 @@ QWidget {
 
 
  QPushButton {
-    background-color:#51adcf;
+    background-color:#008891;
     color: white;
     font-weight: bold;
     font-size: 16px;
     border-radius: 10px;
     border-style: none;
-    height: 25px;
+    height: 40px;
+   
+    margin-left: 140px;
+    margin-right: 140px;
+    
  }
 
  
@@ -92,7 +98,7 @@ QPushButton:hover {
   QTableView {
      color: #618b38;
      font-weight: 500;
-     background-color: aliceblue;
+     background-color:#f8efd4;
      border-radius: 15px;
      border : 2px solid black;
      gridline-color: 3px solid black;

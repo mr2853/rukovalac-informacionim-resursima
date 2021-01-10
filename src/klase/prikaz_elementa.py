@@ -47,7 +47,7 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
         self.lista_kriterijuma = [] # lista kriterijuma, isto kao lista gore sto
         # cuva nazive atributa, ova lista cuva vrednosti tih atributa
         self.lista_vece_manje = []
-
+        m=0;
         for i in range(len(self.lista_atributa)):
             naziv = self.lista_atributa[i][0].upper()
 
@@ -58,7 +58,7 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                     naziv += self.lista_atributa[i][s]
 
             ime = QtWidgets.QLabel(naziv + " :")
-            self.layout.addWidget(ime)
+            self.layout.addWidget(ime,m,0)
             self.__setattr__(self.lista_atributa[i], QtWidgets.QLineEdit())
 
             if self.tip == 2:
@@ -75,16 +75,20 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
 
             if element == None and not pretraga:
                 self.__getattribute__(self.lista_atributa[i]).setPlaceholderText("Do " + self.lista_duzine_atributa[i] + " karaktera")
+                self.__getattribute__(self.lista_atributa[i]).setMaxLength(int(self.lista_duzine_atributa[i]))
             elif element != None:
                 self.element = element
                 self.__getattribute__(self.lista_atributa[i]).setText(element.__getattribute__(self.lista_atributa[i]))
-
-            self.layout.addWidget(self.__getattribute__(self.lista_atributa[i]))
-            if self.tip == 2:
-                self.layout.addWidget(self.__getattribute__(self.lista_atributa[i]+"_vece_manje"))
+                self.__getattribute__(self.lista_atributa[i]).setMaxLength(int(self.lista_duzine_atributa[i]))
             
-        self.layout.addWidget(self.dugme)
-        self.layout.addWidget(self.zatvori)
+            self.__getattribute__(self.lista_atributa[i]).setFixedHeight(27)
+            self.layout.addWidget(self.__getattribute__(self.lista_atributa[i]),m,1)
+            
+            if self.tip == 2:
+                self.layout.addWidget(self.__getattribute__(self.lista_atributa[i]+"_vece_manje"),m,2)
+            m+=1
+        self.layout.addWidget(self.dugme,m+1,0,1,3)
+        self.layout.addWidget(self.zatvori,m+2,0,3,3)
         self.setLayout(self.layout)
         self.dugme.clicked.connect(self.dugme_kliknuto)
         self.zatvori.clicked.connect(self.zatvori_prikaz)
@@ -97,7 +101,7 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
         else:
             self.element = GenerickaKlasa([],[])
         
-        
+        self.setFixedWidth(500)
         self.show()
     
     def sacuvaj_podatke(self):
