@@ -44,8 +44,6 @@ class PocetnaStrana(QWidget):
         self.main_window.setStatusBar(status_bar)
         
         self.central_widget = QtWidgets.QTabWidget(self.main_window) 
-        # tab = Tab(self.central_widget)
-        # self.central_widget.addTab(tab, "Naslov")
         self.central_widget.setTabsClosable(True) 
         self.central_widget.tabCloseRequested.connect(self.delete_tab)
         self.main_window.setCentralWidget(self.central_widget)
@@ -344,19 +342,28 @@ class PocetnaStrana(QWidget):
         del1 = lista_roditelja[index].find("(") + 1
         del2 = lista_roditelja[index].find(")")
         lista_kljuceva.append(lista_roditelja[index][del1:del2].split("#"))
-
-        tab = Tab(nova_putanja, self.central_widget)
-        # self.__getattribute__(ime).clicked.connect(self.element_selected)
-        tab.read()
         
-        if self.is_baza:
+        if self.central_widget.currentWidget().is_baza:
             tab = Tab(parent=self.central_widget)
-            tab.read(nova_putanja, ime_roditelja)
+            tab.pocetna_strana = self
+            tab.naziv = ime_roditelja
+            indeks = 0
+            for i in range(len(self.imena_tabela)):
+                if self.imena_tabela[i] == ime_roditelja:
+                    indeks = i
+                    break
+            for i in range(len(self.lista_baza)):
+                if self.lista_baza[i] == self.central_widget.currentWidget().indeks:
+                    self.lista_baza.pop(i)
+                    break
+            tab.indeks = indeks
+            tab.read(nova_putanja)
         else:
             tab = Tab(nova_putanja, self.central_widget)
+            tab.pocetna_strana = self
             tab.read()
 
-        nova_lista = []
+        indeks_roditelja = -1
         for j in range(len(tab.table.model().lista_prikaz)):
             pronadjen = True
             for m in range(len(lista_kljuceva[len(lista_kljuceva)-1])):
@@ -370,9 +377,10 @@ class PocetnaStrana(QWidget):
                 else:
                     print("pocetna_strana.py, 124 linija, eror u len(klucevi):", len(kljucevi), "// ", kljucevi)
             if pronadjen:
-                nova_lista.append(tab.table.model().lista_prikaz[j])
+                indeks_roditelja = j
+                break
         
-        if len(nova_lista) == 0:
+        if indeks_roditelja == -1:
             poruka = QMessageBox()
             icon = QtGui.QIcon("src/ikonice/logo.jpg")
             poruka.setWindowIcon(icon)
@@ -381,7 +389,9 @@ class PocetnaStrana(QWidget):
             poruka.exec_()
             return
 
-        tab.table.model().lista_prikaz = nova_lista
+        tab.table.selectRow(indeks_roditelja)
+        top = tab.table.currentIndex()
+        tab.element_selected(top)
 
         # tab.table.setModel(tab.table.model())
 
@@ -453,6 +463,7 @@ class PocetnaStrana(QWidget):
         child = self.central_widget.currentWidget().tab_widget.currentWidget()
         if self.central_widget.currentWidget().is_baza:
             tab = Tab(parent=self.central_widget)
+            tab.pocetna_strana = self
             tab.naziv = child.naziv
             indeks = 0
             for i in range(len(self.imena_tabela)):
@@ -465,10 +476,10 @@ class PocetnaStrana(QWidget):
                     break
             tab.indeks = indeks
             # self.lista_baza.append(indeks)
-
-            tab.read(child.putanja, child.naziv)
+            tab.read(child.putanja)
         else:
             tab = Tab(child.putanja, self.central_widget)
+            tab.pocetna_strana = self
             tab.read()
         tab.table.model().lista_prikaz = child.model.lista_prikaz
         
@@ -584,8 +595,8 @@ class PocetnaStrana(QWidget):
             for i in range(len(self.lista_baza)):
                 if self.lista_baza[i] == tab.indeks:
                     self.lista_baza.pop(i)
-                    self.central_widget.removeTab(index)
                     break
+            self.central_widget.removeTab(index)
             return
         if hasattr(tab, "sortirano") and len(tab.table.model().lista_prikaz) > 1:
             if tab.meta_podaci[1] == "serijska": 
@@ -688,6 +699,8 @@ class PocetnaStrana(QWidget):
                 return
 
             tab = Tab(putanja, parent=self.central_widget)
+            tab.pocetna_strana = self
+
             if putanja != "":
                 tab.read()
             else:
@@ -734,6 +747,7 @@ class PocetnaStrana(QWidget):
             self.lista_baza.append(indeks)
 
         tab = Tab(parent=self.central_widget)
+        tab.pocetna_strana = self
         tab.indeks = indeks
         tab.naziv = self.imena_tabela[indeks]
         
@@ -748,7 +762,7 @@ class PocetnaStrana(QWidget):
         
         nova_putanja += "_meta_podaci_sql.csv"
 
-        tab.read(nova_putanja, tab.naziv)
+        tab.read(nova_putanja)
         tab.btn_down.clicked.connect(self.otvori_tabelu_dete)
         tab.btn_up.clicked.connect(self.otvori_tabelu_roditelj)
         self.central_widget.addTab(tab, tab.naziv)

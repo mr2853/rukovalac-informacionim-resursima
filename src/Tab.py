@@ -65,21 +65,24 @@ class Tab(QtWidgets.QWidget):
     def delete_sub_tab(self, index): 
         self.tab_widget.removeTab(index)
     
-    def read(self, podaci="", naziv=""):
+    def read(self, podaci=""):
         if self.putanja != "":
             with open(self.putanja, newline='\n') as f:
                 podaci = f.readline().strip()
                 f.close()
         self.putanja_meta = podaci
         self.meta_podaci = citanje_meta_podataka(podaci)
-        self.pocetna_strana = self.parent().parent().parent()
-        if not self.is_baza:
+        if self.is_baza:
+            model = kreiraj_model(self.meta_podaci, self, self.naziv)
+        else:
             self.meta_podaci[4] = self.putanja
             model = kreiraj_model(self.meta_podaci)
-        else:
-            model = kreiraj_model(self.meta_podaci, self, self.naziv)
 
         self.table.setModel(model)
+        if len(model.lista_prikaz) != 0:
+            self.table.selectRow(0)
+            top = self.table.currentIndex()
+            self.element_selected(top)
         self.table.setSortingEnabled(True)
         self.table.setSelectionMode(QAbstractItemView.SingleSelection)
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
@@ -197,7 +200,7 @@ class Tab(QtWidgets.QWidget):
                             print("tab.py, 135 linija, eror u len(klucevi):", len(kljucevi), "// ", kljucevi)
                     if pronadjen:
                         nova_lista.append(self.__getattribute__(ime).model.lista_prikaz[j])
-
+                        
                 self.__getattribute__(ime).model.lista_prikaz = nova_lista
 
                 self.__getattribute__(ime).setModel(self.__getattribute__(ime).model)

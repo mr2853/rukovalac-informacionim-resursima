@@ -7,6 +7,6 @@ nazivi_atributa:VU_OZNAKA,STU_STRUKA,STU_BROJ_INDEKSA,STU_PREZIME,STU_IME_RODITE
 tipovi_atributa:str,str,str,str,str,str,str,str,str,str,str
 duzina_atributa:2,2,6,20,20,20,1,120,20,13,10
 obaveznost_atributa:True,True,True,True,False,True,True,False,False,False,False
-veze:parent_visokoskolska_ustanova(VU_OZNAKA),child_tok_studija(VU_OZNAKA#STU_STRUKA#STU_BROJ_INDEKSA)
+veze:parent_visokoskolska_ustanova(VU_OZNAKA),child_tok_studija(VU_OZNAKA=STU_VU_OZNAKA#STU_STRUKA#STU_BROJ_INDEKSA)
 nazivi_kolona:Ustanova,Struka,Broj indeksa,PrezSTU_IME,Ime roditelja,Ime,Pol,Adresa stanovanja,Telefon,Jmbg,Datum rodjenja
 lista_kljuceva:VU_OZNAKA,STU_STRUKA,STU_BROJ_INDEKSA

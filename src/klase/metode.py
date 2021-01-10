@@ -48,15 +48,8 @@ def kreiraj_model(meta_podaci, tab=None, naziv=""):
                 model.lista_prikaz.append(GenerickaKlasa(meta_podaci[5].split(","), lista_podataka))
     else:
         parent = tab.pocetna_strana
-
-        query = "SELECT COLUMN_NAME FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='model_projekat' AND `TABLE_NAME`='"+ naziv +"';"
-        
-        parent.csor.execute(query)
-        nazivi_kolona = []
-        for result in parent.csor.fetchall():
-            nazivi_kolona.append(result[0])
             
-        model = Model(nazivi_kolona)
+        model = Model(meta_podaci[5].split(","))
         query = "SELECT * FROM " + naziv
         parent.csor.execute(query)
 
@@ -64,7 +57,8 @@ def kreiraj_model(meta_podaci, tab=None, naziv=""):
             lista_podataka = []
             for i in result:
                 lista_podataka.append(str(i))
-            model.lista_prikaz.append(GenerickaKlasa(nazivi_kolona, lista_podataka))
+                
+            model.lista_prikaz.append(GenerickaKlasa(meta_podaci[5].split(","), lista_podataka))
 
     return model
 
