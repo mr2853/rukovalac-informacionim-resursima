@@ -634,9 +634,11 @@ class PocetnaStrana(QWidget):
                 
                 model = QStandardItemModel(parent=self.dock.tree.sub_layout)
                 item = QStandardItem("zatvori")
+                item.setEditable(False)
                 model.appendRow(item)
                 for text in self.imena_tabela:
                     item = QStandardItem(text)
+                    item.setEditable(False)
                     model.appendRow(item)
                 
                 self.treeView.setModel(model)
