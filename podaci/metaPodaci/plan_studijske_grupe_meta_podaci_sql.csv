@@ -1,0 +1,12 @@
+objekat:plan_studijske_grupe
+tip_datoteke:sql
+relativna_putanja:podaci\metaPodaci
+sufiks:csv
+podaci:relativna_putanja\model_projekat.sufiks
+nazivi_atributa:STU_VU_OZNAKA,SP_OZNAKA,SPB_BLOK,SPB_POZICIJA,VU_OZNAKA,NP_OZNAKA
+tipovi_atributa:str,str,int,int,str,str
+duzina_atributa:2,3,2,2,2,6
+obaveznost_atributa:True,True,True,True,True,True
+veze:parent_nastavni_predmet(VU_OZNAKA#NP_OZNAKA),parent_studijski_programi(STU_VU_OZNAKA#SP_OZNAKA)
+nazivi_kolona:Program ustanove,Oznaka programa,Blok,Pozicija,Ustanova predmet,Oznaka predmeta
+lista_kljuceva:STU_VU_OZNAKA,SP_OZNAKA,SPB_BLOK,SPB_POZICIJA

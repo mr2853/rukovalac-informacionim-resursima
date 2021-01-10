@@ -30,8 +30,8 @@ def citanje_meta_podataka(putanja, bez_putanje=False):
             
     return neka_lista
 
-def kreiraj_model(meta_podaci, tab=None):
-    if meta_podaci[0] != "model_projekat":
+def kreiraj_model(meta_podaci, tab=None, naziv=""):
+    if meta_podaci[1] != "sql":
         model = Model(meta_podaci[5].split(","), meta_podaci[10].split(","))
         prva_linija = True
         with open(meta_podaci[4], 'r', newline='\n') as f:
@@ -47,9 +47,9 @@ def kreiraj_model(meta_podaci, tab=None):
                 lista_podataka = podaci.split(",")
                 model.lista_prikaz.append(GenerickaKlasa(meta_podaci[5].split(","), lista_podataka))
     else:
-        parent = tab.parent().parent().parent()
+        parent = tab.pocetna_strana
 
-        query = "SELECT COLUMN_NAME FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='model_projekat' AND `TABLE_NAME`='"+ tab.naziv +"';"
+        query = "SELECT COLUMN_NAME FROM `INFORMATION_SCHEMA`.`COLUMNS` WHERE `TABLE_SCHEMA`='model_projekat' AND `TABLE_NAME`='"+ naziv +"';"
         
         parent.csor.execute(query)
         nazivi_kolona = []
@@ -57,7 +57,7 @@ def kreiraj_model(meta_podaci, tab=None):
             nazivi_kolona.append(result[0])
             
         model = Model(nazivi_kolona)
-        query = "SELECT * FROM " + tab.naziv
+        query = "SELECT * FROM " + naziv
         parent.csor.execute(query)
 
         for result in parent.csor.fetchall():

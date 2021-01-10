@@ -1,14 +1,11 @@
 
-from io import FileIO
-import sys
 from PySide2 import QtWidgets, QtGui
 from PySide2 import QtCore
-from PySide2.QtCore import QCoreApplication, QEvent, QItemSelectionModel, QPoint
-from PySide2.QtGui import QKeyEvent, QStandardItem, QStandardItemModel, Qt
+from PySide2.QtGui import QStandardItem, QStandardItemModel, Qt
 from pynput import keyboard
 from klase.genericka_klasa import GenerickaKlasa
 from left_dock import LeftDock
-from PySide2.QtWidgets import QDockWidget, QInputDialog, QMainWindow, QMessageBox, QPushButton, QTreeView, QWidget
+from PySide2.QtWidgets import QMessageBox, QTreeView, QWidget
 from PySide2.QtWidgets import QAbstractItemView
 from tab import Tab
 from menu_bar import MenuBar
@@ -16,14 +13,10 @@ from tool_bar import ToolBar
 from klase.metode import *
 from klase.prikaz_elementa import PrikazElementa
 from PySide2.QtCore import QModelIndex
-from pynput.keyboard import Key, Listener
+from pynput.keyboard import Key
 import csv
 import os
-import json
-from klase.file_system import FileSystem
 import mysql.connector
-
-from tree import Tree
 
 class PocetnaStrana(QWidget):
     def __init__(self, parent=None):
@@ -339,8 +332,13 @@ class PocetnaStrana(QWidget):
         nova_putanja = meta_podaci[2] + "\\" + nova_putanja
         if meta_podaci[1] == "serijska":
             nova_putanja += "_ser."
-        else:
+            
+        elif meta_podaci[1] == "sekvencijalna":
             nova_putanja += "_sek."
+            
+        elif meta_podaci[1] == "sql":
+            nova_putanja += "_meta_podaci_sql."
+
         nova_putanja += meta_podaci[3]
         
         del1 = lista_roditelja[index].find("(") + 1
@@ -351,6 +349,13 @@ class PocetnaStrana(QWidget):
         # self.__getattribute__(ime).clicked.connect(self.element_selected)
         tab.read()
         
+        if self.is_baza:
+            tab = Tab(parent=self.central_widget)
+            tab.read(nova_putanja, ime_roditelja)
+        else:
+            tab = Tab(nova_putanja, self.central_widget)
+            tab.read()
+
         nova_lista = []
         for j in range(len(tab.table.model().lista_prikaz)):
             pronadjen = True
@@ -399,8 +404,13 @@ class PocetnaStrana(QWidget):
         meta = self.central_widget.currentWidget().meta_podaci[2] + "\\" + meta
         if self.central_widget.currentWidget().meta_podaci[1] == "serijska":
             meta += "_ser."
-        else:
+            
+        elif self.central_widget.currentWidget().meta_podaci[1] == "sekvencijalna":
             meta += "_sek."
+            
+        elif self.central_widget.currentWidget().meta_podaci[1] == "sql":
+            meta += "_meta_podaci_sql."
+
         meta += self.central_widget.currentWidget().meta_podaci[3]
         
         self.lista_putanja.append(meta)
@@ -441,8 +451,25 @@ class PocetnaStrana(QWidget):
             return
 
         child = self.central_widget.currentWidget().tab_widget.currentWidget()
-        tab = Tab(child.putanja, self.central_widget)
-        tab.read()
+        if self.central_widget.currentWidget().is_baza:
+            tab = Tab(parent=self.central_widget)
+            tab.naziv = child.naziv
+            indeks = 0
+            for i in range(len(self.imena_tabela)):
+                if self.imena_tabela[i] == child.naziv:
+                    indeks = i
+                    break
+            for i in range(len(self.lista_baza)):
+                if self.lista_baza[i] == self.central_widget.currentWidget().indeks:
+                    self.lista_baza.pop(i)
+                    break
+            tab.indeks = indeks
+            # self.lista_baza.append(indeks)
+
+            tab.read(child.putanja, child.naziv)
+        else:
+            tab = Tab(child.putanja, self.central_widget)
+            tab.read()
         tab.table.model().lista_prikaz = child.model.lista_prikaz
         
         tab.btn_down.clicked.connect(self.otvori_tabelu_dete)
@@ -462,8 +489,13 @@ class PocetnaStrana(QWidget):
         meta = child.meta_podaci[2] + "\\" + meta
         if child.meta_podaci[1] == "serijska":
             meta += "_ser."
-        else:
+            
+        elif child.meta_podaci[1] == "sekvencijalna":
             meta += "_sek."
+            
+        elif child.meta_podaci[1] == "sql":
+            meta += "_meta_podaci_sql."
+
         meta += child.meta_podaci[3]
 
         self.lista_putanja.append(meta)
@@ -662,7 +694,8 @@ class PocetnaStrana(QWidget):
                 tab.read(putanja)
             tab.btn_down.clicked.connect(self.otvori_tabelu_dete)
             tab.btn_up.clicked.connect(self.otvori_tabelu_roditelj)
-            self.central_widget.addTab(tab, tab.meta_podaci[0])
+            tab.naziv = tab.meta_podaci[0]
+            self.central_widget.addTab(tab, tab.naziv)
             self.central_widget.setCurrentIndex(self.central_widget.currentIndex()+1)
     
     def dugme_baza(self, model_indeks):
@@ -703,7 +736,19 @@ class PocetnaStrana(QWidget):
         tab = Tab(parent=self.central_widget)
         tab.indeks = indeks
         tab.naziv = self.imena_tabela[indeks]
-        tab.read("podaci\metaPodaci\model_projekat_meta_podaci.csv", self.imena_tabela[indeks])
+        
+        nova_putanja = "podaci\\metaPodaci\\"
+        nova_putanja += self.imena_tabela[indeks][0].lower()
+        
+        for s in range(1, len(self.imena_tabela[indeks])):
+            if self.imena_tabela[indeks][s].isupper():
+                nova_putanja += "_" + self.imena_tabela[indeks][s].lower()
+            else:
+                nova_putanja += self.imena_tabela[indeks][s]
+        
+        nova_putanja += "_meta_podaci_sql.csv"
+
+        tab.read(nova_putanja, tab.naziv)
         tab.btn_down.clicked.connect(self.otvori_tabelu_dete)
         tab.btn_up.clicked.connect(self.otvori_tabelu_roditelj)
         self.central_widget.addTab(tab, tab.naziv)

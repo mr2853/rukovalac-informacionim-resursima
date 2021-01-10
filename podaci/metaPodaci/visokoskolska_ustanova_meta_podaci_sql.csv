@@ -1,0 +1,12 @@
+objekat:visokoskolska_ustanova
+tip_datoteke:sql
+relativna_putanja:podaci\metaPodaci
+sufiks:csv
+podaci:relativna_putanja\model_projekat.sufiks
+VU_NAZIV_atributa:VU_OZNAKA,VU_NAZIV,VU_ADRESA
+tipovi_atributa:str,str,str
+duzina_atributa:2,80,80
+obaveznost_atributa:True,True,True
+veze:child_studijski_programi(VU_OZNAKA),child_nastavni_predmet(VU_OZNAKA),child_studenti(VU_OZNAKA)
+VU_NAZIVi_kolona:Oznaka,Naziv,Adresa
+lista_kljuceva:VU_OZNAKA

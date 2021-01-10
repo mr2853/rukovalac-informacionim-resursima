@@ -1,0 +1,12 @@
+objekat:studenti
+tip_datoteke:serijska
+relativna_putanja:podaci\podaci\serijske
+sufiks:csv
+podaci:relativna_putanja\studenti_ser.sufiks
+nazivi_atributa:ustanova,struka,broj_indeksa,prezime,ime_roditelja,ime,pol,adresa_stanovanja,telefon,jmbg,datum_rodjenja
+tipovi_atributa:str,str,str,str,str,str,str,str,str,str,str
+duzina_atributa:2,2,6,20,20,20,1,120,20,13,10
+obaveznost_atributa:True,True,True,True,False,True,True,False,False,False,False
+veze:parent_visokoskolska_ustanova(ustanova=oznaka),child_tok_studija(ustanova#struka#broj_indeksa)
+nazivi_kolona:Ustanova,Struka,Broj indeksa,Prezime,Ime roditelja,Ime,Pol,Adresa stanovanja,Telefon,Jmbg,Datum rodjenja
+lista_kljuceva:ustanova,struka,broj_indeksa

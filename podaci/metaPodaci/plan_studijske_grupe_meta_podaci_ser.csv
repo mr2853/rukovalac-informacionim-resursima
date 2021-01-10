@@ -1,4 +1,4 @@
-objekat:PlanStudijskeGrupe
+objekat:plan_studijske_grupe
 tip_datoteke:serijska
 relativna_putanja:podaci\podaci\serijske
 sufiks:csv
@@ -7,6 +7,6 @@ nazivi_atributa:program_ustanove,oznaka_programa,blok,pozicija,ustanova_predmet,
 tipovi_atributa:str,str,int,int,str,str
 duzina_atributa:2,3,2,2,2,6
 obaveznost_atributa:True,True,True,True,True,True
-veze:parent_NastavniPredmet(ustanova_predmet=ustanova#oznaka_predmeta=oznaka),parent_StudijskiProgram(program_ustanove=ustanova#oznaka_programa)
+veze:parent_nastavni_predmet(ustanova_predmet=ustanova#oznaka_predmeta=oznaka),parent_studijski_programi(program_ustanove=ustanova#oznaka_programa)
 nazivi_kolona:Program ustanove,Oznaka programa,Blok,Pozicija,Ustanova predmet,Oznaka predmeta
 lista_kljuceva:program_ustanove,oznaka_programa,blok,pozicija

@@ -72,12 +72,13 @@ class Tab(QtWidgets.QWidget):
                 f.close()
         self.putanja_meta = podaci
         self.meta_podaci = citanje_meta_podataka(podaci)
+        self.pocetna_strana = self.parent().parent().parent()
         if not self.is_baza:
             self.meta_podaci[4] = self.putanja
-        if self.is_baza:
-            model = kreiraj_model(self.meta_podaci, self)
-        else:
             model = kreiraj_model(self.meta_podaci)
+        else:
+            model = kreiraj_model(self.meta_podaci, self, self.naziv)
+
         self.table.setModel(model)
         self.table.setSortingEnabled(True)
         self.table.setSelectionMode(QAbstractItemView.SingleSelection)
@@ -147,12 +148,14 @@ class Tab(QtWidgets.QWidget):
                     else:
                         nova_putanja += ime_deteta[s]
 
-                nova_putanja = nova_putanja[1:len(nova_putanja)]
+                # nova_putanja = nova_putanja[1:len(nova_putanja)]
                 nova_putanja = self.meta_podaci[2] + "\\" + nova_putanja
                 if self.meta_podaci[1] == "serijska":
                     nova_putanja += "_ser."
-                else:
+                elif self.meta_podaci[1] == "sekvencijalna":
                     nova_putanja += "_sek."
+                elif self.meta_podaci[1] == "sql":
+                    nova_putanja += "_meta_podaci_sql."
                 nova_putanja += self.meta_podaci[3]
                 
                 del1 = veze[counter].find("(") + 1
@@ -168,12 +171,15 @@ class Tab(QtWidgets.QWidget):
                 self.__getattribute__(ime).setSelectionBehavior(QAbstractItemView.SelectRows)
                 # self.__getattribute__(ime).clicked.connect(self.element_selected)
                 
-                with open(nova_putanja, newline='\n') as f:
-                    podaci = f.readline().strip()
-                    f.close()
+                if nova_putanja.find("sql") == -1:
+                    with open(nova_putanja, newline='\n') as f:
+                        podaci = f.readline().strip()
+                        f.close()
+                else:
+                    podaci = nova_putanja
 
                 lista = citanje_meta_podataka(podaci)
-                self.__getattribute__(ime).model = kreiraj_model(lista)
+                self.__getattribute__(ime).model = kreiraj_model(lista, self, lista[0])
                 self.__getattribute__(ime).meta_podaci = lista
                 
                 nova_lista = []
@@ -195,6 +201,7 @@ class Tab(QtWidgets.QWidget):
                 self.__getattribute__(ime).model.lista_prikaz = nova_lista
 
                 self.__getattribute__(ime).setModel(self.__getattribute__(ime).model)
+                self.__getattribute__(ime).__setattr__("naziv", imena_dece[-1])
             
                 self.tab_widget.addTab(self.__getattribute__(ime), ime_deteta)
                 counter -= 1

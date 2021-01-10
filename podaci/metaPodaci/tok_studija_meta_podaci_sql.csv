@@ -1,0 +1,12 @@
+objekat:tok_studija
+tip_datoteke:sql
+relativna_putanja:podaci\metaPodaci
+sufiks:csv
+podaci:relativna_putanja\model_projekat.sufiks
+nazivi_atributa:STU_VU_OZNAKA,SP_OZNAKA,VU_OZNAKA,STU_STRUKA,STU_BROJ_INDEKSA,TOK_SKOLSKA_GODINA,TOK_GODINA_STUDIJA,TOK_BLOK,TOK_REDNI_BROJ_UPISA,TOK_DATUM_UPISA,TOK_DATUM_OVERE,TOK_ESPB_POCETNI,TOK_ESPB_KRAJNJI
+tipovi_atributa:str,str,str,str,str,int,int,int,int,str,str,int,int
+duzina_atributa:2,3,2,2,6,4,1,2,2,10,10,3,3
+obaveznost_atributa:True,True,True,True,True,True,True,True,True,True,False,True,True
+veze:parent_studenti(VU_OZNAKA#STU_STRUKA#STU_BROJ_INDEKSA),parent_studijski_programi(STU_VU_OZNAKA#SP_OZNAKA)
+nazivi_kolona:Ustanova,Oznaka programa,Student iz ustanove,Struka,Broj indeksa,Skolska godina,Godina studija,Redni broj upisa,Datum upisa,Datum overe,Espb pocetni,Espb krajnji
+lista_kljuceva:STU_VU_OZNAKA,SP_OZNAKA,VU_OZNAKA,STU_STRUKA,STU_BROJ_INDEKSA,TOK_SKOLSKA_GODINA,TOK_GODINA_STUDIJA,TOK_BLOK,TOK_REDNI_BROJ_UPISA

@@ -1,0 +1,12 @@
+objekat:nivo_studija
+tip_datoteke:sql
+relativna_putanja:podaci\metaPodaci
+sufiks:csv
+podaci:relativna_putanja\model_projekat.sufiks
+nazivi_atributa:NIV_OZNAKA,NIV_NAZIV
+tipovi_atributa:float,str
+duzina_atributa:2,80
+obaveznost_atributa:True,True
+veze:child_studijski_programi(NIV_OZNAKA=NIV_OZNAKA)
+nazivi_kolona:Oznaka,Naziv
+lista_kljuceva:NIV_OZNAKA

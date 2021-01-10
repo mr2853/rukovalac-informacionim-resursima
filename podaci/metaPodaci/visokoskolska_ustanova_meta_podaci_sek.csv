@@ -1,4 +1,4 @@
-objekat:VisokoskolskaUstanova
+objekat:visokoskolska_ustanova
 tip_datoteke:sekvencijalna
 relativna_putanja:podaci\podaci\sekvencijalne
 sufiks:csv
@@ -7,6 +7,6 @@ naziv_atributa:oznaka,naziv,adresa
 tipovi_atributa:str,str,str
 duzina_atributa:2,80,80
 obaveznost_atributa:True,True,True
-veze:child_StudijskiProgram(oznaka=ustanova),child_NastavniPredmet(oznaka=ustanova),child_Student(oznaka=ustanova)
+veze:child_studijski_programi(oznaka=ustanova),child_nastavni_predmet(oznaka=ustanova),child_studenti(oznaka=ustanova)
 nazivi_kolona:Oznaka,Naziv,Adresa
 lista_kljuceva:oznaka

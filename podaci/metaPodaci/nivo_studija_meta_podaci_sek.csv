@@ -1,4 +1,4 @@
-objekat:NivoStudija
+objekat:nivo_studija
 tip_datoteke:sekvencijalna
 relativna_putanja:podaci\podaci\sekvencijalne
 sufiks:csv
@@ -7,6 +7,6 @@ nazivi_atributa:oznaka,naziv
 tipovi_atributa:float,str
 duzina_atributa:2,80
 obaveznost_atributa:True,True
-veze:child_StudijskiProgram(oznaka=nivo)
+veze:child_studijski_programi(oznaka=nivo)
 nazivi_kolona:Oznaka,Naziv
 lista_kljuceva:oznaka

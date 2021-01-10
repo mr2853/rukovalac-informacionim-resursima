@@ -1,0 +1,12 @@
+objekat:nastavni_predmet
+tip_datoteke:sql
+relativna_putanja:podaci\metaPodaci
+sufiks:csv
+podaci:relativna_putanja\model_projekat.sufiks
+nazivi_atributa:VU_OZNAKA,NP_OZNAKA,NP_NAZIV,NP_ESPB
+tipovi_atributa:str,str,str,int
+duzina_atributa:2,6,120,2
+obaveznost_atributa:True,True,True,True
+veze:parent_visokoskolska_ustanova(VU_OZNAKA=NP_OZNAKA),child_plan_studijske_grupe(VU_OZNAKA=VU_OZNAKA#NP_OZNAKA=NP_OZNAKA)
+nazivi_kolona:Ustanova,Oznaka,Naziv,Espb
+lista_kljuceva:VU_OZNAKA,NP_OZNAKA

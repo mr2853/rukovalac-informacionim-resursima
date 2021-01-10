@@ -1,4 +1,4 @@
-objekat:TokStudija
+objekat:tok_studija
 tip_datoteke:serijska
 relativna_putanja:podaci\podaci\serijske
 sufiks:csv
@@ -7,6 +7,6 @@ nazivi_atributa:ustanova,oznaka_programa,student_iz_ustanove,struka,broj_indeksa
 tipovi_atributa:str,str,str,str,str,int,int,int,int,str,str,int,int
 duzina_atributa:2,3,2,2,6,4,1,2,2,10,10,3,3
 obaveznost_atributa:True,True,True,True,True,True,True,True,True,True,False,True,True
-veze:parent_Student(student_iz_ustanove=ustanova#struka#broj_indeksa),parent_StudijskiProgram(ustanova#oznaka_programa)
+veze:parent_studenti(student_iz_ustanove=ustanova#struka#broj_indeksa),parent_studijski_programi(ustanova#oznaka_programa)
 nazivi_kolona:Ustanova,Oznaka programa,Student iz ustanove,Struka,Broj indeksa,Skolska godina,Godina studija,Redni broj upisa,Datum upisa,Datum overe,Espb pocetni,Espb krajnji
 lista_kljuceva:ustanova,oznaka_programa,student_iz_ustanove,struka,broj_indeksa,skolska_godina,godina_studija,blok,redni_broj_upisa
