@@ -13,13 +13,13 @@ QWidget {
  }
 
  QDialog {
-     background-color: #f8efd4;
+     background-color: #51adcf;
      
      
  }
  
  QLabel {
-    background-color: #f8efd4;
+    background-color: #51adcf;
     color: black;
     font-weight: bold;
     font-size: 14px;
