@@ -8,5 +8,5 @@ tipovi_atributa:str,float,str,str
 duzina_atributa:2,2,3,120
 obaveznost_atributa:True,True,True,True
 veze:parent_visokoskolska_ustanova(VU_OZNAKA),parent_nivo_studija(NIV_OZNAKA),child_plan_studijske_grupe(VU_OZNAKA=STU_VU_OZNAKA#SP_OZNAKA),child_tok_studija(VU_OZNAKA=STU_VU_OZNAKA#SP_OZNAKA)
-nazivi_kolona:Nivo,Oznaka programa,Naziv programa
+nazivi_kolona:Ustanova,Nivo,Oznaka programa,Naziv programa
 lista_kljuceva:VU_OZNAKA,NIV_OZNAKA,SP_OZNAKA

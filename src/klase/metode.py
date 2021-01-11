@@ -32,7 +32,7 @@ def citanje_meta_podataka(putanja, bez_putanje=False):
 
 def kreiraj_model(meta_podaci, tab=None, naziv=""):
     if meta_podaci[1] != "sql":
-        model = Model(meta_podaci[5].split(","), meta_podaci[10].split(","))
+        model = Model(meta_podaci[5].split(","), meta_podaci[10].split(","), meta_podaci[11].split(","))
         prva_linija = True
         with open(meta_podaci[4], 'r', newline='\n') as f:
             while True:
@@ -49,7 +49,7 @@ def kreiraj_model(meta_podaci, tab=None, naziv=""):
     else:
         parent = tab.pocetna_strana
             
-        model = Model(meta_podaci[5].split(","), meta_podaci[10].split(","))
+        model = Model(meta_podaci[5].split(","), meta_podaci[10].split(","), meta_podaci[11].split(","))
         query = "SELECT * FROM " + naziv
         parent.csor.execute(query)
 
@@ -62,8 +62,8 @@ def kreiraj_model(meta_podaci, tab=None, naziv=""):
 
     return model
 
-def pretraga(lista_atr, lista_kriterijuma, lista_vece_manje, meta_podaci, tab=None):
-    model = Model(meta_podaci[5], meta_podaci[10])
+def pretraga(lista_atr, lista_kriterijuma, lista_vece_manje, meta_podaci, ponistavanje=False, tab=None):
+    model = Model(meta_podaci[5].split(","), meta_podaci[10].split(","), meta_podaci[11].split(","))
     if meta_podaci[1] != "sql":
         with open(meta_podaci[4], 'r', newline='\n') as f:
             prva_linija = True
@@ -77,6 +77,9 @@ def pretraga(lista_atr, lista_kriterijuma, lista_vece_manje, meta_podaci, tab=No
                 
                 lista_podataka = podaci.split(",")
                 lista_atributa = meta_podaci[5].split(",")
+                if ponistavanje:
+                    model.lista_prikaz.append(GenerickaKlasa(lista_atributa, lista_podataka))
+                    continue
                 for i in range(len(lista_podataka)):
                     proslo = False
                     for j in range(len(lista_atr)):
@@ -101,9 +104,19 @@ def pretraga(lista_atr, lista_kriterijuma, lista_vece_manje, meta_podaci, tab=No
     else:
         parent = tab.pocetna_strana
             
-        model = Model(meta_podaci[5].split(","), meta_podaci[10].split(","))
-        query = "SELECT * FROM " + tab.naziv + " WHERE "
+        model = Model(meta_podaci[5].split(","), meta_podaci[10].split(","), meta_podaci[11].split(","))
         lista_atributa = meta_podaci[5].split(",")
+        
+        if ponistavanje:
+            query = "SELECT * FROM " + tab.naziv
+            parent.csor.execute(query)
+            for result in parent.csor.fetchall():
+                lista_podataka = []
+                for i in result:
+                    lista_podataka.append(str(i))
+                model.lista_prikaz.append(GenerickaKlasa(lista_atributa, lista_podataka))
+            return model
+        query = "SELECT * FROM " + tab.naziv + " WHERE "
         for j in range(len(lista_atr)):
             query += tab.naziv + "." + lista_atr[j]
             if lista_vece_manje[j] == 0:

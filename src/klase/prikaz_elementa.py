@@ -287,7 +287,6 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                         if i < len(self.lista_kljuceva) - 1:
                             query += " AND "
                     try:
-                        print(query)
                         parent.csor.execute(query)
                     except mysql.connector.errors.IntegrityError as e:
                         poruka = QtWidgets.QMessageBox()

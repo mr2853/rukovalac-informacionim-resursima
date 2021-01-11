@@ -35,6 +35,7 @@ class PocetnaStrana(QWidget):
         self.tool_bar.dodaj.triggered.connect(self.dodavanje_u_datoteku)
         self.tool_bar.izmeni_tabelu.triggered.connect(self.izmena_u_datoteci)
         self.tool_bar.pretrazi.triggered.connect(self.otvori_pretragu)
+        self.tool_bar.ponisti_pretragu.triggered.connect(self.ponisti_pretragu)
         self.tool_bar.ukloni_iz_tabele.triggered.connect(self.ukloni_iz_tabele)
         self.tool_bar.spoji_datoteke.triggered.connect(self.spoji_datoteke)
         # self.tool_bar.podeli_datoteku.triggered.connect(self.podeli_datoteku)
@@ -59,6 +60,31 @@ class PocetnaStrana(QWidget):
         self.listener.start()
         self.main_window.show()
 
+    def ponisti_pretragu(self):
+        if self.central_widget.currentWidget() == None:
+            poruka = QMessageBox()
+            icon = QtGui.QIcon("src/ikonice/logo.jpg")
+            poruka.setWindowIcon(icon)
+            poruka.setWindowTitle("Upozorenje!")
+            poruka.setText("Trenutno nijedna datoteka nije otvorena!")
+            poruka.exec_()
+            return
+
+        model = self.central_widget.currentWidget().table.model()
+        model = pretraga(
+            [], [],
+            [], 
+            self.central_widget.currentWidget().meta_podaci,
+            True,
+            self.central_widget.currentWidget())
+
+        self.central_widget.currentWidget().table.setModel(model)
+        self.central_widget.currentWidget().table.selectRow(0)
+        self.central_widget.currentWidget().table.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
+        self.central_widget.currentWidget().table.resizeColumnsToContents()
+        for i in range(1, len(self.central_widget.currentWidget().meta_podaci[10].split(","))):
+            self.central_widget.currentWidget().table.horizontalHeader().setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeToContents)
+
     def podeli_datoteku(self): # kopirano od metode pretrage
         if len(self.multi_selekt) == 0:
             poruka = QMessageBox()
@@ -76,7 +102,8 @@ class PocetnaStrana(QWidget):
             model = pretraga(
                 prikaz.lista_atr, prikaz.lista_kriterijuma,
                 prikaz.lista_vece_manje, 
-                self.central_widget.currentWidget().meta_podaci)
+                self.central_widget.currentWidget().meta_podaci,
+                False)
 
             if len(model.lista_prikaz) == 0:
                 poruka = QMessageBox()
@@ -570,6 +597,7 @@ class PocetnaStrana(QWidget):
                 prikaz.lista_atr, prikaz.lista_kriterijuma,
                 prikaz.lista_vece_manje, 
                 self.central_widget.currentWidget().meta_podaci,
+                False,
                 self.central_widget.currentWidget())
 
             if len(model.lista_prikaz) == 0:

@@ -8,7 +8,7 @@ from klase.merge_sort import merge_sort
 
 
 class Model(QtCore.QAbstractTableModel, QtCore.QObject): #genericki model koji sadrzi sve objekte koje kreiramo
-    def __init__(self, lista1, lista2=[], parent=None):
+    def __init__(self, lista1, lista2=[], kljucevi=[], parent=None):
         super().__init__(parent)
         self.lista_prikaz = []
         self.nazivi_atributa = lista1
@@ -18,6 +18,10 @@ class Model(QtCore.QAbstractTableModel, QtCore.QObject): #genericki model koji s
             self.nazivi_kolona = lista1
 
         self.broj_kolona = len(self.nazivi_kolona)
+        for i in range(len(self.nazivi_atributa)):
+            for j in kljucevi:
+                if self.nazivi_atributa[i] == j:
+                    self.nazivi_kolona[i] = "#" + self.nazivi_kolona[i]
         
     # pomocna metoda
     def get_element(self, index):

@@ -15,17 +15,3 @@ Zadatke koje trebamo jos odraditi:
 	8.* Logicko brisanje
 	9.* Dodati atribut posle koliko unosa da sacuvava promene
 	10.* Referencijalni integritet
-
-Za baze:
-	1.* Model
-	2.* Instrukcije za sve
-	3.* Povezati sa pythonom.
-
-Dodatno sa 1.tacke:
-	1.* Oznaciti u prikazu primarne kljuceve
-	2.* U tabeli odmah prvi oznacen entitet
-	3.* Ponistavanje pretrage
-	4.* Duzina polja da bude prema duzini zahtevanih karaktera
-	5.* Layout, raspored u prikazu da bude drugaciji, da ne bude jedno ispod drugog
-	6.* Kontrola unosa, npr za duzinu ako treba 2 char da
-	    ne da treci char, onField neka provera

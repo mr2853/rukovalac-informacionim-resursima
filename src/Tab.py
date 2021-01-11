@@ -91,10 +91,10 @@ class Tab(QtWidgets.QWidget):
         header = self.table.horizontalHeader()
         header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
         self.table.resizeColumnsToContents()
-        if not self.is_baza:
-            for i in range(1, len(self.meta_podaci[10].split(","))):
-                header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeToContents)
+        for i in range(1, len(self.meta_podaci[10].split(","))):
+            header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeToContents)
 
+        if not self.is_baza:
             if self.meta_podaci[1] == "serijska":
                 self.tab_widget.hide()
                 self.btn_down.hide()
@@ -206,6 +206,9 @@ class Tab(QtWidgets.QWidget):
 
                 self.__getattribute__(ime).setModel(self.__getattribute__(ime).model)
                 self.__getattribute__(ime).__setattr__("naziv", imena_dece[-1])
+
+                for i in range(1, len(self.__getattribute__(ime).meta_podaci[10].split(","))):
+                    self.__getattribute__(ime).horizontalHeader().setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeToContents)
             
                 self.tab_widget.addTab(self.__getattribute__(ime), ime_deteta)
                 counter -= 1
