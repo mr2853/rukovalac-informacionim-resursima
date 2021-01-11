@@ -98,12 +98,12 @@ class PocetnaStrana(QWidget):
             return
 
     def spoji_datoteke(self):
-        if len(self.multi_selekt) == 0:
+        if len(self.multi_selekt) < 2:
             poruka = QMessageBox()
             icon = QtGui.QIcon("src/ikonice/logo.jpg")
             poruka.setWindowIcon(icon)
             poruka.setWindowTitle("Upozorenje!")
-            poruka.setText("Trenutno nijedna datoteka nije selektovana za spajanje!")
+            poruka.setText("Trenutno nije vise datoteka selektovano za spajanje!")
             poruka.exec_()
             return
 
@@ -535,6 +535,7 @@ class PocetnaStrana(QWidget):
         prikaz = PrikazElementa(self.central_widget.currentWidget(), False, selektovani_element)
     
         prikaz.exec_()
+        self.central_widget.currentWidget().table.resizeColumnsToContents()
 
     def dodavanje_u_datoteku(self):
         if self.central_widget.currentWidget() == None:
@@ -549,6 +550,7 @@ class PocetnaStrana(QWidget):
         prikaz = PrikazElementa(self.central_widget.currentWidget())
     
         prikaz.exec_()
+        self.central_widget.currentWidget().table.resizeColumnsToContents()
 
     def otvori_pretragu(self):
         if self.central_widget.currentWidget() == None:
@@ -567,7 +569,8 @@ class PocetnaStrana(QWidget):
             model = pretraga(
                 prikaz.lista_atr, prikaz.lista_kriterijuma,
                 prikaz.lista_vece_manje, 
-                self.central_widget.currentWidget().meta_podaci)
+                self.central_widget.currentWidget().meta_podaci,
+                self.central_widget.currentWidget())
 
             if len(model.lista_prikaz) == 0:
                 poruka = QMessageBox()
@@ -579,6 +582,7 @@ class PocetnaStrana(QWidget):
                 return
 
             self.central_widget.currentWidget().table.setModel(model)
+            self.central_widget.currentWidget().table.selectRow(0)
         else:
             poruka = QMessageBox()
             icon = QtGui.QIcon("src/ikonice/logo.jpg")
@@ -587,6 +591,8 @@ class PocetnaStrana(QWidget):
             poruka.setText("Niste zadali ni jedan kriterijum za pretragu, pretraga je prekinuta.")
             poruka.exec_()
             return
+            
+        self.central_widget.currentWidget().table.resizeColumnsToContents()
 
     def delete_tab(self, index):
         self.central_widget.setCurrentIndex(index)

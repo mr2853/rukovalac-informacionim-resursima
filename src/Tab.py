@@ -90,6 +90,7 @@ class Tab(QtWidgets.QWidget):
             
         header = self.table.horizontalHeader()
         header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
+        self.table.resizeColumnsToContents()
         if not self.is_baza:
             for i in range(1, len(self.meta_podaci[10].split(","))):
                 header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeToContents)

@@ -1,5 +1,4 @@
-1.*### zapoceto ### Promeniti prikaz naslova datoteka i njihovih ikonica u dock-u (ideja metoda change u left_dock)
-2.* Podela datoteke (split)
+1.* Podela datoteke (split)
 greske:
 	1.# Dodavanje u VSU doda element, ali ne doda novi red
 	2. Testirati dodavanje elemenata pa kada ih vise istih, pokaze neki element 2 puta

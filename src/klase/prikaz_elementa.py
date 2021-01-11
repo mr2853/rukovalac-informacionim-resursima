@@ -1,9 +1,11 @@
+from configparser import Error
 from klase.metode import dodaj_u_serijsku, sastavi_sekvencijalnu
 from .genericka_klasa import GenerickaKlasa
 from PySide2.QtCore import QModelIndex
 from PySide2 import QtWidgets, QtGui
 from pydoc import locate
 import csv
+import mysql
 import os
 
 class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
@@ -47,7 +49,8 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
         self.lista_kriterijuma = [] # lista kriterijuma, isto kao lista gore sto
         # cuva nazive atributa, ova lista cuva vrednosti tih atributa
         self.lista_vece_manje = []
-        m=0;
+        m=0
+        self.blocked = False
         for i in range(len(self.lista_atributa)):
             naziv = self.lista_atributa[i][0].upper()
 
@@ -80,6 +83,15 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                 self.element = element
                 self.__getattribute__(self.lista_atributa[i]).setText(element.__getattribute__(self.lista_atributa[i]))
                 self.__getattribute__(self.lista_atributa[i]).setMaxLength(int(self.lista_duzine_atributa[i]))
+                veze = self.parent().meta_podaci[9].split(",")
+                for j in range(len(veze)):
+                    if hasattr(self.parent(), "sub_table"+str(j+1)):
+                        if len(self.parent().__getattribute__("sub_table"+str(j+1)).model.lista_prikaz) != 0:
+                            for k in range(len(self.lista_kljuceva)):
+                                if k <= i:
+                                    if self.__getattribute__(self.lista_kljuceva[k]).isEnabled():
+                                        self.__getattribute__(self.lista_kljuceva[k]).setDisabled(True)
+                            self.blocked = True
             
             self.__getattribute__(self.lista_atributa[i]).setFixedHeight(27)
             self.layout.addWidget(self.__getattribute__(self.lista_atributa[i]),m,1)
@@ -179,7 +191,7 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                     self.element.__setattr__(self.lista_atributa[i], vrijednost)
                     self.lista_atr.append(self.lista_atributa[i])
                     self.lista_kriterijuma.append(vrijednost)
-                    if self.tip == 2 and self.lista_tipovi_atributa[i] !=  "str":
+                    if self.tip == 2:
                         self.lista_vece_manje.append(self.__getattribute__(self.lista_atributa[i]+"_vece_manje").currentIndex())
                 else:
                     poruka = QtWidgets.QMessageBox()
@@ -191,50 +203,112 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                     return
             
             if self.tip == 1:
-                self.parent().table.model().lista_prikaz = []
-
-                with open(self.putanja_podaci, 'r',newline='') as csvfile:
-                    spamreader = csv.reader(csvfile, delimiter = "\n")
-                    counter = 0
-                    prva_linija = True
-                    for row in spamreader:
-                        if prva_linija:
-                            prva_linija = False
-                            continue
-                        if row[0] == "":
-                            break
-            
-                        objekat = GenerickaKlasa(self.lista_atributa, row[0].split(","))
-                        nadjen = True
-                        
-                        for i in range(len(self.lista_kljuceva)):
-                            if objekat.__getattribute__(self.lista_kljuceva[i]) !=  self.original_elem.__getattribute__(self.lista_kljuceva[i]):
-                                nadjen = False
-                        if not nadjen:
-                            self.parent().table.model().lista_prikaz.append(objekat)
-                        else:
-                            if self.tip_datoteke == "sekvencijalna":
-                                dodaj_u_serijsku(self.element, self.lista_atributa, self.privremena_datoteka, self.parent().putanja)
-                            else:
-                                for i in range(len(self.lista_atributa)):
-                                    objekat.__setattr__(self.lista_atributa[i], self.element.__getattribute__(self.lista_atributa[i]))
-
+                if not self.parent().is_baza:
+                    with open(self.putanja_podaci, 'r',newline='') as csvfile:
+                        spamreader = csv.reader(csvfile, delimiter = "\n")
+                        counter = 0
+                        prva_linija = True
+                        for row in spamreader:
+                            if prva_linija:
+                                prva_linija = False
+                                continue
+                            if row[0] == "":
+                                break
+                
+                            objekat = GenerickaKlasa(self.lista_atributa, row[0].split(","))
+                            nadjen = True
+                            
+                            self.parent().table.model().lista_prikaz = []
+                            for i in range(len(self.lista_kljuceva)):
+                                if objekat.__getattribute__(self.lista_kljuceva[i]) !=  self.original_elem.__getattribute__(self.lista_kljuceva[i]):
+                                    nadjen = False
+                            if not nadjen:
                                 self.parent().table.model().lista_prikaz.append(objekat)
-                            
-                        counter += 1
+                            else:
+                                if self.tip_datoteke == "sekvencijalna":
+                                    dodaj_u_serijsku(self.element, self.lista_atributa, self.privremena_datoteka, self.parent().putanja)
+                                else:
+                                    for i in range(len(self.lista_atributa)):
+                                        objekat.__setattr__(self.lista_atributa[i], self.element.__getattribute__(self.lista_atributa[i]))
 
-                with open(self.putanja_podaci, 'w', newline='') as f:
-                    writer = csv.writer(f, delimiter = ",")
-                    writer.writerow([self.parent().putanja_meta])
-                    for i in range(len(self.parent().table.model().lista_prikaz)):
-                        tekst = ""
-                        for j in range(len(self.lista_atributa)):
-                            tekst += str(self.parent().table.model().lista_prikaz[i].__getattribute__(self.lista_atributa[j]))
-                            if j < len(self.lista_atributa)-1:
-                                tekst += ","
+                                    self.parent().table.model().lista_prikaz.append(objekat)
+                                
+                            counter += 1
+
+                    with open(self.putanja_podaci, 'w', newline='') as f:
+                        writer = csv.writer(f, delimiter = ",")
+                        writer.writerow([self.parent().putanja_meta])
+                        for i in range(len(self.parent().table.model().lista_prikaz)):
+                            tekst = ""
+                            for j in range(len(self.lista_atributa)):
+                                tekst += str(self.parent().table.model().lista_prikaz[i].__getattribute__(self.lista_atributa[j]))
+                                if j < len(self.lista_atributa)-1:
+                                    tekst += ","
+                                
+                            novi_red = tekst.split(",")
+                            writer.writerow(novi_red)
+                else:
+                    parent = self.parent().pocetna_strana
+
+                    query = "UPDATE " + self.parent().naziv + " SET "
+                    block = False
+                    for i in range(len(self.lista_atributa)):
+                        block = False
+                        if self.blocked:
+                            for j in self.lista_kljuceva:
+                                if self.lista_atributa[i] == j:
+                                    block = True
+                                    break
+                        if block:
+                            continue
+                        query += self.lista_atributa[i] + "="
+                        if self.lista_tipovi_atributa[i] == "str":
+                            query += "'"
+                        query += self.element.__getattribute__(self.lista_atributa[i])
+                        if self.lista_tipovi_atributa[i] == "str":
+                            query += "'"
+
+                        if i < len(self.lista_atributa) - 1:
+                            query += " , "
                             
-                        novi_red = tekst.split(",")
-                        writer.writerow(novi_red)
+                    if len(self.lista_atributa) == len(self.lista_kljuceva) and self.blocked:
+                        return
+                        
+                    query += " WHERE "
+                    for i in range(len(self.lista_kljuceva)):
+                        query += self.lista_kljuceva[i] + "="
+                        if self.lista_tipovi_atributa[i] == "str":
+                            query += "'"
+
+                        query += self.original_elem.__getattribute__(self.lista_kljuceva[i])
+                        if self.lista_tipovi_atributa[i] == "str":
+                            query += "'"
+
+                        if i < len(self.lista_kljuceva) - 1:
+                            query += " AND "
+                    try:
+                        print(query)
+                        parent.csor.execute(query)
+                    except mysql.connector.errors.IntegrityError as e:
+                        poruka = QtWidgets.QMessageBox()
+                        icon = QtGui.QIcon("src/ikonice/logo.jpg")
+                        poruka.setWindowIcon(icon)
+                        poruka.setWindowTitle("Upozorenje!")
+                        poruka.setText("Vec postoji element sa zadatim kljucem!\n"+e.msg)
+                        poruka.exec_()
+
+                    parent.connection.commit()
+
+                    query = "SELECT * FROM " + self.parent().naziv
+                    parent.csor.execute(query)
+                    
+                    self.parent().table.model().lista_prikaz = []
+                    for result in parent.csor.fetchall():
+                        lista_podataka = []
+                        for i in result:
+                            lista_podataka.append(str(i))
+                            
+                        self.parent().table.model().lista_prikaz.append(GenerickaKlasa(self.lista_atributa, lista_podataka))
 
                 top = QModelIndex()
                 top.child(0,0)

@@ -10,4 +10,9 @@ if __name__ == '__main__':
         _style = f.read()
         app.setStyleSheet(_style)
     
-    sys.exit(app.exec_())
+    app.exec_()
+    if hasattr(pocetna_strana, "csor"):
+        pocetna_strana.csor.close()
+        pocetna_strana.connection.close()
+        
+    sys.exit()
