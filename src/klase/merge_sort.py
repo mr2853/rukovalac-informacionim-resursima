@@ -34,8 +34,8 @@ def merge(s1, s, atribut, bool_nacin_sortiranja):
                     prvi = int(s1[i][atribut])
                     drugi = int(s1[j][atribut])
                 except ValueError:
-                    prvi = s1[i].__getattribute__(atribut)
-                    drugi = s1[j].__getattribute__(atribut)
+                    prvi = s1[i][atribut]
+                    drugi = s1[j][atribut]
                 except TypeError:
                     prvi = s1[i].__getattribute__(atribut)
                     drugi = s1[j].__getattribute__(atribut)
@@ -56,8 +56,8 @@ def merge(s1, s, atribut, bool_nacin_sortiranja):
                     prvi = int(s1[i][atribut])
                     drugi = int(s1[j][atribut])
                 except ValueError:
-                    prvi = s1[i].__getattribute__(atribut)
-                    drugi = s1[j].__getattribute__(atribut)
+                    prvi = s1[i][atribut]
+                    drugi = s1[j][atribut]
                 except TypeError:
                     prvi = s1[i].__getattribute__(atribut)
                     drugi = s1[j].__getattribute__(atribut)
@@ -107,8 +107,8 @@ def merge(s1, s, atribut, bool_nacin_sortiranja):
                     prvi = int(s1[i][atribut])
                     drugi = int(s1[j][atribut])
                 except ValueError:
-                    prvi = s1[i].__getattribute__(atribut)
-                    drugi = s1[j].__getattribute__(atribut)
+                    prvi = s1[i][atribut]
+                    drugi = s1[j][atribut]
                 except TypeError:
                     prvi = s1[i].__getattribute__(atribut)
                     drugi = s1[j].__getattribute__(atribut)
@@ -128,8 +128,8 @@ def merge(s1, s, atribut, bool_nacin_sortiranja):
                     prvi = int(s1[i][atribut])
                     drugi = int(s1[j][atribut])
                 except ValueError:
-                    prvi = s1[i].__getattribute__(atribut)
-                    drugi = s1[j].__getattribute__(atribut)
+                    prvi = s1[i][atribut]
+                    drugi = s1[j][atribut]
                 except TypeError:
                     prvi = s1[i].__getattribute__(atribut)
                     drugi = s1[j].__getattribute__(atribut)

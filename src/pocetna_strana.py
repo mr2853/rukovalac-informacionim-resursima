@@ -699,9 +699,9 @@ class PocetnaStrana(QWidget):
         if not ista_putanja:
             self.lista_putanja.append(putanja)
             if putanja.find(".sql") != -1:
-                self.connection = mysql.connector.connect(user="root", password="root", host="127.0.0.1", database="model_projekat")
+                self.connection = mysql.connector.connect(user="root", password="root", host="127.0.0.1", database="projekat")
                 self.csor = self.connection.cursor()
-                putanja = "podaci\metaPodaci\model_projekat_meta_podaci.csv"
+                putanja = "podaci\metaPodaci\projekat_meta_podaci.csv"
                 meta_podaci = citanje_meta_podataka(putanja, True)
                 self.imena_tabela = meta_podaci[4].split(",")
 
