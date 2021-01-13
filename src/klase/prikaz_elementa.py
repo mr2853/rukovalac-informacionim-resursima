@@ -2,7 +2,7 @@ from configparser import Error
 from klase.metode import dodaj_u_serijsku, sastavi_sekvencijalnu
 from .genericka_klasa import GenerickaKlasa
 from PySide2.QtCore import QModelIndex
-from PySide2 import QtWidgets, QtGui
+from PySide2 import QtWidgets, QtGui, QtCore
 from pydoc import locate
 import csv
 import mysql
@@ -27,6 +27,9 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
         icon = QtGui.QIcon("src/ikonice/logo.jpg")
         self.setWindowIcon(icon)
         self.layout = QtWidgets.QGridLayout()
+
+        self.setWindowFlags(self.windowFlags()
+                ^ QtCore.Qt.WindowContextHelpButtonHint)
         self.tip = 0  # tip == 0 -dodavanje / tip == 1 -izmena / tip == 2 -pretraga
         
         if element != None:

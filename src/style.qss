@@ -167,9 +167,10 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
       border-radius: 15px;
    }
   QMenuBar {
+    font-family: 'Courier New', Courier, monospace;
      font-weight: bold;
      background-color:#F7F9FB;
-     color:black;
+     color:#000000;
     
   }
 
