@@ -80,10 +80,7 @@ class PocetnaStrana(QWidget):
 
         self.central_widget.currentWidget().table.setModel(model)
         self.central_widget.currentWidget().table.selectRow(0)
-        self.central_widget.currentWidget().table.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
-        self.central_widget.currentWidget().table.resizeColumnsToContents()
-        for i in range(1, len(self.central_widget.currentWidget().meta_podaci[10].split(","))):
-            self.central_widget.currentWidget().table.horizontalHeader().setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeToContents)
+        self.central_widget.currentWidget().column_resize()
 
     def podeli_datoteku(self): # kopirano od metode pretrage
         if len(self.multi_selekt) == 0:
@@ -562,7 +559,7 @@ class PocetnaStrana(QWidget):
         prikaz = PrikazElementa(self.central_widget.currentWidget(), False, selektovani_element)
     
         prikaz.exec_()
-        self.central_widget.currentWidget().table.resizeColumnsToContents()
+        self.central_widget.currentWidget().column_resize()
 
     def dodavanje_u_datoteku(self):
         if self.central_widget.currentWidget() == None:
@@ -577,7 +574,7 @@ class PocetnaStrana(QWidget):
         prikaz = PrikazElementa(self.central_widget.currentWidget())
     
         prikaz.exec_()
-        self.central_widget.currentWidget().table.resizeColumnsToContents()
+        self.central_widget.currentWidget().column_resize()
 
     def otvori_pretragu(self):
         if self.central_widget.currentWidget() == None:
@@ -620,7 +617,7 @@ class PocetnaStrana(QWidget):
             poruka.exec_()
             return
             
-        self.central_widget.currentWidget().table.resizeColumnsToContents()
+        self.central_widget.currentWidget().column_resize()
 
     def delete_tab(self, index):
         self.central_widget.setCurrentIndex(index)

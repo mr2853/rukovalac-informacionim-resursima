@@ -87,19 +87,21 @@ class Tab(QtWidgets.QWidget):
         self.table.setSelectionMode(QAbstractItemView.SingleSelection)
         self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.table.horizontalHeader().sectionClicked.connect(self.sort_table) # kada se klikne na neki horizontalHeader da pozove self.sort_table
-            
-        header = self.table.horizontalHeader()
-        header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
-        self.table.resizeColumnsToContents()
-        for i in range(1, len(self.meta_podaci[10].split(","))):
-            header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeToContents)
+        self.column_resize()
 
         if not self.is_baza:
             if self.meta_podaci[1] == "serijska":
                 self.tab_widget.hide()
                 self.btn_down.hide()
                 self.btn_up.hide()
-        
+                
+    def column_resize(self):
+        header = self.table.horizontalHeader()
+        header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
+        self.table.resizeColumnsToContents()
+        for i in range(1, len(self.meta_podaci[10].split(","))):
+            header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeToContents)
+
     def sort_table(self, index):
         """
         sortira listu
