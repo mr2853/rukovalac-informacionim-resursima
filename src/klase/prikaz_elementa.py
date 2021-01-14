@@ -111,8 +111,8 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
         if self.tip == 1:
             self.original_elem = GenerickaKlasa([],[])
             self.element = element
-            for i in range(len(self.lista_kljuceva)):
-                self.original_elem.__setattr__(self.lista_kljuceva[i], self.element.__getattribute__(self.lista_kljuceva[i]))
+            for i in range(len(self.lista_atributa)):
+                self.original_elem.__setattr__(self.lista_atributa[i], self.element.__getattribute__(self.lista_atributa[i]))
         else:
             self.element = GenerickaKlasa([],[])
         
@@ -211,32 +211,32 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                         spamreader = csv.reader(csvfile, delimiter = "\n")
                         counter = 0
                         prva_linija = True
+                        lista = []
                         for row in spamreader:
                             if prva_linija:
                                 prva_linija = False
                                 continue
                             if row[0] == "":
                                 break
-                
+                            
                             objekat = GenerickaKlasa(self.lista_atributa, row[0].split(","))
                             nadjen = True
                             
                             self.parent().table.model().lista_prikaz = []
-                            for i in range(len(self.lista_kljuceva)):
-                                if objekat.__getattribute__(self.lista_kljuceva[i]) !=  self.original_elem.__getattribute__(self.lista_kljuceva[i]):
+                            for i in range(len(self.lista_atributa)):
+                                if objekat.__getattribute__(self.lista_atributa[i]) !=  self.original_elem.__getattribute__(self.lista_atributa[i]):
                                     nadjen = False
                             if not nadjen:
-                                self.parent().table.model().lista_prikaz.append(objekat)
+                                lista.append(objekat)
                             else:
-                                if self.tip_datoteke == "sekvencijalna":
-                                    dodaj_u_serijsku(self.element, self.lista_atributa, self.privremena_datoteka, self.parent().putanja)
-                                else:
-                                    for i in range(len(self.lista_atributa)):
-                                        objekat.__setattr__(self.lista_atributa[i], self.element.__getattribute__(self.lista_atributa[i]))
+                                for i in range(len(self.lista_atributa)):
+                                    objekat.__setattr__(self.lista_atributa[i], self.element.__getattribute__(self.lista_atributa[i]))
 
-                                    self.parent().table.model().lista_prikaz.append(objekat)
+                                lista.append(objekat)
                                 
                             counter += 1
+                        
+                        self.parent().table.model().lista_prikaz = lista
 
                     with open(self.putanja_podaci, 'w', newline='') as f:
                         writer = csv.writer(f, delimiter = ",")
