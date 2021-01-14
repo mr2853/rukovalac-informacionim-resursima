@@ -29,7 +29,7 @@ class PocetnaStrana(QWidget):
         icon = QtGui.QIcon("src/ikonice/logo.jpg")
         self.main_window.setWindowIcon(icon)
 
-        meni_bar = MenuBar(self.main_window, parent=None)
+        self.meni_bar = MenuBar(self.main_window, parent=None)
 
         self.tool_bar = ToolBar(self.main_window,parent=None)
         self.tool_bar.dodaj.triggered.connect(self.dodavanje_u_datoteku)

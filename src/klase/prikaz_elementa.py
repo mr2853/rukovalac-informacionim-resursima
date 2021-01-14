@@ -116,7 +116,7 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
         else:
             self.element = GenerickaKlasa([],[])
         
-        self.setFixedWidth(500)
+        self.setMinimumWidth(500)
         self.show()
     
     def sacuvaj_podatke(self):

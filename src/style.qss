@@ -142,16 +142,21 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
  QToolBar {
     
     background-color:#51adcf;
+    height: 20px;
+    
  }
  QToolButton { 
-   background-color:whitesmoke;
-   margin: 3px;
+   background-color:#f3ca20;
    
+   border-radius: 5px;
+   margin: 3px;
+   width: 50px;
+   height: 50px;
    }
 
  QToolButton:hover { 
-   background-color:#f3ca20;
-   border-radius: 2px;
+   background-color:#000000;
+   border-radius: 3px;
    }
 
    QDockWidget {
