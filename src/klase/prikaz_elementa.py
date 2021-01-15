@@ -86,7 +86,7 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                 self.__getattribute__(self.lista_atributa[i]).setMaxLength(int(self.lista_duzine_atributa[i]))
                 if "datum" in self.lista_naziva_atributa[i].lower():
                     self.__getattribute__(self.lista_atributa[i]).setPlaceholderText("YYYY-MM-DD")
-                    print("nasli")
+                    
             elif element != None:
                 self.element = element
                 
@@ -348,7 +348,7 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                             query += ", "
                         brojac2 += 1
                     query += ")"
-                    print(query)
+                    
                     provjeri = True
                     try:
                         parent.csor.execute(query)
@@ -382,17 +382,17 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                             
                         self.parent().table.model().lista_prikaz.append(GenerickaKlasa(self.lista_atributa, lista_podataka))
                
-                top = QModelIndex()
-                top.child(0,0)
-                bottom = QModelIndex()
-                bottom.child(len(self.parent().table.model().lista_prikaz), self.parent().table.model().broj_kolona)
-                self.parent().table.dataChanged(top, bottom)
-                if provjeri:
-                    self.parent().table.model().beginInsertRows(QModelIndex(), 0, 0)
-                    model = self.parent().table.model()
-                    model.lista_prikaz.append(self.element)
-                    self.parent().table.setModel(model)
-                    self.parent().table.model().endInsertRows()
+                    top = QModelIndex()
+                    top.child(0,0)
+                    bottom = QModelIndex()
+                    bottom.child(len(self.parent().table.model().lista_prikaz), self.parent().table.model().broj_kolona)
+                    self.parent().table.dataChanged(top, bottom)
+                    if provjeri:
+                        self.parent().table.model().beginInsertRows(QModelIndex(), 0, 0)
+                        model = self.parent().table.model()
+                        model.lista_prikaz.append(self.element)
+                        self.parent().table.setModel(model)
+                        self.parent().table.model().endInsertRows()
 
                     
                 if self.tip_datoteke == "serijska":
