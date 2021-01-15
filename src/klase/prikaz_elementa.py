@@ -13,6 +13,7 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
         super(PrikazElementa,self).__init__(parent)
         meta_podaci = parent.meta_podaci  #kada kliknemo saljemo meta podatke u prikaz
         self.lista_atributa = meta_podaci[5].split(",")
+        self.lista_naziva_atributa = meta_podaci[5].split(",")
         self.lista_tipovi_atributa = meta_podaci[6].split(",")
         self.lista_duzine_atributa = meta_podaci[7].split(",")
         self.lista_obaveznosti_atributa = meta_podaci[8].split(",")
@@ -22,6 +23,7 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
         self.sufiks = meta_podaci[3]
         self.putanja_podaci = meta_podaci[4]
         self.lista = []
+        
         self.pretraga = pretraga
         self.privremena_datoteka = "podaci/podaci/privremena_ser.csv"
         icon = QtGui.QIcon("src/ikonice/logo.jpg")
@@ -62,7 +64,7 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                     naziv += " "
                 else:
                     naziv += self.lista_atributa[i][s]
-
+            
             ime = QtWidgets.QLabel(naziv + " :")
             self.layout.addWidget(ime,m,0)
             self.__setattr__(self.lista_atributa[i], QtWidgets.QLineEdit())
@@ -82,10 +84,16 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
             if element == None and not pretraga:
                 self.__getattribute__(self.lista_atributa[i]).setPlaceholderText("Do " + self.lista_duzine_atributa[i] + " karaktera")
                 self.__getattribute__(self.lista_atributa[i]).setMaxLength(int(self.lista_duzine_atributa[i]))
+                if "datum" in self.lista_naziva_atributa[i].lower():
+                    self.__getattribute__(self.lista_atributa[i]).setPlaceholderText("YYYY-MM-DD")
+                    print("nasli")
             elif element != None:
                 self.element = element
+                
                 self.__getattribute__(self.lista_atributa[i]).setText(element.__getattribute__(self.lista_atributa[i]))
                 self.__getattribute__(self.lista_atributa[i]).setMaxLength(int(self.lista_duzine_atributa[i]))
+                print(self.lista_naziva_atributa[i])
+              
                 veze = self.parent().meta_podaci[9].split(",")
                 for j in range(len(veze)):
                     if hasattr(self.parent(), "sub_table"+str(j+1)):
@@ -340,7 +348,7 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                             query += ", "
                         brojac2 += 1
                     query += ")"
-                    
+                    print(query)
                     provjeri = True
                     try:
                         parent.csor.execute(query)
@@ -352,6 +360,16 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                         poruka.setWindowTitle("Upozorenje!")
                         poruka.setText("Vec postoji element sa zadatim kljucem!\n"+e.msg)
                         poruka.exec_()
+                   
+                    except mysql.connector.errors.DataError as e:
+                        poruka = QtWidgets.QMessageBox()
+                        provjeri=False
+                        icon = QtGui.QIcon("src/ikonice/logo.jpg")
+                        poruka.setWindowIcon(icon)
+                        poruka.setWindowTitle("Upozorenje!")
+                        poruka.setText("Uneli ste pogresnu vrednost!\n"+e.msg)
+                        poruka.exec_()
+
 
                     parent.connection.commit()
                     query = "SELECT * FROM " + self.parent().naziv
