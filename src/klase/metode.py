@@ -302,7 +302,7 @@ def sastavi_sekvencijalnu(parent):
         list_klj.pop(0)
         input = QtWidgets.QInputDialog.getItem(
             parent, 
-            "",
+            "Izbor",
             tekst+
             "\nIzaberite koji element zelite da zadrzite:",
             list_tuple,

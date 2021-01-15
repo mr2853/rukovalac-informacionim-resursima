@@ -11,7 +11,7 @@ import os
 class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
     def __init__(self, parent, pretraga=False, element=None):
         super(PrikazElementa,self).__init__(parent)
-        meta_podaci = parent.meta_podaci
+        meta_podaci = parent.meta_podaci  #kada kliknemo saljemo meta podatke u prikaz
         self.lista_atributa = meta_podaci[5].split(",")
         self.lista_tipovi_atributa = meta_podaci[6].split(",")
         self.lista_duzine_atributa = meta_podaci[7].split(",")
@@ -252,7 +252,7 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                             writer.writerow(novi_red)
                 else:
                     parent = self.parent().pocetna_strana
-
+                    
                     query = "UPDATE " + self.parent().naziv + " SET "
                     block = False
                     for i in range(len(self.lista_atributa)):
@@ -319,6 +319,64 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                 self.parent().table.dataChanged(top, bottom) 
 
             elif self.tip == 0:
+                if self.tip_datoteke == "sql":
+                    parent = self.parent().pocetna_strana
+                  
+                    query = "INSERT INTO " + self.parent().naziv +" (" 
+                    brojac =0
+                    for i in range(len(self.lista_atributa)):
+                        query += self.lista_atributa[i]
+                        if brojac < len(self.lista_atributa)-1:
+                            query += ", "
+                        brojac += 1
+                    query += ") " + "VALUES ("
+                    brojac2=0
+                    for i in range(len(self.lista_atributa)):
+                        if self.lista_tipovi_atributa[i] == "str":
+                            query += "'"+self.__getattribute__(self.lista_atributa[i]).text()+"'"
+                        else:
+                            query += self.__getattribute__(self.lista_atributa[i]).text()
+                        if brojac2 < len(self.lista_atributa)-1:
+                            query += ", "
+                        brojac2 += 1
+                    query += ")"
+                    
+                    provjeri = True
+                    try:
+                        parent.csor.execute(query)
+                    except mysql.connector.errors.IntegrityError as e:
+                        poruka = QtWidgets.QMessageBox()
+                        provjeri=False
+                        icon = QtGui.QIcon("src/ikonice/logo.jpg")
+                        poruka.setWindowIcon(icon)
+                        poruka.setWindowTitle("Upozorenje!")
+                        poruka.setText("Vec postoji element sa zadatim kljucem!\n"+e.msg)
+                        poruka.exec_()
+
+                    parent.connection.commit()
+                    query = "SELECT * FROM " + self.parent().naziv
+                    parent.csor.execute(query)
+                    self.parent().table.model().lista_prikaz = []
+                    for result in parent.csor.fetchall():
+                        lista_podataka = []
+                        for i in result:
+                            lista_podataka.append(str(i))
+                            
+                        self.parent().table.model().lista_prikaz.append(GenerickaKlasa(self.lista_atributa, lista_podataka))
+               
+                top = QModelIndex()
+                top.child(0,0)
+                bottom = QModelIndex()
+                bottom.child(len(self.parent().table.model().lista_prikaz), self.parent().table.model().broj_kolona)
+                self.parent().table.dataChanged(top, bottom)
+                if provjeri:
+                    self.parent().table.model().beginInsertRows(QModelIndex(), 0, 0)
+                    model = self.parent().table.model()
+                    model.lista_prikaz.append(self.element)
+                    self.parent().table.setModel(model)
+                    self.parent().table.model().endInsertRows()
+
+                    
                 if self.tip_datoteke == "serijska":
                     dodaj_u_serijsku(self.element, self.lista_atributa, self.putanja_podaci, self.parent().putanja)
                     self.parent().table.model().beginInsertRows(QModelIndex(), 0, 0)

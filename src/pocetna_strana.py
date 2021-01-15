@@ -318,7 +318,7 @@ class PocetnaStrana(QWidget):
 
             input = QtWidgets.QInputDialog.getItem(
                 self,
-                "",
+                "Izbor",
                 "Trenutna tabela ima vise od 1 roditelja\nIzaberite roditelja:",
                 list_tuple,
                 0,
@@ -640,7 +640,7 @@ class PocetnaStrana(QWidget):
 
                     input = QtWidgets.QInputDialog.getItem(
                         tab,
-                        "",
+                        "Izbor",
                         "Posto ste sortirali tabelu\nIzaberite da li zelite da sacuvate:",
                         list_tuple,
                         0,
