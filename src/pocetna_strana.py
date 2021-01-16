@@ -224,7 +224,6 @@ class PocetnaStrana(QWidget):
                     query += element_selected.__getattribute__(lista_atributa[i])
                 brojac +=1
             query += ";"
-            print(query)
 
             try:
                 self.csor.execute(query)
@@ -252,19 +251,19 @@ class PocetnaStrana(QWidget):
         top = QModelIndex()
         top.child(0,0)
         self.central_widget.currentWidget().table.model().beginRemoveRows(top, 0, 0) 
+        for i in range(len(veze)): #provjaravamo da li ima djecu, ako ima ne smije se obrisati
+            if hasattr(self.central_widget.currentWidget(), "sub_table"+str(i+1)):
+                if len(self.central_widget.currentWidget().__getattribute__("sub_table"+str(i+1)).model.lista_prikaz) != 0:
+                    poruka = QMessageBox()
+                    icon = QtGui.QIcon("src/ikonice/logo.jpg")
+                    poruka.setWindowIcon(icon)
+                    poruka.setWindowTitle("Upozorenje!")
+                    poruka.setText("Selektovani element ne sme da se obrise zato sto se njegovi podaci koriste u podtabelama, njegovoj deci!")
+                    poruka.exec_()
+                    return
                
         self.central_widget.currentWidget().table.model().lista_prikaz = []
         if tip_datoteke != "sql":
-            for i in range(len(veze)): #provjaravamo da li ima djecu, ako ima ne smije se obrisati
-                if hasattr(self.central_widget.currentWidget(), "sub_table"+str(i+1)):
-                    if len(self.central_widget.currentWidget().__getattribute__("sub_table"+str(i+1)).model.lista_prikaz) != 0:
-                        poruka = QMessageBox()
-                        icon = QtGui.QIcon("src/ikonice/logo.jpg")
-                        poruka.setWindowIcon(icon)
-                        poruka.setWindowTitle("Upozorenje!")
-                        poruka.setText("Selektovani element ne sme da se obrise zato sto se njegovi podaci koriste u podtabelama, njegovoj deci!")
-                        poruka.exec_()
-                        return
             
             with open(putanja, 'r',newline='') as csvfile:
                 spamreader = csv.reader(csvfile, delimiter = "\n")
@@ -275,7 +274,8 @@ class PocetnaStrana(QWidget):
                     if prva_linija:
                         prva_linija = False
                         continue
-                    if row[0] == "":
+                    
+                    if len(row) == 0:
                         break
                     
                     objekat = GenerickaKlasa(lista_atributa, row[0].split(","))
