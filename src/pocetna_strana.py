@@ -198,72 +198,125 @@ class PocetnaStrana(QWidget):
             poruka.setText("Trenutno nijedan element nije selektovan!")
             poruka.exec_()
             return
-            
+        ime_datoteke = self.central_widget.currentWidget().meta_podaci[0]    
+        tip_datoteke = self.central_widget.currentWidget().meta_podaci[1]  
         model = self.central_widget.currentWidget().table.model()
         element_selected = model.get_element(self.central_widget.currentWidget().table.selected_elem)
         putanja = self.central_widget.currentWidget().meta_podaci[4]
         lista_kljuceva = self.central_widget.currentWidget().meta_podaci[11].split(",")
         lista_atributa = self.central_widget.currentWidget().meta_podaci[5].split(",")
+        lista_tip_atributa = self.central_widget.currentWidget().meta_podaci[6].split(",")
         veze = []
         veze = self.central_widget.currentWidget().meta_podaci[9].split(",")
         
-        for i in range(len(veze)):
-            if hasattr(self.central_widget.currentWidget(), "sub_table"+str(i+1)):
-                if len(self.central_widget.currentWidget().__getattribute__("sub_table"+str(i+1)).model.lista_prikaz) != 0:
-                    poruka = QMessageBox()
-                    icon = QtGui.QIcon("src/ikonice/logo.jpg")
-                    poruka.setWindowIcon(icon)
-                    poruka.setWindowTitle("Upozorenje!")
-                    poruka.setText("Selektovani element ne sme da se obrise zato sto se njegovi podaci koriste u podtabelama, njegovoj deci!")
-                    poruka.exec_()
-                    return
-        
-        self.central_widget.currentWidget().table.model().lista_prikaz = []
+        #DELETE FROM plan_studijske_grupe WHERE STU_VU_OZNAKA='IR' AND SP_OZNAKA='IT' AND SPB_BLOK=2 AND SPB_POZICIJA=2;
+        if tip_datoteke == "sql":
+            query= " DELETE FROM " + ime_datoteke + " WHERE "
+            brojac = 0 
+            for i in range(len(lista_kljuceva)):
+                if brojac == 0:
+                    query+= lista_kljuceva[i] + "="
+                else:
+                    query += " AND " + lista_kljuceva[i] + "="
+                if lista_tip_atributa[i] == "str":
+                    query += "'" + element_selected.__getattribute__(lista_atributa[i]) +"'"
+                else:
+                    query += element_selected.__getattribute__(lista_atributa[i])
+                brojac +=1
+            query += ";"
+            print(query)
+
+            try:
+                self.csor.execute(query)
+            except mysql.connector.errors.IntegrityError as e:
+                poruka = QtWidgets.QMessageBox()
+                
+                icon = QtGui.QIcon("src/ikonice/logo.jpg")
+                poruka.setWindowIcon(icon)
+                poruka.setWindowTitle("Upozorenje!")
+                poruka.setText("Ne mozete izbrisati ovaj element!\n"+e.msg)
+                poruka.exec_()
+                return
+
+            self.connection.commit()
+            query = "SELECT * FROM " + ime_datoteke
+            self.csor.execute(query)
+            self.central_widget.currentWidget().table.model().lista_prikaz = []
+            for result in self.csor.fetchall():
+                lista_podataka = []
+                for i in result:
+                    lista_podataka.append(str(i))
+                    
+                self.central_widget.currentWidget().table.model().lista_prikaz.append(GenerickaKlasa(lista_atributa, lista_podataka))
 
         top = QModelIndex()
         top.child(0,0)
-        self.central_widget.currentWidget().table.model().beginRemoveRows(top, 0, 0)
-
-        with open(putanja, 'r',newline='') as csvfile:
-            spamreader = csv.reader(csvfile, delimiter = "\n")
-            counter = 0
-            prva_linija = True
-            izbrisan = False
-            for row in spamreader:
-                if prva_linija:
-                    prva_linija = False
-                    continue
-                if row[0] == "":
-                    break
-                
-                objekat = GenerickaKlasa(lista_atributa, row[0].split(","))
-                nadjen = True
-                for i in range(len(lista_kljuceva)):
-                    if objekat.__getattribute__(lista_kljuceva[i]) != element_selected.__getattribute__(lista_kljuceva[i]):
-                        nadjen = False
+        self.central_widget.currentWidget().table.model().beginRemoveRows(top, 0, 0) 
+               
+        self.central_widget.currentWidget().table.model().lista_prikaz = []
+        if tip_datoteke != "sql":
+            for i in range(len(veze)): #provjaravamo da li ima djecu, ako ima ne smije se obrisati
+                if hasattr(self.central_widget.currentWidget(), "sub_table"+str(i+1)):
+                    if len(self.central_widget.currentWidget().__getattribute__("sub_table"+str(i+1)).model.lista_prikaz) != 0:
+                        poruka = QMessageBox()
+                        icon = QtGui.QIcon("src/ikonice/logo.jpg")
+                        poruka.setWindowIcon(icon)
+                        poruka.setWindowTitle("Upozorenje!")
+                        poruka.setText("Selektovani element ne sme da se obrise zato sto se njegovi podaci koriste u podtabelama, njegovoj deci!")
+                        poruka.exec_()
+                        return
             
-                if not izbrisan and nadjen:
-                    izbrisan = True
-                    self.central_widget.currentWidget().table.model().removeRow(counter)
-                else:
-                    self.central_widget.currentWidget().table.model().lista_prikaz.append(objekat)
-                counter += 1
-        
-        self.central_widget.currentWidget().table.model().endRemoveRows()
-        
-        with open(putanja, 'w', newline='') as f:
-            writer = csv.writer(f, delimiter = ",")
-            writer.writerow([self.central_widget.currentWidget().putanja_meta])
-            for i in range(len(self.central_widget.currentWidget().table.model().lista_prikaz)):
-                tekst = ""
-                for j in range(len(lista_atributa)):
-                    tekst += str(self.central_widget.currentWidget().table.model().lista_prikaz[i].__getattribute__(lista_atributa[j]))
-                    if j < len(lista_atributa)-1:
-                        tekst += ","
-                        
-                novi_red = tekst.split(",")
-                writer.writerow(novi_red)
+            with open(putanja, 'r',newline='') as csvfile:
+                spamreader = csv.reader(csvfile, delimiter = "\n")
+                counter = 0
+                prva_linija = True
+                izbrisan = False
+                for row in spamreader:
+                    if prva_linija:
+                        prva_linija = False
+                        continue
+                    if row[0] == "":
+                        break
+                    
+                    objekat = GenerickaKlasa(lista_atributa, row[0].split(","))
+                    nadjen = True
+                    for i in range(len(lista_kljuceva)):
+                        if objekat.__getattribute__(lista_kljuceva[i]) != element_selected.__getattribute__(lista_kljuceva[i]):
+                            nadjen = False
+                
+                    if not izbrisan and nadjen:
+                        izbrisan = True
+                        self.central_widget.currentWidget().table.model().removeRow(counter) #uklanjamo red iz tabele
+                    else:
+                        self.central_widget.currentWidget().table.model().lista_prikaz.append(objekat)
+                    counter += 1
+            
+            
+            
+            with open(putanja, 'w', newline='') as f:
+                writer = csv.writer(f, delimiter = ",")
+                writer.writerow([self.central_widget.currentWidget().putanja_meta])
+                for i in range(len(self.central_widget.currentWidget().table.model().lista_prikaz)):
+                    tekst = ""
+                    for j in range(len(lista_atributa)):
+                        tekst += str(self.central_widget.currentWidget().table.model().lista_prikaz[i].__getattribute__(lista_atributa[j]))
+                        if j < len(lista_atributa)-1:
+                            tekst += ","
+                            
+                    novi_red = tekst.split(",")
+                    writer.writerow(novi_red)
+        else:
+            query = "SELECT * FROM " + ime_datoteke
+            self.csor.execute(query)
 
+            for result in self.csor.fetchall():
+                lista_podataka = []
+                for i in result:
+                    lista_podataka.append(str(i))
+                    
+                self.central_widget.currentWidget().table.model().lista_prikaz.append(GenerickaKlasa(lista_atributa, lista_podataka))
+
+        self.central_widget.currentWidget().table.model().endRemoveRows()
 
     def otvori_tabelu_roditelj(self):
         if self.central_widget.currentWidget() == None:
