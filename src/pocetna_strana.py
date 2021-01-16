@@ -131,7 +131,6 @@ class PocetnaStrana(QWidget):
             poruka.exec_()
             return
 
-        kljuc = [0, "vrednost"] #po kom kljucu da sortira, nije zavrseno
         lista = []
         self.multi_selekt.sort()
         
@@ -152,14 +151,18 @@ class PocetnaStrana(QWidget):
         ime_nove_datoteke = "podaci/podaci/"
         if ok:
             ime_nove_datoteke += str(text) + ".csv"
-        
+        else:
+            return
+            
         for i in range(0, len(self.multi_selekt)-1, 2):
             spoji_dve_sekvencijalne_datoteke(
                 self.dock.model.filePath(self.multi_selekt[i]),
                 self.dock.model.filePath(self.multi_selekt[i+1]),
-                kljuc,
+                self.central_widget.currentWidget().meta_podaci[11].split(","),
+                self.central_widget.currentWidget().meta_podaci[5].split(","),
                 True,
-                ime_nove_datoteke)
+                ime_nove_datoteke,
+                self)
 
         self.multi_selekt = []
 
