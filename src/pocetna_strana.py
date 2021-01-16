@@ -228,7 +228,7 @@ class PocetnaStrana(QWidget):
             try:
                 self.csor.execute(query)
             except mysql.connector.errors.IntegrityError as e:
-                poruka = QtWidgets.QMessageBox()
+                poruka = QtWidgets.QMessageBox() 
                 
                 icon = QtGui.QIcon("src/ikonice/logo.jpg")
                 poruka.setWindowIcon(icon)
