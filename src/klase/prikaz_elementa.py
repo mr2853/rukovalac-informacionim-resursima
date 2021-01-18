@@ -23,13 +23,24 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
         self.sufiks = meta_podaci[3]
         self.putanja_podaci = meta_podaci[4]
         self.lista = []
+        self.primarni_kljucevi=[]
+        if self.tip_datoteke == "sekvencijalna":
+            self.roditelji = meta_podaci[12].split(",")
+            self.broj_kljuceva = meta_podaci[13].split(",")
+            self.pozicije_u_formi = meta_podaci[14].split(",")
+            self.pozicije_u_datoteci = meta_podaci[15].split(",")
+            
         
+        self.putanja_kljucevi ="podaci/podaci/sekvencijalne/"
         self.pretraga = pretraga
         self.privremena_datoteka = "podaci/podaci/privremena_ser.csv"
         icon = QtGui.QIcon("src/ikonice/logo.jpg")
         self.setWindowIcon(icon)
         self.layout = QtWidgets.QGridLayout()
-
+        
+        
+        
+        
         self.setWindowFlags(self.windowFlags()
                 ^ QtCore.Qt.WindowContextHelpButtonHint)
         self.tip = 0  # tip == 0 -dodavanje / tip == 1 -izmena / tip == 2 -pretraga
@@ -127,6 +138,25 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
         self.setMinimumWidth(500)
         self.show()
     
+    
+    def ucitaj_kljuceve(self,putanja, pozicija_kljuca):
+        kljucevi = open(putanja,"r",encoding="utf-8")
+        next(csv.reader(kljucevi,delimiter=","))
+        self.primarni_kljucevi=[i.split(',')[pozicija_kljuca] for i in kljucevi.readlines()]
+        return self.primarni_kljucevi
+        
+    def poredjenje(self, lista, vrijednost):
+        brojac = 0
+        for i in range(len(lista)):
+            print(lista[i] +"=="+ vrijednost)
+            if lista[i] == vrijednost:
+                brojac +=1
+
+        if brojac > 0:
+            return True
+        else:
+            return False 
+
     def sacuvaj_podatke(self):
         if os.path.exists(self.privremena_datoteka):
             if self.tip_datoteke == "sekvencijalna":
@@ -160,11 +190,36 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
     def closeEvent(self, event):
         self.sacuvaj_podatke()
         event.accept()
+    
 
     def dugme_kliknuto(self):
         try:
             for i in range(len(self.lista_atributa)):
                 vrijednost = self.__getattribute__(self.lista_atributa[i]).text()
+           
+                if self.tip_datoteke == "sekvencijalna":
+                    brojac =0
+                    for o in range(len(self.broj_kljuceva)):
+                        if self.broj_kljuceva != []:
+                            
+                            for k in range(int(self.broj_kljuceva[o])):
+                                self.ucitaj_kljuceve(self.putanja_kljucevi + self.roditelji[o],int(self.pozicije_u_datoteci[brojac]))
+                                vrijed = self.__getattribute__(self.lista_atributa[int(self.pozicije_u_formi[brojac])]).text()
+                                brojac +=1
+                              
+                                if self.poredjenje(self.primarni_kljucevi,vrijed) == False:         
+                                    poruka = QtWidgets.QMessageBox()
+                                    icon = QtGui.QIcon("src/ikonice/logo.jpg")
+                                    poruka.setWindowIcon(icon)
+                                    poruka.setWindowTitle("Upozorenje!")
+                                    poruka.setText(" sadrzi kljuc koji ne postoji u roditeljskoj klasi! Pokusajte ponovo!")
+                                    poruka.exec_()
+                                    return
+                                else:
+                                    continue
+                                    
+                                
+                    
 
                 if self.tip == 2:
                     if len(vrijednost.strip()) == 0:
@@ -348,7 +403,7 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                             query += ", "
                         brojac2 += 1
                     query += ")"
-                    
+                    print(query)
                     provjeri = True
                     try:
                         parent.csor.execute(query)

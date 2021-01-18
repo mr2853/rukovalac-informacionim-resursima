@@ -10,3 +10,7 @@ obaveznost_atributa:True,True,True,True,True,True,True,True,True,True,False,True
 veze:parent_studenti(student_iz_ustanove=ustanova#struka#broj_indeksa),parent_studijski_programi(ustanova#oznaka_programa)
 nazivi_kolona:Ustanova,Oznaka programa,Student iz ustanove,Struka,Broj indeksa,Skolska godina,Godina studija,Redni broj upisa,Datum upisa,Datum overe,Espb pocetni,Espb krajnji
 lista_kljuceva:ustanova,oznaka_programa,student_iz_ustanove,struka,broj_indeksa,skolska_godina,godina_studija,blok,redni_broj_upisa
+roditelj:studijski_programi_sek.csv,studenti_sek.csv
+broj_kljuceva:2,3
+pozicije_kljuceva_u_formi:0,1,2,3,4
+pozicije_u_datoteci:0,2,0,1,2

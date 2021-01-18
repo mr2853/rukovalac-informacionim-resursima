@@ -10,3 +10,7 @@ obaveznost_atributa:True,True,True,True
 veze:parent_visokoskolska_ustanova(ustanova=oznaka),child_plan_studijske_grupe(ustanova=ustanova_predmet#oznaka=oznaka_predmeta)
 nazivi_kolona:Ustanova,Oznaka,Naziv,Espb
 lista_kljuceva:ustanova,oznaka
+roditelj:nastavni_predmet_sek.csv
+broj_kljuceva:1
+pozicije_kljuceva_u_formi:0
+pozicije_u_datoteci:0

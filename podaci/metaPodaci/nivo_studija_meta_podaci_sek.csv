@@ -10,3 +10,7 @@ obaveznost_atributa:True,True
 veze:child_studijski_programi(oznaka=nivo)
 nazivi_kolona:Oznaka,Naziv
 lista_kljuceva:oznaka
+roditelji:
+broj_kljuceva:
+pozicije_kljuceva_u_formi:
+pozicije_u_datoteci:
