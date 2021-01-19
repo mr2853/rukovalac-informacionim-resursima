@@ -30,6 +30,7 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
             self.pozicije_u_formi = meta_podaci[14].split(",")
             self.pozicije_u_datoteci = meta_podaci[15].split(",")
             
+            
         
         self.putanja_kljucevi ="podaci/podaci/sekvencijalne/"
         self.pretraga = pretraga
@@ -199,26 +200,27 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
            
                 if self.tip_datoteke == "sekvencijalna":
                     brojac =0
-                    for o in range(len(self.broj_kljuceva)):
-                        if self.broj_kljuceva != []:
-                            
-                            for k in range(int(self.broj_kljuceva[o])):
-                                self.ucitaj_kljuceve(self.putanja_kljucevi + self.roditelji[o],int(self.pozicije_u_datoteci[brojac]))
-                                vrijed = self.__getattribute__(self.lista_atributa[int(self.pozicije_u_formi[brojac])]).text()
-                                brojac +=1
-                              
-                                if self.poredjenje(self.primarni_kljucevi,vrijed) == False:         
-                                    poruka = QtWidgets.QMessageBox()
-                                    icon = QtGui.QIcon("src/ikonice/logo.jpg")
-                                    poruka.setWindowIcon(icon)
-                                    poruka.setWindowTitle("Upozorenje!")
-                                    poruka.setText(" sadrzi kljuc koji ne postoji u roditeljskoj klasi! Pokusajte ponovo!")
-                                    poruka.exec_()
-                                    return
-                                else:
-                                    continue
-                                    
+                    if self.broj_kljuceva != ['']:
+                        for o in range(len(self.broj_kljuceva)):
+                            if self.broj_kljuceva != ['']:
                                 
+                                for k in range(int(self.broj_kljuceva[o])):
+                                    self.ucitaj_kljuceve(self.putanja_kljucevi + self.roditelji[o],int(self.pozicije_u_datoteci[brojac]))
+                                    vrijed = self.__getattribute__(self.lista_atributa[int(self.pozicije_u_formi[brojac])]).text()
+                                    brojac +=1
+                                
+                                    if self.poredjenje(self.primarni_kljucevi,vrijed) == False:         
+                                        poruka = QtWidgets.QMessageBox()
+                                        icon = QtGui.QIcon("src/ikonice/logo.jpg")
+                                        poruka.setWindowIcon(icon)
+                                        poruka.setWindowTitle("Upozorenje!")
+                                        poruka.setText(" sadrzi kljuc koji ne postoji u roditeljskoj klasi! Pokusajte ponovo!")
+                                        poruka.exec_()
+                                        return
+                                    else:
+                                        continue
+                                        
+                                    
                     
 
                 if self.tip == 2:
