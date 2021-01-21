@@ -3,15 +3,3 @@ Za pokretanje aplikacije potrebno je instalirati:
 	putanja_do_python.exe -m pip install --upgrade pip
 
 	putanja_do_python.exe - na primer C:\envirotments\bazePodataka\Scripts\python.exe
-
-
-Zadatke koje trebamo jos odraditi:
-	1.* Kreiranje datoteke
-	2.% Promena imena datoteke
-	3.* Brisanje datoteke
-	5.* Kreiranje meta podataka
-	6.* Brisanje meta podataka
-	7.* Izmena meta podataka
-	8.* Logicko brisanje
-	9.* Dodati atribut posle koliko unosa da sacuvava promene
-	10.* Referencijalni integritet
