@@ -104,7 +104,7 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                 
                 self.__getattribute__(self.lista_atributa[i]).setText(element.__getattribute__(self.lista_atributa[i]))
                 self.__getattribute__(self.lista_atributa[i]).setMaxLength(int(self.lista_duzine_atributa[i]))
-                
+                print(self.lista_naziva_atributa[i])
               
                 veze = self.parent().meta_podaci[9].split(",")
                 for j in range(len(veze)):
@@ -214,7 +214,7 @@ class PrikazElementa(QtWidgets.QDialog): # izmena, dodaj, pretrazi
                                         icon = QtGui.QIcon("src/ikonice/logo.jpg")
                                         poruka.setWindowIcon(icon)
                                         poruka.setWindowTitle("Upozorenje!")
-                                        poruka.setText(" sadrzi kljuc koji ne postoji u roditeljskoj klasi! Pokusajte ponovo!")
+                                        poruka.setText(" Jedno polje sadrzi kljuc koji ne postoji u roditeljskoj klasi! Pokusajte ponovo!")
                                         poruka.exec_()
                                         return
                                     else:

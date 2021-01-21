@@ -1,5 +1,6 @@
 podaci\metaPodaci\plan_studijske_grupe_meta_podaci_sek.csv
-IR,SI,1,1,TF,ARR
-IR,SI,2,2,TF,MAT
-PF,EK,3,3,PF,EKO
 TF,SI,4,4,TF,OPR
+TF,SI,4,5,TF,OOP2
+TF,SI,4,4,TF,OPR
+PF,EK,3,3,PF,EKO
+IR,SI,1,1,TF,ARR
