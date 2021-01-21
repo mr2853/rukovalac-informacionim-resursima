@@ -10,7 +10,7 @@ obaveznost_atributa:True,True,True,True,False,True,True,False,False,False,False
 veze:parent_visokoskolska_ustanova(ustanova=oznaka),child_tok_studija(ustanova#struka#broj_indeksa)
 nazivi_kolona:Ustanova,Struka,Broj indeksa,Prezime,Ime roditelja,Ime,Pol,Adresa stanovanja,Telefon,Jmbg,Datum rodjenja
 lista_kljuceva:ustanova,struka,broj_indeksa
-roditelji:visokoskolska_ustanova_sek.csv
+roditelj:visokoskolska_ustanova_sek.csv
 broj_kljuceva:1
 pozicije_kljuceva_u_formi:0
 pozicije_u_datoteci:0
